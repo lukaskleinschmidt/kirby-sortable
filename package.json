@@ -1,0 +1,10 @@
+{
+  "name": "modules",
+  "version": "1.0.0",
+  "description": "Kirby Modules Field",
+  "license": "MIT",
+  "type": "kirby-field",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
