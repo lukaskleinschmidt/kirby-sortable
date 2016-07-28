@@ -1,15 +1,18 @@
 <?php
 
 use Kirby\Modules;
+use Kirby\Panel\Snippet;
 
 class ModulesField extends BaseField {
   protected $modules;
   protected $modulesRoot;
 
+  public $style    = 'module'; // module | preview
+  public $readonly = false;
+
   static public $assets = array(
     'js' => array(
-      'modules.js',
-      'Sortable.js',
+      'dist/modules.js',
     ),
     'css' => array(
       'modules.css',
@@ -65,19 +68,28 @@ class ModulesField extends BaseField {
     return $this->modulesRoot = $modulesRoot;
   }
 
+  public function entries($file, $data = array()) {
+    return tpl::load(__DIR__ . DS . 'styles' . DS . $file . '.php', $data);;
+  }
+
   public function content() {
     return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
   }
 
   public function entry($module) {
-    $intendedTemplate = $module->intendedTemplate();
-    $templatePrefix   = Modules\Modules::templatePrefix();
+    if ($this->style == 'preview') {
+      $intendedTemplate = $module->intendedTemplate();
+      $templatePrefix   = Modules\Modules::templatePrefix();
 
-    // Get the module name from the template
-    $name = str::substr($intendedTemplate, str::length($templatePrefix));
-    $path = Modules\Modules::directory() . DS . $name . DS . $name . '.panel.php';
+      // Get the module name from the template
+      $name = str::substr($intendedTemplate, str::length($templatePrefix));
+      $path = Modules\Modules::directory() . DS . $name . DS . $name . '.panel.php';
 
-    return is_file($path) ? tpl::load($path, compact('module')) : $module->blueprint()->title();
+      // Return template 
+      if($entry = tpl::load($path, compact('module'))) return $entry;
+    }
+
+    return '<span class="modules-entry-title">' . $module->icon() . $module->blueprint()->title() . '</span>';
   }
 
   public function label() {
@@ -88,7 +100,7 @@ class ModulesField extends BaseField {
     if(!$this->readonly) {
       $add = new Brick('a');
       $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.structure.add'));
-      $add->addClass('structure-add-button label-option');
+      $add->addClass('modules-add-button label-option');
       $add->data('modal', true);
       $add->attr('href', $this->url('add'));
     } else {
@@ -101,7 +113,7 @@ class ModulesField extends BaseField {
     }
  
     $label = parent::label();
-    $label->addClass('structure-label');
+    $label->addClass('modules-label');
     $label->append($add);
 
     return $label;
