@@ -1,3 +1,11 @@
+$white: #fff;
+$black: #000;
+
+$gray: #777;
+$gray-light: #bbb;
+$gray-lighter: #ddd;
+$gray-lightest: #efefef;
+
 .modules {
   // padding-bottom: 0.5em;
 }
@@ -10,7 +18,7 @@
   h3 {
     margin-bottom: 1em;
     font-weight: 400;
-    color: #777;
+    color: $gray;
   }
 
   .subpages-help {
@@ -20,7 +28,7 @@
 
 .modules-dropzone {
   position: relative;
-  border: 1px dashed #bbb;
+  border: 1px dashed $gray-light;
   border-radius: 0.2em;
   padding: 0.25em 0.25em 0 0.25em;
   min-height: 3.125em;
@@ -31,15 +39,15 @@
 }
 
 .modules-entry {
-  background: #fff;
-  border: 2px solid #ddd;
+  background: $white;
+  border: 2px solid $gray-lighter;
   margin-bottom: 0.25em;
   position: relative;
 
   // check if even necessary
   .modules-readonly & {
-    background: #efefef;
-    color: #777;
+    background: $gray-lightest;
+    color: $gray;
   }
 
   .modules[data-style='module'] & {
@@ -49,7 +57,7 @@
 }
 
 .modules-entry-content {
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid $gray-lightest;
   cursor: move;
 
   .modules[data-style='module'] & {
@@ -86,11 +94,11 @@
   float: left;
 
   &:nth-child(n+2) {
-    border-left: 1px solid #efefef;
+    border-left: 1px solid $gray-lightest;
   }
 
   .modules[data-style='module'] & {
-    border-left: 1px solid #efefef;
+    border-left: 1px solid $gray-lightest;
   }   
 }
 
@@ -100,18 +108,18 @@
 
 .modules-empty {
   padding: 1.5em;
-  background: #ddd;
+  background: $gray-lighter;
 
   &:hover {
-    border-color: #000;
+    border-color: $black;
   }
 
   a {
-    border-bottom: 2px solid #aaa;
+    border-bottom: 2px solid $gray-light;
     margin-left: .5em;
 
     &:hover {
-      border-color: #000;
+      border-color: $black;
     }
   }
 }

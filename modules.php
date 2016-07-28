@@ -1,7 +1,6 @@
 <?php
 
 use Kirby\Modules;
-use Kirby\Panel\Snippet;
 
 class ModulesField extends BaseField {
   protected $modules;
@@ -61,9 +60,7 @@ class ModulesField extends BaseField {
     if($this->modulesRoot) return $this->modulesRoot;
 
     // Determine where the modules live
-    if(!$modulesRoot = $this->page->find(Modules\Modules::parentUid())) {
-      $modulesRoot = $this->page;
-    }
+    if(!$modulesRoot = $this->page->find(Modules\Modules::parentUid())) $modulesRoot = $this->page;
 
     return $this->modulesRoot = $modulesRoot;
   }
@@ -86,10 +83,14 @@ class ModulesField extends BaseField {
       $path = Modules\Modules::directory() . DS . $name . DS . $name . '.panel.php';
 
       // Return template 
-      if($entry = tpl::load($path, compact('module'))) return $entry;
+      return tpl::load($path, compact('module'));
     }
 
-    return '<span class="modules-entry-title">' . $module->icon() . $module->blueprint()->title() . '</span>';
+    $title = new Brick('span');
+    $title->addClass('modules-entry-title');
+    $title->html($module->icon() . $module->blueprint()->title());
+
+    return $title;
   }
 
   public function label() {
@@ -101,7 +102,7 @@ class ModulesField extends BaseField {
       $add = new Brick('a');
       $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.structure.add'));
       $add->addClass('modules-add-button label-option');
-      $add->data('modal', true);
+      $add->data('modal','test', true);
       $add->attr('href', $this->url('add'));
     } else {
       $add = null;
