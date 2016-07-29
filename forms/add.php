@@ -1,42 +1,42 @@
 <?php
 
-use Kirby\Modules;
-
 return function($page, $cancel) {
 
-  $options = array();
+  $templates = $page->blueprint()->pages()->template();
+  $options   = array();
 
-  foreach($page->blueprint()->pages()->template() as $template) {
+  foreach($templates as $template) {
     $options[$template->name()] = $template->title();
   }
 
-  $uid = sprintf('%u', crc32(time()));
+  $uid = substr(sprintf('%u', crc32(time())), 0, 8);
 
   $form = new Kirby\Panel\Form(array(
     'title' => array(
-      'label'        => 'pages.add.title.label',
-      'type'         => 'title',
+      'label'        => 'fields.modules.add.title.label',
+      'type'         => 'hidden', // title
+      'default'      => $templates->first()->title(),
       'placeholder'  => 'pages.add.title.placeholder',
       'autocomplete' => false,
       'autofocus'    => true,
       'required'     => true
     ),
     'uid' => array(
-      'label'        => 'pages.add.url.label',
-      'type'         => 'text',
-      'placeholder'  => $uid,
+      'label'        => 'fields.modules.add.url.label',
+      'type'         => 'hidden', // text
+      'default'      => $uid,
       'autocomplete' => false,
       'required'     => true,
       'icon'         => 'chain',
     ),
     'template' => array(
-      'label'    => 'pages.add.template.label',
+      'label'    => 'fields.modules.add.template.label',
       'type'     => 'select',
       'options'  => $options,
       'default'  => key($options),
       'required' => true,
       'readonly' => count($options) == 1 ? true : false,
-      'icon'     => count($options) == 1 ? $page->blueprint()->pages()->template()->first()->icon() : 'chevron-down',
+      'icon'     => count($options) == 1 ? $templates->first()->icon() : 'chevron-down',
     ),
   ));
 

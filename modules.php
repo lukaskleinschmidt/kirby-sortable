@@ -6,8 +6,9 @@ class ModulesField extends BaseField {
   protected $modules;
   protected $modulesRoot;
 
-  public $style    = 'module'; // module | preview
+  public $style    = 'table'; // preview
   public $readonly = false;
+  public $redirect = true;
 
   static public $assets = array(
     'js' => array(
@@ -18,17 +19,27 @@ class ModulesField extends BaseField {
     ),
   );
 
+  public function __construct() {
+    // Path to language files
+    $path = __DIR__ . DS . 'languages' . DS;
+
+    // Intended language file
+    $file = $path . panel()->translation()->code() . '.php';
+
+    // Try to load intended language file and fallback to default language
+    if(is_file($file)) {
+      require_once($file);
+    } else {
+      require_once($path . 'en.php');
+    }
+  }
+
   public function routes() {
     return array(
       array(
         'pattern' => 'add',
         'method'  => 'get|post',
         'action'  => 'add'
-      ),
-      array(
-        'pattern' => 'context',
-        'method'  => 'get|post',
-        'action'  => 'context'
       ),
       array(
         'pattern' => 'delete',
@@ -80,15 +91,20 @@ class ModulesField extends BaseField {
 
       // Get the module name from the template
       $name = str::substr($intendedTemplate, str::length($templatePrefix));
-      $path = Modules\Modules::directory() . DS . $name . DS . $name . '.panel.php';
+      $path = Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
 
-      // Return template 
-      return tpl::load($path, compact('module'));
+      $preview = new Brick('div');
+      $preview->addClass('modules-entry-preview');
+      $preview->attr('template', $name);
+      $preview->html(tpl::load($path, compact('module')));
+
+      // Return preview 
+      return $preview;
     }
 
     $title = new Brick('span');
     $title->addClass('modules-entry-title');
-    $title->html($module->icon() . $module->blueprint()->title());
+    $title->html($module->icon() . $module->title());
 
     return $title;
   }
@@ -100,9 +116,9 @@ class ModulesField extends BaseField {
   public function headline() {
     if(!$this->readonly) {
       $add = new Brick('a');
-      $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.structure.add'));
+      $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.modules.add'));
       $add->addClass('modules-add-button label-option');
-      $add->data('modal','test', true);
+      $add->data('modal', true);
       $add->attr('href', $this->url('add'));
     } else {
       $add = null;
@@ -123,7 +139,7 @@ class ModulesField extends BaseField {
   public function url($action, $query = array()) {
     if($action == 'sort') return $this->modulesRoot()->url('subpages');
 
-    if($action == 'delete') {
+    if($action == 'delete' || !$this->redirect()) {
       $redirect = $this->page()->uri('edit');
       $query['_redirect'] = $redirect != $this->modulesRoot()->uri('edit') ? $redirect : null;
     }

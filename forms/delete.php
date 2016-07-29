@@ -4,7 +4,7 @@ return function($page, $cancel) {
 
   $form = new Kirby\Panel\Form(array(
     'page' => array(
-      'label'    => 'pages.delete.headline',
+      'label'    => 'fields.modules.delete.headline',
       'type'     => 'text',
       'readonly' => true,
       'icon'     => false,
@@ -18,5 +18,4 @@ return function($page, $cancel) {
   $form->cancel($cancel);
 
   return $form;
-
 };

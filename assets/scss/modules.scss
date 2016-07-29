@@ -33,7 +33,7 @@ $gray-lightest: #efefef;
   padding: 0.25em 0.25em 0 0.25em;
   min-height: 3.125em;
 
-  .modules[data-style='module'] & {
+  .modules[data-style='table'] & {
     padding-bottom: calc(0.25em - 1px);
   }
 }
@@ -44,31 +44,34 @@ $gray-lightest: #efefef;
   margin-bottom: 0.25em;
   position: relative;
 
-  // check if even necessary
-  .modules-readonly & {
-    background: $gray-lightest;
-    color: $gray;
-  }
-
-  .modules[data-style='module'] & {
+  .modules[data-style='table'] & {
     margin-bottom: 1px;
     border: none;
   }
+
+  // .modules-readonly & {
+  //   background: $white;
+  //   color: $gray;
+  // }
 }
 
 .modules-entry-content {
   border-bottom: 1px solid $gray-lightest;
   cursor: move;
 
-  .modules[data-style='module'] & {
+  .modules[data-style='table'] & {
     padding: 0.75em 0.5em;
     border-bottom: none;
     line-height: 1em;
   }
+
+  .modules-readonly & {
+    cursor: default;
+  }
 }
 
 .modules-entry-options {
-  .modules[data-style='module'] & {
+  .modules[data-style='table'] & {
     position: absolute;
     right: 0;
     top: 0;
@@ -97,7 +100,7 @@ $gray-lightest: #efefef;
     border-left: 1px solid $gray-lightest;
   }
 
-  .modules[data-style='module'] & {
+  .modules[data-style='table'] & {
     border-left: 1px solid $gray-lightest;
   }   
 }

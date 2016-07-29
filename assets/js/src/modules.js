@@ -6,33 +6,35 @@
     var api      = element.data('api');
     var entries  = $(selector, el);
 
-    entries._sortable({
-      connectWith: selector,
-      update: function(e, ui) {
-        var element = $(this), count = element.data('count');
+    if(!element.hasClass('modules-readonly')) {
+      entries._sortable({
+        connectWith: selector,
+        update: function(e, ui) {
+          var element = $(this), count = element.data('count');
 
-        // Make sure sort is not getting called when a visible module sould get hidden
-        if($(this).data('entries') == 'visible' && count <= element.children().length) {
+          // Make sure sort is not getting called when a visible module sould get hidden
+          if($(this).data('entries') == 'visible' && count <= element.children().length) {
 
-          id = ui.item.data('uid');
-          to = ui.item.index() + 1;
-          $.post(api, {action: 'sort', id: id, to: to}, function() {
-            app.content.reload();
-          });
+            id = ui.item.data('uid');
+            to = ui.item.index() + 1;
+            $.post(api, {action: 'sort', id: id, to: to}, function() {
+              app.content.reload();
+            });
+          }
+        },
+        start: function(event, ui) {
+          $(this)._sortable('refreshPositions');
+        },
+        receive : function(event, ui) {
+          if($(this).data('entries') == 'invisible') {
+
+            $.post(api, {action: 'hide', id: ui.item.data('uid')}, function() {
+              app.content.reload();
+            });
+          }
         }
-      },
-      start: function(event, ui) {
-        $(this)._sortable('refreshPositions');
-      },
-      receive : function(event, ui) {
-        if($(this).data('entries') == 'invisible') {
-
-          $.post(api, {action: 'hide', id: ui.item.data('uid')}, function() {
-            app.content.reload();
-          });
-        }
-      }
-    }).disableSelection();
+      }).disableSelection();
+    }
   }
 
   // Fixing scrollbar jumping issue
