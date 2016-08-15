@@ -77,30 +77,36 @@ class ModulesField extends BaseField {
   }
 
   public function entries($file, $data = array()) {
-    return tpl::load(__DIR__ . DS . 'styles' . DS . $file . '.php', $data);;
+    return tpl::load(__DIR__ . DS . 'templates' . DS . $file . '.php', $data);;
   }
 
   public function content() {
-    return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
+    return tpl::load(__DIR__ . DS . 'templates' . DS . 'field.php', array('field' => $this));
   }
 
   public function entry($module) {
-    if ($this->style == 'preview') {
-      $intendedTemplate = $module->intendedTemplate();
-      $templatePrefix   = Modules\Modules::templatePrefix();
+    // if ($this->style == 'preview') {
+    //   $intendedTemplate = $module->intendedTemplate();
+    //   $templatePrefix   = Modules\Modules::templatePrefix();
 
-      // Get the module name from the template
-      $name = str::substr($intendedTemplate, str::length($templatePrefix));
-      $path = Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
+    //   // Get the module name from the template
+    //   $name = str::substr($intendedTemplate, str::length($templatePrefix));
+    //   $path = Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
 
-      $preview = new Brick('div');
-      $preview->addClass('modules-entry-preview');
-      $preview->attr('template', $name);
-      $preview->html(tpl::load($path, compact('module')));
+    //   $preview = new Brick('div');
+    //   $preview->addClass('modules-entry-preview');
+    //   $preview->attr('template', $name);
+    //   $preview->html(tpl::load($path, compact('module')));
 
-      // Return preview 
-      return $preview;
-    }
+    //   // Return preview 
+    //   return $preview;
+    // }
+    
+
+    $module = new Modules\Module($module);
+    
+    dump($module->name());
+    dump($module->template());
 
     $title = new Brick('span');
     $title->addClass('modules-entry-title');
@@ -109,36 +115,33 @@ class ModulesField extends BaseField {
     return $title;
   }
 
-  public function label() {
-    return null;
-  }
+  // public function label() {
+  //   return null;
+  // }
 
-  public function headline() {
+  public function label() {
+    // Make sure there's at least an empty label
+    if(!$this->label) $this->label = '&nbsp;';
+ 
+    $label = new Brick('label');
+    $label->addClass('label');
+    $label->html($this->label);
+
     if(!$this->readonly) {
       $add = new Brick('a');
-      $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.modules.add'));
       $add->addClass('modules-add-button label-option');
+      $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.modules.add'));
       $add->data('modal', true);
       $add->attr('href', $this->url('add'));
-    } else {
-      $add = null;
-    }
 
-    // make sure there's at least an empty label
-    if(!$this->label) {
-      $this->label = '&nbsp;';
+      // Add to the label
+      $label->append($add);
     }
- 
-    $label = parent::label();
-    $label->addClass('modules-label');
-    $label->append($add);
 
     return $label;
   }
 
   public function url($action, $query = array()) {
-    if($action == 'sort') return $this->modulesRoot()->url('subpages');
-
     if($action == 'delete' || !$this->redirect()) {
       $redirect = $this->page()->uri('edit');
       $query['_redirect'] = $redirect != $this->modulesRoot()->uri('edit') ? $redirect : null;

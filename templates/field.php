@@ -1,7 +1,4 @@
-<div class="modules<?php e($field->readonly(), ' modules-readonly') ?>" data-field="modules" data-api="<?php __($field->url('sort')); ?>" data-style="<?php echo $field->style(); ?>">
-  <?php echo $field->headline(); ?>
-  <?php echo $field->label(); ?>
-
+<div class="modules<?php e($field->readonly(), ' modules-readonly') ?>" data-field="modules" data-api="<?php __($field->modulesRoot()->url('subpages')); ?>" data-style="<?php echo $field->style(); ?>">
   <?php if(!$field->modules()->count()): ?>
 
   <div class="modules-empty"> 
