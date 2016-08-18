@@ -1,4 +1,4 @@
-<div class="modules<?php e($field->readonly(), ' modules-readonly') ?>" data-field="modules" data-api="<?php __($field->modulesRoot()->url('subpages')); ?>" data-style="<?php echo $field->style(); ?>">
+<div class="modules<?php e($field->readonly(), ' modules-readonly') ?>" data-field="modules" data-sortable='{lorem: ipsum}' data-api="<?php __($field->modulesRoot()->url('subpages')); ?>" data-style="<?php echo $field->style(); ?>">
   <?php if(!$field->modules()->count()): ?>
 
   <div class="modules-empty"> 
@@ -12,9 +12,9 @@
         $modules = $field->modules()->visible();
         $count   = $modules->count(); 
       ?>
-      <h3><?php _l('fields.modules.visible') ?> <span class="counter">( <?php echo $count; ?> )</span></h3>
+      <h3><?php _l('fields.modules.visible') ?> <span class="counter">( <?php echo $count; ?> / 3 )</span></h3>
       <div class="modules-dropzone" data-entries="visible" data-count="<?php echo $count; ?>">
-        <?php echo $field->entries($field->style(), array('modules' => $modules, 'field' => $field)); ?>
+        <?php tpl::load(__DIR__ .  DS . 'module.php', compact('modules', 'field'), false); ?>
       </div>
 
       <?php if(!$count && !$field->readonly()): ?>
@@ -31,7 +31,7 @@
       ?>
       <h3><?php _l('fields.modules.invisible') ?> <span class="counter">( <?php echo $count; ?> )</span></h3>
       <div class="modules-dropzone" data-entries="invisible" data-count="<?php echo $count; ?>">
-        <?php echo $field->entries($field->style(), array('modules' => $modules, 'field' => $field)); ?>
+        <?php tpl::load(__DIR__ .  DS . 'module.php', compact('modules', 'field'), false); ?>
       </div>
 
       <?php if(!$count && !$field->readonly()): ?>

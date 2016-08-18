@@ -1,9 +1,11 @@
 <?php foreach($modules as $module): ?>
-<div class="modules-entry" id="modules-entry-<?php echo $module->id() ?>" data-uid="<?php echo __($module->uid()); ?>">
-  <div class="modules-entry-content">
-    <?php echo $field->entry($module); ?>
-  </div>
-  <nav class="modules-entry-options cf">
+<div class="modules-entry" data-uid="<?php echo __($module->uid()); ?>">
+  <?php echo $field->preview($module); ?>
+  <nav class="modules-entry-options">
+    <span class="modules-entry-title">
+      <?php echo $module->icon(); ?>
+      <?php echo $module->title(); ?>
+    </span>
     <a class="modules-entry-button btn btn-with-icon modules-edit-button" href="<?php __($module->url('edit')); ?>">
       <?php i('pencil', 'left') . _l('fields.modules.edit') ?>
     </a>

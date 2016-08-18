@@ -6,7 +6,8 @@ class ModulesField extends BaseField {
   protected $modules;
   protected $modulesRoot;
 
-  public $style    = 'table'; // preview
+  public $tyle     = 'items';
+  public $preview  = true;
   public $readonly = false;
   public $redirect = true;
 
@@ -24,11 +25,11 @@ class ModulesField extends BaseField {
     $path = __DIR__ . DS . 'languages' . DS;
 
     // Intended language file
-    $file = $path . panel()->translation()->code() . '.php';
+    $language = $path . panel()->translation()->code() . '.php';
 
     // Try to load intended language file and fallback to default language
-    if(is_file($file)) {
-      require_once($file);
+    if(is_file($language)) {
+      require_once($language);
     } else {
       require_once($path . 'en.php');
     }
@@ -76,48 +77,30 @@ class ModulesField extends BaseField {
     return $this->modulesRoot = $modulesRoot;
   }
 
-  public function entries($file, $data = array()) {
-    return tpl::load(__DIR__ . DS . 'templates' . DS . $file . '.php', $data);;
-  }
-
   public function content() {
+
+    dump($this->modulesRoot->blueprint()->pages()->max());
+
     return tpl::load(__DIR__ . DS . 'templates' . DS . 'field.php', array('field' => $this));
   }
 
-  public function entry($module) {
-    // if ($this->style == 'preview') {
-    //   $intendedTemplate = $module->intendedTemplate();
-    //   $templatePrefix   = Modules\Modules::templatePrefix();
+  public function preview($page) {
+    if (!$this->preview) return null;
 
-    //   // Get the module name from the template
-    //   $name = str::substr($intendedTemplate, str::length($templatePrefix));
-    //   $path = Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
+    $module = new Modules\Module($page);
 
-    //   $preview = new Brick('div');
-    //   $preview->addClass('modules-entry-preview');
-    //   $preview->attr('template', $name);
-    //   $preview->html(tpl::load($path, compact('module')));
+    $name = $module->name();
+    $template = Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
 
-    //   // Return preview 
-    //   return $preview;
-    // }
-    
+    if (!is_file($template)) return null;
 
-    $module = new Modules\Module($module);
-    
-    dump($module->name());
-    dump($module->template());
+    $preview = new Brick('div');
+    $preview->addClass('modules-entry-preview');
+    $preview->data('module', $name);
+    $preview->html(tpl::load($template, array('module' => $page)));
 
-    $title = new Brick('span');
-    $title->addClass('modules-entry-title');
-    $title->html($module->icon() . $module->title());
-
-    return $title;
+    return $preview;
   }
-
-  // public function label() {
-  //   return null;
-  // }
 
   public function label() {
     // Make sure there's at least an empty label
@@ -153,4 +136,3 @@ class ModulesField extends BaseField {
     return purl($this->model(), 'field/' . $this->name() . '/modules/' . $action . $query);
   }
 }
-?>
