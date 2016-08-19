@@ -1,15 +1,21 @@
 <?php
 
-use Kirby\Modules;
-
 class ModulesField extends BaseField {
   protected $modules;
   protected $modulesRoot;
+  protected $modulesOptions;
 
   public $tyle     = 'items';
-  public $preview  = true;
   public $readonly = false;
   public $redirect = true;
+  public $options  = [];
+
+  static public $defaults = array(
+    'preview' => true,
+    'delete' => true,
+    'edit' => true,
+    'max' => 0,
+  );
 
   static public $assets = array(
     'js' => array(
@@ -33,6 +39,11 @@ class ModulesField extends BaseField {
     } else {
       require_once($path . 'en.php');
     }
+
+    // Define autoloader
+    load(array(
+      'kirby\\field\\modules\\module' => __DIR__ . DS . 'lib' . DS . 'module.php'
+    ));
   }
 
   public function routes() {
@@ -57,7 +68,7 @@ class ModulesField extends BaseField {
     // Filter the modules by valid module
     $modules = $this->modulesRoot()->children()->filter(function($page) {
       try {
-        $module = new Modules\Module($page);
+        $module = new Kirby\Field\Modules\Module($page, 'test');
         return $module->validate();
       } catch(Error $e) {
         return false;
@@ -72,27 +83,40 @@ class ModulesField extends BaseField {
     if($this->modulesRoot) return $this->modulesRoot;
 
     // Determine where the modules live
-    if(!$modulesRoot = $this->page->find(Modules\Modules::parentUid())) $modulesRoot = $this->page;
+    if(!$modulesRoot = $this->page->find(Kirby\Modules\Modules::parentUid())) $modulesRoot = $this->page;
 
     return $this->modulesRoot = $modulesRoot;
   }
 
   public function content() {
 
-    dump($this->modulesRoot->blueprint()->pages()->max());
+    // dump($this->modulesRoot->blueprint()->pages()->max());
+
+    // dump($this->options());
 
     return tpl::load(__DIR__ . DS . 'templates' . DS . 'field.php', array('field' => $this));
   }
 
-  public function preview($page) {
-    if (!$this->preview) return null;
+  public function option($page, $key) {
+    // Get template specific options
+    $options = a::get($this->options, $page->intendedTemplate(), array());
 
-    $module = new Modules\Module($page);
+    // Get specific option by key
+    $option = a::get($options, $key);
+
+    // Return default value if option is not set
+    return is_null($option) ? a::get(static::$defaults, $key) : $option;
+  }
+
+  public function preview($page) {
+    $module = new Kirby\Field\Modules\Module($page, 'test');
 
     $name = $module->name();
-    $template = Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
 
-    if (!is_file($template)) return null;
+    var_dump($module->max());
+    $template = Kirby\Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
+
+    if(!is_file($template)) return null;
 
     $preview = new Brick('div');
     $preview->addClass('modules-entry-preview');
@@ -124,7 +148,7 @@ class ModulesField extends BaseField {
     return $label;
   }
 
-  public function url($action, $query = array()) {
+  public function url($action, $query = array('template' => array('module.gallery', 'module.text'))) {
     if($action == 'delete' || !$this->redirect()) {
       $redirect = $this->page()->uri('edit');
       $query['_redirect'] = $redirect != $this->modulesRoot()->uri('edit') ? $redirect : null;
