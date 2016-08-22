@@ -1,18 +1,25 @@
 <?php
 
-use Kirby\Modules;
-
 class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   public function add() {
-    $page = $this->root();
+
+    // $this->options = $page
+
+    // $templates = str::split(get('templates'), ',');
+    $page = $this->origin();
+
+    dump($this->origin()->blueprint()->field());
+    dump($page->blueprint()->pages()->template);
+    dump($page->children()->count());
 
     $form = $this->form('add', array($page, $this->model()));
 
+    // return $this->modal('add', compact('form', 'templates'));
     return $this->modal('add', compact('form'));
   }
 
   public function delete() {
-    $page = $this->root()->find(get('uid'));
+    $page = $this->origin()->find(get('uid'));
 
     $form = $this->form('delete', array($page, $this->model()));
     $form->style('delete');
@@ -20,12 +27,19 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     return $this->modal('delete', compact('form'));
   }
 
-  public function root() {
+  public function origin() {
     // Determine where the modules live
-    if(!$root = $this->model()->find(Modules\Modules::parentUid())) {
-      $root = $this->model();
+    if(!$origin = $this->model()->find(Kirby\Modules\Modules::parentUid())) {
+      $origin = $this->model();
     }
 
-    return $root;
+    return $origin;
+  }
+
+  public function options($template) {
+    // Get module specific options
+    $options = a::get($this->modules, $template, array());
+
+    return a::update($this->options, $options);
   }
 }

@@ -1,9 +1,10 @@
 <?php
 
 return function($page, $cancel) {
-
   $templates = $page->blueprint()->pages()->template();
   $options   = array();
+
+  var_dump($cancel->toArray());
 
   foreach($templates as $template) {
     $options[$template->name()] = $template->title();

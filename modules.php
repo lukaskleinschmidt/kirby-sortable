@@ -1,22 +1,16 @@
 <?php
 
 class ModulesField extends BaseField {
-  protected $modules;
-  protected $modulesRoot;
-  protected $modulesOptions;
+  // Caches
+  protected $origin;
+  protected $pages;
 
-  public $tyle     = 'items';
+  public $style = 'table';
+  public $options = array();
+  public $modules = array();
   public $readonly = false;
-  public $redirect = true;
-  public $options  = [];
-
-  static public $defaults = array(
-    'preview' => true,
-    'delete' => true,
-    'edit' => true,
-    'max' => 0,
-  );
-
+  public $redirect = false;
+  
   static public $assets = array(
     'js' => array(
       'dist/modules.js',
@@ -27,23 +21,7 @@ class ModulesField extends BaseField {
   );
 
   public function __construct() {
-    // Path to language files
-    $path = __DIR__ . DS . 'languages' . DS;
-
-    // Intended language file
-    $language = $path . panel()->translation()->code() . '.php';
-
-    // Try to load intended language file and fallback to default language
-    if(is_file($language)) {
-      require_once($language);
-    } else {
-      require_once($path . 'en.php');
-    }
-
-    // Define autoloader
-    load(array(
-      'kirby\\field\\modules\\module' => __DIR__ . DS . 'lib' . DS . 'module.php'
-    ));
+    require_once(__DIR__ . DS . 'bootstrap.php');
   }
 
   public function routes() {
@@ -61,69 +39,65 @@ class ModulesField extends BaseField {
     );
   }
 
-  public function modules() {
+  public function options($template) {
+    if(is_a($template, 'Page')) {
+      $template = $template->intendedTemplate();
+    }
+
+    // Get module specific options
+    $options = a::get($this->modules, $template, array());
+
+    return a::update($this->options, $options);
+  }
+
+  public function module($page) {
+    return new Kirby\Field\Modules\Module($this, $page);
+  }
+
+  public function modules($pages) {
+    foreach ($pages as $page) {
+      $module = $this->module($page);
+      echo tpl::load(__DIR__ . DS . 'templates' .  DS . 'module.php', compact('page', 'module'));
+    }
+  }
+
+  public function pages() {
     // Return from cache if possible
-    if($this->modules) return $this->modules;
-        
-    // Filter the modules by valid module
-    $modules = $this->modulesRoot()->children()->filter(function($page) {
+    if($this->pages) return $this->pages;
+
+    $pages = $this->origin()->children()->filter(function($page) {
       try {
-        $module = new Kirby\Field\Modules\Module($page, 'test');
+        $module = new Kirby\Modules\Module($page);
         return $module->validate();
       } catch(Error $e) {
         return false;
       }
     });
-    
-    return $this->modules = $modules;
+
+    return $this->pages = $pages;
   }
 
-  public function modulesRoot() {
+  public function origin() {
     // Return from cache if possible
-    if($this->modulesRoot) return $this->modulesRoot;
+    if($this->origin) return $this->origin;
 
     // Determine where the modules live
-    if(!$modulesRoot = $this->page->find(Kirby\Modules\Modules::parentUid())) $modulesRoot = $this->page;
+    if(!$origin = $this->page()->find(Kirby\Modules\Modules::parentUid())) $origin = $this->page();
 
-    return $this->modulesRoot = $modulesRoot;
+    return $this->origin = $origin;
+  }
+
+  public function config() {
+    $config = array(
+      'url' => $this->origin()->url('subpages'),
+      'max' => 3,
+    );
+
+    return json_encode($config);
   }
 
   public function content() {
-
-    // dump($this->modulesRoot->blueprint()->pages()->max());
-
-    // dump($this->options());
-
     return tpl::load(__DIR__ . DS . 'templates' . DS . 'field.php', array('field' => $this));
-  }
-
-  public function option($page, $key) {
-    // Get template specific options
-    $options = a::get($this->options, $page->intendedTemplate(), array());
-
-    // Get specific option by key
-    $option = a::get($options, $key);
-
-    // Return default value if option is not set
-    return is_null($option) ? a::get(static::$defaults, $key) : $option;
-  }
-
-  public function preview($page) {
-    $module = new Kirby\Field\Modules\Module($page, 'test');
-
-    $name = $module->name();
-
-    var_dump($module->max());
-    $template = Kirby\Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
-
-    if(!is_file($template)) return null;
-
-    $preview = new Brick('div');
-    $preview->addClass('modules-entry-preview');
-    $preview->data('module', $name);
-    $preview->html(tpl::load($template, array('module' => $page)));
-
-    return $preview;
   }
 
   public function label() {
@@ -148,15 +122,17 @@ class ModulesField extends BaseField {
     return $label;
   }
 
-  public function url($action, $query = array('template' => array('module.gallery', 'module.text'))) {
-    if($action == 'delete' || !$this->redirect()) {
-      $redirect = $this->page()->uri('edit');
-      $query['_redirect'] = $redirect != $this->modulesRoot()->uri('edit') ? $redirect : null;
+  public function url($action) {
+    switch($action) {
+      case 'add':
+        $query = '';
+
+        if(!$this->redirect) {
+          $query = '?' . url::queryToString(array('_redirect' => $this->page()->uri('edit')));
+        }
+
+        return purl($this->model(), 'field/' . $this->name() . '/modules/' . $action . $query);
+        break;
     }
-
-    $query = url::queryToString($query);
-    $query = $query ? '?' . $query : '';
-
-    return purl($this->model(), 'field/' . $this->name() . '/modules/' . $action . $query);
   }
 }
