@@ -5,7 +5,10 @@ class ModulesField extends BaseField {
   protected $origin;
   protected $pages;
 
-  public $style = 'table';
+  // Inherits from subpages settings
+  public $max = null;
+
+  public $style = 'item';
   public $options = array();
   public $modules = array();
   public $readonly = false;
@@ -13,7 +16,7 @@ class ModulesField extends BaseField {
   
   static public $assets = array(
     'js' => array(
-      'dist/modules.js',
+      'modules.js',
     ),
     'css' => array(
       'modules.css',
@@ -87,13 +90,44 @@ class ModulesField extends BaseField {
     return $this->origin = $origin;
   }
 
-  public function config() {
-    $config = array(
+  public function data() {
+    $templates = $this->origin()->blueprint()->pages()->template();
+    $modules = array();
+
+    foreach($templates as $template) {
+      $modules[] = array(
+        'options' => $this->options($template->name()),
+        'template' => $template->name(),
+      );
+    }
+
+    $data = array(
+      'max' => $this->max(),
       'url' => $this->origin()->url('subpages'),
-      'max' => 3,
+      'modules' => $modules,
     );
 
-    return json_encode($config);
+    return json_encode($data);
+  }
+
+  public function max() {
+    // Return from cache if possible
+    if($this->max) return $this->max;
+
+    return $this->max = $this->origin()->blueprint()->pages()->max();
+  }
+
+  public function counter($count, $max = false) {
+    $values = array($count);
+
+    $max = $max ? $this->max() : false;
+    if($max) $values[] = $max;
+
+    $counter = new Brick('span');
+    $counter->addClass('counter');
+    $counter->html('( ' . implode(' / ', $values) . ' )');
+
+    return $counter;
   }
 
   public function content() {
@@ -125,13 +159,7 @@ class ModulesField extends BaseField {
   public function url($action) {
     switch($action) {
       case 'add':
-        $query = '';
-
-        if(!$this->redirect) {
-          $query = '?' . url::queryToString(array('_redirect' => $this->page()->uri('edit')));
-        }
-
-        return purl($this->model(), 'field/' . $this->name() . '/modules/' . $action . $query);
+        return purl($this->model(), 'field/' . $this->name() . '/modules/' . $action);
         break;
     }
   }

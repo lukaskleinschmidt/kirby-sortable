@@ -6,6 +6,8 @@ $gray-light: #bbb;
 $gray-lighter: #ddd;
 $gray-lightest: #efefef;
 
+$green: #8dae28;
+
 .modules {
   // padding-bottom: 0.5em;
 }
@@ -48,6 +50,19 @@ $gray-lightest: #efefef;
   .modules[data-style='table'] & {
     margin-bottom: 1px;
     border: none;
+  }
+
+  &.sortable-ghost {
+    opacity: 0;
+  }
+
+  &.sortable-fallback {
+    opacity: 1 !important;
+    border-color: $green;
+  }
+
+  &.sortable-chosen {
+    border-color: $green;
   }
 
   // .modules-readonly & {

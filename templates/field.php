@@ -1,6 +1,6 @@
 <div class="modules<?php e($field->readonly(), ' modules-readonly') ?>"
   data-field="modules"
-  data-config='<?php echo $field->config(); ?>'
+  data-options='<?php echo $field->data(); ?>'
   data-api="<?php __($field->origin()->url('subpages')); ?>"
   data-style="<?php echo $field->style(); ?>">
   
@@ -19,7 +19,7 @@
         $pages = $field->pages()->visible();
         $count = $pages->count(); 
       ?>
-      <h3><?php _l('fields.modules.visible') ?> <span class="counter">( <?php echo $count; ?> / 3 )</span></h3>
+      <h3><?php _l('fields.modules.visible') ?> <?php echo $field->counter($count, true); ?></h3>
 
       <div class="modules-dropzone" data-entries="visible" data-count="<?php echo $count; ?>">
         <?php $field->modules($pages); ?>
@@ -37,7 +37,7 @@
         $pages = $field->pages()->invisible();
         $count = $pages->count(); 
       ?>
-      <h3><?php _l('fields.modules.invisible') ?> <span class="counter">( <?php echo $count; ?> )</span></h3>
+      <h3><?php _l('fields.modules.invisible') ?> <?php echo $field->counter($count); ?></h3>
 
       <div class="modules-dropzone" data-entries="invisible" data-count="<?php echo $count; ?>">
         <?php $field->modules($pages); ?>

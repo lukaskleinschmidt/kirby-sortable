@@ -5,7 +5,7 @@ var cssmin  = require('gulp-cssmin');
 var sass    = require('gulp-sass');
 
 gulp.task('scripts', function() {
-  return gulp.src('assets/js/src/modules.js')
+  return gulp.src('resources/scripts/modules.js')
     .pipe(webpack({
       output: {
         filename: 'modules.js'
@@ -23,12 +23,12 @@ gulp.task('scripts', function() {
         ]
       }
     }))
-    // .pipe(uglify())
-    .pipe(gulp.dest('assets/js/dist'));
+    .pipe(uglify())
+    .pipe(gulp.dest('assets/js'));
 });
 
 gulp.task('styles', function() {
-  return gulp.src('assets/scss/modules.scss')
+  return gulp.src('resources/styles/modules.scss')
     .pipe(sass().on('error', sass.logError)) 
     .pipe(cssmin())
     .pipe(gulp.dest('assets/css'));
@@ -44,8 +44,8 @@ gulp.task('form-css', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('assets/scss/**/*.scss', ['styles']);
-  gulp.watch('assets/js/src/**/*.js', ['scripts']);
+  gulp.watch('resources/styles/**/*.scss', ['styles']);
+  gulp.watch('resources/scripts/**/*.js', ['scripts']);
 });
 
 gulp.task('default', [

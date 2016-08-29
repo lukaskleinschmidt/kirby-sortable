@@ -12,10 +12,10 @@ class Module extends \Kirby\Modules\Module {
   public $field;
   public $page;
 
-  // public $redirect = false;
+  public $redirect = false;
   public $preview = true;
   public $delete = true;
-  // public $limit = false;
+  public $limit = null;
   public $edit = true;
 
   public function __construct($field, $page) {

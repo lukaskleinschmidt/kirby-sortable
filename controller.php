@@ -1,21 +1,28 @@
 <?php
 
 class ModulesFieldController extends Kirby\Panel\Controllers\Field {
+  public $options = array();
+  public $modules = array();
+
   public function add() {
+    $page = $this->model();
+    $origin = $this->origin();
 
-    // $this->options = $page
+    $field = $this->field($this->fieldname());
 
-    // $templates = str::split(get('templates'), ',');
-    $page = $this->origin();
+    $this->options = $field->options;
+    $this->modules = $field->modules;
 
-    dump($this->origin()->blueprint()->field());
-    dump($page->blueprint()->pages()->template);
-    dump($page->children()->count());
+    $modules = $this->modules($origin);
 
-    $form = $this->form('add', array($page, $this->model()));
+    $form = $this->form('add', array($origin, $page, $modules));
 
-    // return $this->modal('add', compact('form', 'templates'));
-    return $this->modal('add', compact('form'));
+    $options = array(
+      'redirect' => $page->uri('edit'),
+      'modules' => $modules,
+    );
+
+    return $this->modal('add', compact('form', 'options'));
   }
 
   public function delete() {
@@ -25,6 +32,26 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $form->style('delete');
 
     return $this->modal('delete', compact('form'));
+  }
+
+  public function modules($page) {
+    $templates = $page->blueprint()->pages()->template();
+    $modules = array();
+
+    foreach($templates as $template) {
+      $modules[] = array(
+        'title' => $template->title(),
+        'options' => $this->options($template->name()),
+        'template' => $template->name(),
+      );
+    }
+
+    return $modules;
+  }
+
+  public function field($name) {
+    $fields = $this->model()->blueprint()->fields(null);
+    return $fields->get($name);
   }
 
   public function origin() {

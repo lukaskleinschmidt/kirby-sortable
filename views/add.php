@@ -1,28 +1,25 @@
-<div class="modal-content modal-content-medium" data-templates='<?php echo json_encode($templates);?>'>
+<div class="modal-content modal-content-medium" data-options='<?php echo json_encode($options);?>'>
   <?php echo $form ?>
 </div>
 <script>
   (function($) {
-    var modal = $('.modal-content'),
-        title = $('input[name="title"]', modal),
-        select    = $('select[name="template"]', modal),
-        redirect  = $('input[name="_redirect"]', modal),
-        templates = modal.data('templates').map(function(index) { return parseInt(index); });
-
-    select.on('change', function(event) {
-      var option = $('option:selected', this);
-      title.val(option.text());
-      update(option.index());
+    var modal = $('.modal-content'), form = $('form', modal), options = modal.data('options');
+    var modules = options.modules.map(function(module) {
+      module.redirect = module.options.redirect ? '' : options.redirect;
+      return module;
     });
 
-    function update(index) {
-      if (templates.indexOf(index) < 0) {
-        redirect.attr('name', '');
-      } else {
-        redirect.attr('name', '_redirect');
-      }
-    }
+    form.on('submit', function(event) {
+      var template = $('select[name="template"] option:selected', this).val();
+      var module = modules.find(function(module) {
+        return module.template == template;
+      });
 
-    update(0);
+      // Set correct title
+      $('input[name="title"]', modal).val(module.title);
+
+      // Set redirect
+      $('input[name="_redirect"]', modal).val(module.redirect);
+    });
   })(jQuery);
 </script>
