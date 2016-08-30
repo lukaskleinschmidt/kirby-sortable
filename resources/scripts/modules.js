@@ -100,12 +100,12 @@ import Module from './module';
     }
 
     sort(id, to) {
-      $.post(this.options.url, {action: 'sort', id: id, to: (to + 1)}, this.reload);
+      $.post(this.options.url, {action: 'sort', id: id, to: (to + 1)}, this.reload.bind(this));
     }
 
     hide(id) {
       // $.post(this.options.url, {action: 'hide', id: id}, this.debounce(this.reload, this.wait));
-      $.post(this.options.url, {action: 'hide', id: id}, this.reload);
+      $.post(this.options.url, {action: 'hide', id: id}, this.reload.bind(this));
     }
 
     // debounce(func, wait, immediate) {
@@ -126,6 +126,9 @@ import Module from './module';
     // }
 
     reload() {
+      this.visible.option('disabled', true);
+      this.invisible.option('disabled', true);
+
       // console.log('reload');
       app.content.reload();
     }
