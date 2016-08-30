@@ -13,7 +13,7 @@ class ModulesField extends BaseField {
   public $modules = array();
   public $readonly = false;
   public $redirect = false;
-  
+
   static public $assets = array(
     'js' => array(
       'modules.js',
@@ -137,7 +137,7 @@ class ModulesField extends BaseField {
   public function label() {
     // Make sure there's at least an empty label
     if(!$this->label) $this->label = '&nbsp;';
- 
+
     $label = new Brick('label');
     $label->addClass('label');
     $label->html($this->label);

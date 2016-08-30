@@ -1,6 +1,5 @@
 import Sortable from 'sortablejs';
 import Module from './module';
-// import _ from 'underscore';
 
 (function($) {
 
@@ -10,7 +9,7 @@ import Module from './module';
       this.animation = 0;
       this.containment = $('.main');
       this.options = this.element.data('options');
-      this.wait = 350;
+      this.wait = 0;
 
       this.modules = this.options.modules.map(module => {
         return new Module(module);
@@ -37,7 +36,8 @@ import Module from './module';
           put: put || [],
         },
         animation: this.animation,
-        scroll: false
+        scroll: false,
+        filter: '.modules-entry-button'
       });
     }
 
@@ -46,7 +46,7 @@ import Module from './module';
         name: name
       });
 
-      return false;
+      // return false;
     }
 
     connect(name, put) {
@@ -55,7 +55,7 @@ import Module from './module';
         put: put
       });
 
-      return true;
+      // return true;
     }
 
     events() {
@@ -71,9 +71,9 @@ import Module from './module';
         clearTimeout(this.timeout);
       });
 
-      Sortable.utils.on(this.visible.el, 'start', event => {
-        clearTimeout(this.timeout);
-      });
+      // Sortable.utils.on(this.visible.el, 'start', event => {
+      //   clearTimeout(this.timeout);
+      // });
 
       Sortable.utils.on(this.visible.el, 'add', event => {
         this.sort(event.item.dataset.uid, event.newIndex);
@@ -100,32 +100,33 @@ import Module from './module';
     }
 
     sort(id, to) {
-      $.post(this.options.url, {action: 'sort', id: id, to: (to + 1)}, this.debounce(this.reload, this.wait));
+      $.post(this.options.url, {action: 'sort', id: id, to: (to + 1)}, this.reload);
     }
 
     hide(id) {
-      $.post(this.options.url, {action: 'hide', id: id}, this.debounce(this.reload, this.wait));
+      // $.post(this.options.url, {action: 'hide', id: id}, this.debounce(this.reload, this.wait));
+      $.post(this.options.url, {action: 'hide', id: id}, this.reload);
     }
 
-    debounce(func, wait, immediate) {
-      return () => {
-        if (this.timeout) {
-          clearTimeout(this.timeout);
-        } else if (immediate) {
-          func.call(this);
-        }
-
-        this.timeout = setTimeout(() => {
-          if (!immediate) {
-            func.call(this);
-          }
-          this.timeout = null;
-        }, wait);
-      };
-    }
+    // debounce(func, wait, immediate) {
+    //   return () => {
+    //     if (this.timeout) {
+    //       clearTimeout(this.timeout);
+    //     } else if (immediate) {
+    //       func.call(this);
+    //     }
+    //
+    //     this.timeout = setTimeout(() => {
+    //       if (!immediate) {
+    //         func.call(this);
+    //       }
+    //       this.timeout = null;
+    //     }, wait);
+    //   };
+    // }
 
     reload() {
-      console.log('reload');
+      // console.log('reload');
       app.content.reload();
     }
   }

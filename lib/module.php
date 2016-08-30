@@ -46,6 +46,18 @@ class Module extends \Kirby\Modules\Module {
     return $preview;
   }
 
+  public function limit() {
+    $count = $this->page()->siblings()->filter(function($page) {
+      return $page->isVisible() && $page->intendedTemplate() == $this->template();
+    })->count();
+
+    $counter = new Brick('span');
+    $counter->addClass('counter');
+    $counter->html('( ' . $count . ' / ' . $this->limit . ' )');
+
+    return $counter;
+  }
+
   public function url($action) {
     switch($action) {
       case 'delete':
