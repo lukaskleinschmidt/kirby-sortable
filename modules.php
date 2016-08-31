@@ -2,17 +2,14 @@
 
 class ModulesField extends BaseField {
   // Caches
-  protected $origin;
-  protected $pages;
+  protected $defaults = array();
+  protected $origin = null;
+  protected $pages = null;
+  protected $limit = false;
 
-  // Inherits from subpages settings
-  public $max = null;
-
-  public $style = 'item';
-  public $options = array();
-  public $modules = array();
   public $readonly = false;
-  public $redirect = false;
+  public $options = array();
+  public $style = 'item';
 
   static public $assets = array(
     'js' => array(
@@ -24,7 +21,23 @@ class ModulesField extends BaseField {
   );
 
   public function __construct() {
-    require_once(__DIR__ . DS . 'bootstrap.php');
+    // Path to language files
+    $path = __DIR__ . DS . 'languages' . DS;
+
+    // Intendet language file
+    $language = $path . panel()->translation()->code() . '.php';
+
+    // Try to load intended language file and fallback to default language
+    if(is_file($language)) {
+      require_once($language);
+    } else {
+      require_once($path . 'en.php');
+    }
+
+    // Define autoloader
+    load(array(
+      'kirby\\field\\modules\\module'     => __DIR__ . DS . 'module.php',
+    ));
   }
 
   public function routes() {
@@ -42,15 +55,26 @@ class ModulesField extends BaseField {
     );
   }
 
+  public function defaults() {
+    // Return from cache if possible
+    if($this->defaults) return $this->defaults;
+
+    $defaults = array_filter($this->options, function($value) {
+      return !is_array($value);
+    });
+
+    return $this->defaults = $defaults;
+  }
+
   public function options($template) {
     if(is_a($template, 'Page')) {
       $template = $template->intendedTemplate();
     }
 
     // Get module specific options
-    $options = a::get($this->modules, $template, array());
+    $options = a::get($this->options, $template, array());
 
-    return a::update($this->options, $options);
+    return a::update($this->defaults(), $options);
   }
 
   public function module($page) {
@@ -60,8 +84,26 @@ class ModulesField extends BaseField {
   public function modules($pages) {
     foreach ($pages as $page) {
       $module = $this->module($page);
-      echo tpl::load(__DIR__ . DS . 'templates' .  DS . 'module.php', compact('page', 'module'));
+      echo tpl::load(__DIR__ . DS . 'etc' .  DS . 'template-module.php', compact('page', 'module'));
     }
+  }
+
+  public function entries($visible = true) {
+    $pages = $this->pages();
+    $pages = $visible ? $pages->visible() : $pages->invisible();
+
+    $status = $visible ? 'visible' : 'invisible';
+    $limit = $visible ? $this->limit() : null;
+    $count = $pages->count();
+
+    $data = compact('pages', 'status', 'limit', 'count');
+    $data['field'] = $this;
+
+    echo tpl::load(__DIR__ . DS . 'etc' .  DS . 'template-modules.php', $data);
+  }
+
+  public function content() {
+    return tpl::load(__DIR__ . DS . 'etc' . DS . 'template.php', array('field' => $this));
   }
 
   public function pages() {
@@ -102,36 +144,31 @@ class ModulesField extends BaseField {
     }
 
     $data = array(
-      'max' => $this->max(),
       'url' => $this->origin()->url('subpages'),
+      'limit' => $this->limit(),
       'modules' => $modules,
     );
 
     return json_encode($data);
   }
 
-  public function max() {
+  public function limit() {
     // Return from cache if possible
-    if($this->max) return $this->max;
+    if($this->limit !== false) return $this->limit;
 
-    return $this->max = $this->origin()->blueprint()->pages()->max();
+    return $this->limit = $this->origin()->blueprint()->pages()->max();
   }
 
-  public function counter($count, $max = false) {
+  public function counter($count, $limit = null) {
     $values = array($count);
 
-    $max = $max ? $this->max() : false;
-    if($max) $values[] = $max;
+    if($limit) $values[] = $limit;
 
     $counter = new Brick('span');
     $counter->addClass('counter');
     $counter->html('( ' . implode(' / ', $values) . ' )');
 
     return $counter;
-  }
-
-  public function content() {
-    return tpl::load(__DIR__ . DS . 'templates' . DS . 'field.php', array('field' => $this));
   }
 
   public function label() {

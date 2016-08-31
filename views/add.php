@@ -4,22 +4,25 @@
 <script>
   (function($) {
     var modal = $('.modal-content'), form = $('form', modal), options = modal.data('options');
-    var modules = options.modules.map(function(module) {
-      module.redirect = module.options.redirect ? '' : options.redirect;
-      return module;
+    var templates = options.templates.map(function(template) {
+      template.redirect = template.options.redirect ? '' : options.redirect;
+      return template;
     });
 
+    console.log(options);
+    console.log(templates);
+
     form.on('submit', function(event) {
-      var template = $('select[name="template"] option:selected', this).val();
-      var module = modules.find(function(module) {
-        return module.template == template;
+      var name = $('select[name="template"] option:selected', this).val();
+      var template = templates.find(function(template) {
+        return template.name == name;
       });
 
       // Set correct title
-      $('input[name="title"]', modal).val(module.title);
+      $('input[name="title"]', modal).val(template.title);
 
       // Set redirect
-      $('input[name="_redirect"]', modal).val(module.redirect);
+      $('input[name="_redirect"]', modal).val(template.redirect);
     });
   })(jQuery);
 </script>

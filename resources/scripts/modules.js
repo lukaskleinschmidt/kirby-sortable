@@ -15,8 +15,8 @@ import Module from './module';
         return new Module(module);
       });
 
-      this.visible = this.create('visible');
       this.invisible = this.create('invisible', ['visible']);
+      this.visible = this.create('visible');
 
       this.modules.forEach(module => {
         return module.children = $(this.visible.el.children).filter(function() {
@@ -68,7 +68,7 @@ import Module from './module';
           this.disconnect('visible')
         }
 
-        clearTimeout(this.timeout);
+        // clearTimeout(this.timeout);
       });
 
       // Sortable.utils.on(this.visible.el, 'start', event => {
@@ -95,8 +95,8 @@ import Module from './module';
     }
 
     droppable() {
-      if (!this.options.max) return true;
-      return this.options.max && this.options.max > this.visible.el.children.length;
+      if (!this.options.limit) return true;
+      return this.options.limit && this.options.limit > this.visible.el.children.length;
     }
 
     sort(id, to) {
@@ -126,8 +126,8 @@ import Module from './module';
     // }
 
     reload() {
-      this.visible.option('disabled', true);
       this.invisible.option('disabled', true);
+      this.visible.option('disabled', true);
 
       // console.log('reload');
       app.content.reload();

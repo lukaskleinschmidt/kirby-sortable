@@ -8,9 +8,8 @@ use Url;
 use Tpl;
 
 class Module extends \Kirby\Modules\Module {
-  public $origin;
-  public $field;
-  public $page;
+  protected $field;
+  protected $page;
 
   public $redirect = false;
   public $preview = true;
@@ -46,7 +45,7 @@ class Module extends \Kirby\Modules\Module {
     return $preview;
   }
 
-  public function limit() {
+  public function counter() {
     $count = $this->page()->siblings()->filter(function($page) {
       return $page->isVisible() && $page->intendedTemplate() == $this->template();
     })->count();

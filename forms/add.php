@@ -13,7 +13,7 @@ return function($page, $cancel) {
   $form = new Kirby\Panel\Form(array(
     'title' => array(
       'label'        => 'fields.modules.add.title.label',
-      'type'         => 'hidden', // title
+      'type'         => 'hidden',
       'default'      => $templates->first()->title(),
       'placeholder'  => 'pages.add.title.placeholder',
       'autocomplete' => false,
@@ -22,7 +22,7 @@ return function($page, $cancel) {
     ),
     'uid' => array(
       'label'        => 'fields.modules.add.url.label',
-      'type'         => 'hidden', // text
+      'type'         => 'hidden',
       'default'      => $uid,
       'autocomplete' => false,
       'required'     => true,

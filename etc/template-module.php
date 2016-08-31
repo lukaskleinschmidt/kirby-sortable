@@ -4,7 +4,7 @@
     <span class="modules-entry-title">
       <?php echo $page->icon(); ?>
       <?php echo $page->title(); ?>
-      <?php if($page->isVisible() && $module->limit) echo $module->limit(); ?>
+      <?php if($page->isVisible() && $module->limit) echo $module->counter(); ?>
     </span>
     <?php if ($module->edit): ?>
     <a class="modules-entry-button btn btn-with-icon modules-edit-button" href="<?php __($module->url('edit')); ?>">

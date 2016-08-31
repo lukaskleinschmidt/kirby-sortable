@@ -1,25 +1,22 @@
 <?php
 
 class ModulesFieldController extends Kirby\Panel\Controllers\Field {
-  public $options = array();
-  public $modules = array();
+  protected $defaults = array();
+  protected $options = array();
+  protected $origin = null;
 
   public function add() {
-    $page = $this->model();
+    $this->options = $this->field($this->fieldname())->options;
+    
+    $templates = $this->templates();
     $origin = $this->origin();
+    $page = $this->model();
 
-    $field = $this->field($this->fieldname());
-
-    $this->options = $field->options;
-    $this->modules = $field->modules;
-
-    $modules = $this->modules($origin);
-
-    $form = $this->form('add', array($origin, $page, $modules));
+    $form = $this->form('add', array($origin, $page, $templates));
 
     $options = array(
+      'templates' => $templates,
       'redirect' => $page->uri('edit'),
-      'modules' => $modules,
     );
 
     return $this->modal('add', compact('form', 'options'));
@@ -34,19 +31,18 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     return $this->modal('delete', compact('form'));
   }
 
-  public function modules($page) {
-    $templates = $page->blueprint()->pages()->template();
-    $modules = array();
+  public function templates() {
+    $templates = array();
 
-    foreach($templates as $template) {
-      $modules[] = array(
-        'title' => $template->title(),
+    foreach($this->origin()->blueprint()->pages()->template() as $template) {
+      $templates[] = array(
         'options' => $this->options($template->name()),
-        'template' => $template->name(),
+        'title' => $template->title(),
+        'name' => $template->name(),
       );
     }
 
-    return $modules;
+    return $templates;
   }
 
   public function field($name) {
@@ -55,18 +51,30 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   }
 
   public function origin() {
-    // Determine where the modules live
-    if(!$origin = $this->model()->find(Kirby\Modules\Modules::parentUid())) {
-      $origin = $this->model();
-    }
+    // Return from cache if possible
+    if($this->origin) return $this->origin;
 
-    return $origin;
+    // Determine where the modules live
+    if(!$origin = $this->model()->find(Kirby\Modules\Modules::parentUid())) $origin = $this->model();
+
+    return $this->origin = $origin;
+  }
+
+  public function defaults() {
+    // Return from cache if possible
+    if($this->defaults) return $this->defaults;
+
+    $defaults = array_filter($this->options, function($value) {
+      return !is_array($value);
+    });
+
+    return $this->defaults = $defaults;
   }
 
   public function options($template) {
     // Get module specific options
-    $options = a::get($this->modules, $template, array());
+    $options = a::get($this->options, $template, array());
 
-    return a::update($this->options, $options);
+    return a::update($this->defaults(), $options);
   }
 }
