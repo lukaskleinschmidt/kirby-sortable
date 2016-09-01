@@ -23,7 +23,8 @@ fields:
 ```yml
 label: Modules
 type: modules
-style: table
+style: item
+readonly: false
 options:
   redirect: false
   preview: true
@@ -35,6 +36,7 @@ options:
 Option|Default|Description
 ---|---|---
 `style`|`item`|Available styles are `item` and `table`.
+`readonly`|`item`|Don't allow changes.
 `redirect`|`false`|Determine if the user should get redirected after adding a new module.
 `preview`|`true`|The template for this preview must be located inside the modules folder `site/modules/gallery/` and must be named `gallery.preview.php`. The `$module` object is available in the template.
 `delete`|`true`|Hide or show the delete button.
@@ -43,12 +45,11 @@ Option|Default|Description
 
 ### Template specific options
 
-You can override the default options by adding template specific options.
+Add template specific options to override the default options.
 
 ```yml
 label: Modules
 type: modules
-style: table
 options:
   redirect: false
   preview: true
@@ -63,4 +64,17 @@ options:
   module.gallery:
     limit: 1
     edit: false
+```
+
+### Max number of modules
+
+To limit the total number of **visible** modules set the `max` option in the subpage settings.
+
+```yml
+title: Modules
+pages:
+  template:
+    - module.text
+    - module.gallery
+  max: 4
 ```

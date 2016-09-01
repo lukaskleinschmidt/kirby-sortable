@@ -11,6 +11,8 @@ import Module from './module';
       this.options = this.element.data('options');
       this.wait = 0;
 
+      if (this.element.hasClass('modules-readonly')) return;
+
       this.modules = this.options.modules.map(module => {
         return new Module(module);
       });

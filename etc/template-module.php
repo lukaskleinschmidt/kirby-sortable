@@ -6,12 +6,12 @@
       <?php echo $page->title(); ?>
       <?php if($page->isVisible() && $module->limit) echo $module->counter(); ?>
     </span>
-    <?php if ($module->edit): ?>
+    <?php if ($module->edit && !$field->readonly): ?>
     <a class="modules-entry-button btn btn-with-icon modules-edit-button" href="<?php __($module->url('edit')); ?>">
       <?php i('pencil', 'left') . _l('fields.modules.edit') ?>
     </a>
     <?php endif; ?>
-    <?php if ($module->delete): ?>
+    <?php if ($module->delete && !$field->readonly): ?>
     <a data-modal class="modules-entry-button btn btn-with-icon modules-delete-button" href="<?php __($module->url('delete')); ?>">
       <?php i('trash-o', 'left') . _l('fields.modules.delete') ?>
     </a>

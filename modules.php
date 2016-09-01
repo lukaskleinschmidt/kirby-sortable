@@ -84,7 +84,9 @@ class ModulesField extends BaseField {
   public function modules($pages) {
     foreach ($pages as $page) {
       $module = $this->module($page);
-      echo tpl::load(__DIR__ . DS . 'etc' .  DS . 'template-module.php', compact('page', 'module'));
+      $data = compact('page', 'module');
+      $data['field'] = $this;
+      echo tpl::load(__DIR__ . DS . 'etc' .  DS . 'template-module.php', $data);
     }
   }
 
