@@ -35,8 +35,8 @@ options:
 
 Option|Default|Description
 ---|---|---
-`style`|`item`|Available styles are `item` and `table`.
-`readonly`|`item`|Don't allow changes.
+`style`|`items`|Available styles are `items` and `table`.
+`readonly`|`false`|Don't allow changes.
 `redirect`|`false`|Determine if the user should get redirected after adding a new module.
 `preview`|`true`|The template for this preview must be located inside the modules folder `site/modules/gallery/` and must be named `gallery.preview.php`. The `$module` object is available in the template.
 `delete`|`true`|Hide or show the delete button.

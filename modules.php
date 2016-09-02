@@ -9,7 +9,7 @@ class ModulesField extends BaseField {
 
   public $readonly = false;
   public $options = array();
-  public $style = 'item';
+  public $style = 'items';
 
   static public $assets = array(
     'js' => array(
