@@ -23,7 +23,7 @@ fields:
 ```yml
 label: Modules
 type: modules
-style: item
+style: items
 readonly: false
 options:
   redirect: false
