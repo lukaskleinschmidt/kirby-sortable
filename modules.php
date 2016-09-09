@@ -52,6 +52,11 @@ class ModulesField extends BaseField {
         'method'  => 'get|post',
         'action'  => 'delete',
       ),
+      array(
+        'pattern' => 'duplicate',
+        'method'  => 'get|post',
+        'action'  => 'duplicate',
+      ),
     );
   }
 
@@ -59,6 +64,7 @@ class ModulesField extends BaseField {
     // Return from cache if possible
     if($this->defaults) return $this->defaults;
 
+    // Filter options for default values
     $defaults = array_filter($this->options, function($value) {
       return !is_array($value);
     });
@@ -78,7 +84,14 @@ class ModulesField extends BaseField {
   }
 
   public function module($page) {
-    return new Kirby\Field\Modules\Module($this, $page);
+    $prefix = \Kirby\Modules\Modules::templatePrefix();
+    $prefixLength = str::length($prefix);
+    $name = str::substr($page->intendedTemplate(), $prefixLength);
+
+    // Get the path of the module
+    $path = kirby()->get('module', $name);
+
+    return new Kirby\Field\Modules\Module($this, $page, $name, $path);
   }
 
   public function modules($pages) {
@@ -114,8 +127,8 @@ class ModulesField extends BaseField {
 
     $pages = $this->origin()->children()->filter(function($page) {
       try {
-        $module = new Kirby\Modules\Module($page);
-        return $module->validate();
+        $module = Kirby\Modules\Modules::module($page);
+        return $module && $module->validate();
       } catch(Error $e) {
         return false;
       }

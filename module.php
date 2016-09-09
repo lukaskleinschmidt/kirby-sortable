@@ -17,7 +17,7 @@ class Module extends \Kirby\Modules\Module {
   public $limit = null;
   public $edit = true;
 
-  public function __construct($field, $page) {
+  public function __construct($field, $page, $name, $path) {
     $this->field = $field;
     $this->page = $page;
 
@@ -27,13 +27,13 @@ class Module extends \Kirby\Modules\Module {
     }
 
     // Call parent constructor
-    parent::__construct($page);
+    parent::__construct($name, $path);
   }
 
   public function preview() {
     $name = $this->name();
 
-    $template = \Kirby\Modules\Modules::directory() . DS . $name . DS . $name . '.preview.php';
+    $template = $this->path . DS . $name . '.preview.php';
 
     if(!is_file($template)) return null;
 
