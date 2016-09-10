@@ -1,6 +1,6 @@
 # Kirby Modules Field
 
-This field is build on top of [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin). It provides a subpage like drag and drop for modules.
+This field was built to extend the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) by providing a more user friendly interface to the plugin
 
 ![Preview](preview.gif)
 
