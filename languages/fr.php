@@ -2,7 +2,7 @@
 l::set(array(
   'fields.modules.add'                => 'Ajouter',
   'fields.modules.visible'            => 'Modules visibles',
-  'fields.modules.visible.info'       => 'Glisser un module invisible ici pour l'ordonner/le rendre visible.',
+  'fields.modules.visible.info'       => 'Glisser un module invisible ici pour l\'ordonner/le rendre visible.',
   'fields.modules.invisible'          => 'Modules invisibles',
   'fields.modules.invisible.info'     => 'Glisser un module visible ici pour le désordonner/le rendre invisible.',
   'fields.modules.edit'               => 'Editer',
