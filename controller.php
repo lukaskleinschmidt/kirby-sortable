@@ -6,8 +6,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   protected $origin = null;
 
   public function add() {
-    $this->options = $this->field($this->fieldname())->options;
-    
+    $this->options = $this->field($this->fieldname())->options() ? : array();
+
     $templates = $this->templates();
     $origin = $this->origin();
     $page = $this->model();
