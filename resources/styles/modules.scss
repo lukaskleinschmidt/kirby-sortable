@@ -1,0 +1,18 @@
+$white: #fff;
+$black: #000;
+
+$gray: #777;
+$gray-light: #bbb;
+$gray-lighter: #ddd;
+$gray-lightest: #efefef;
+
+$green: #8dae28;
+
+.modules {}
+
+.module {
+  background: $white;
+  border: 2px solid $gray-lighter;
+  margin-bottom: 0.25em;
+  position: relative;
+}
