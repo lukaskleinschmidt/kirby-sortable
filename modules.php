@@ -14,6 +14,31 @@ class ModulesField extends InputListField {
     ),
   );
 
+  public function routes() {
+    return array(
+      array(
+        'pattern' => 'add',
+        'method'  => 'get|post',
+        'action'  => 'add'
+      ),
+      array(
+        'pattern' => 'delete',
+        'method'  => 'get|post',
+        'action'  => 'delete',
+      ),
+      array(
+        'pattern' => 'duplicate',
+        'method'  => 'get|post',
+        'action'  => 'duplicate',
+      ),
+      array(
+        'pattern' => 'sort',
+        'method'  => 'get|post',
+        'action'  => 'sort',
+      ),
+    );
+  }
+
   public function input() {
 
     $value = func_get_arg(0);
@@ -101,6 +126,10 @@ class ModulesField extends InputListField {
     $result = parent::result();
     return is_array($result) ? implode(', ', $result) : '';
 
+  }
+
+  public function url($action) {
+    return purl($this->model(), implode('/', array('field', $this->name(), 'modules', $action)));
   }
 
 }

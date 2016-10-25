@@ -17,28 +17,22 @@
 
     events() {
       this.element.on('_sortableupdate', (event, ui) => {
-        if (ui.item.data('visible')) {
-          var to = this.element.children('[data-visible="true"]').index(ui.item);
-          console.log(to);
-        } else {
+        var to = this.element.children().index(ui.item);
+        var uid = ui.item.data('uid');
 
-        }
+        this.sort(uid, to)
 
-        // $.post('http://kirby.dev/panel/pages/home/edit', this.element.find('input').serializeArray(), () =>{
-        //   console.log('complete');
-        // });
-        // console.log(this.element.find('input').serializeArray());
-
-        // this.reload();
+        console.log(uid, to);
       });
     }
 
-    sort(id, to) {
+    sort(uid, to) {
       this.disable();
-      $.post(this.options.url, {action: 'sort', id: id, to: (to + 1)}, this.reload.bind(this));
+      $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/sort', {uid: uid, to: to + 1}, this.reload.bind(this));
     }
 
     hide(id) {
+      this.disable();
       $.post(this.options.url, {action: 'hide', id: id}, this.reload.bind(this));
     }
 
