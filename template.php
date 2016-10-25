@@ -17,12 +17,12 @@
           <?php echo $module->title(); ?>
         </div>
         <div class="module__buttons">
-          <a href="<?php echo $module->url('edit'); ?>"><i class="icon icon-left fa fa-pencil"></i> Edit</a>
-          <a href=""><i class="icon icon-left fa fa-trash-o"></i> Delete</a>
+          <a href="<?php echo $module->url('edit'); ?>" title="Edit"><i class="icon icon-left fa fa-pencil"></i> Edit</a>
+          <a href="" title="Delete"><i class="icon icon-left fa fa-trash-o"></i> Delete</a>
           <?php if($module->isVisible()): ?>
-            <button class="" data-hide><i class="icon icon-left fa fa-toggle-on"></i></button>
+            <button class="" data-hide title="Hide"><i class="icon icon-left fa fa-toggle-on"></i></button>
           <?php else: ?>
-            <button class="" data-show><i class="icon icon-left fa fa-toggle-off"></i></button>
+            <button class="" data-show title="Show"><i class="icon icon-left fa fa-toggle-off"></i></button>
           <?php endif; ?>
         </div>
       </nav>
