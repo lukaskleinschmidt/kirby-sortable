@@ -20,9 +20,33 @@
         var to = this.element.children().index(ui.item);
         var uid = ui.item.data('uid');
 
-        this.sort(uid, to)
+        this.sort(uid, to);
+      });
 
-        console.log(uid, to);
+      this.element.on('click', '[data-show]', event => {
+        event.preventDefault();
+        var element = $(event.target).parents('.module');
+        var uid = element.data('uid');
+
+        var to = 0;
+        this.element.children().each((index, child) => {
+          child = $(child);
+          if (child.is(element)) {
+            return false;
+          } else if (child.data('visible')) {
+            to++;
+          }
+        });
+
+        this.show(uid, to);
+      });
+
+      this.element.on('click', '[data-hide]', event => {
+        event.preventDefault();
+        var element = $(event.target).parents('.module');
+        var uid = element.data('uid');
+
+        this.hide(uid);
       });
     }
 
@@ -31,9 +55,14 @@
       $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/sort', {uid: uid, to: to + 1}, this.reload.bind(this));
     }
 
-    hide(id) {
+    show(uid, to) {
       this.disable();
-      $.post(this.options.url, {action: 'hide', id: id}, this.reload.bind(this));
+      $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/show', {uid: uid, to: to + 1}, this.reload.bind(this));
+    }
+
+    hide(uid) {
+      this.disable();
+      $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/hide', {uid: uid}, this.reload.bind(this));
     }
 
     disable() {

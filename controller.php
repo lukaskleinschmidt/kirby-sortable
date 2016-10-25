@@ -13,6 +13,25 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   public function duplicate() {
   }
 
+  public function show() {
+
+    $uid = get('uid');
+    $to  = get('to');
+
+    // Sort current page
+    $this->field->modules()->find($uid)->sort($to);
+
+  }
+
+  public function hide() {
+
+    $uid = get('uid');
+
+    // Hide current page
+    $this->field->modules()->find($uid)->hide();
+
+  }
+
   public function sort() {
 
     $uid = get('uid');

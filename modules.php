@@ -17,19 +17,14 @@ class ModulesField extends InputListField {
   public function routes() {
     return array(
       array(
-        'pattern' => 'add',
+        'pattern' => 'show',
         'method'  => 'get|post',
-        'action'  => 'add'
+        'action'  => 'show'
       ),
       array(
-        'pattern' => 'delete',
+        'pattern' => 'hide',
         'method'  => 'get|post',
-        'action'  => 'delete',
-      ),
-      array(
-        'pattern' => 'duplicate',
-        'method'  => 'get|post',
-        'action'  => 'duplicate',
+        'action'  => 'hide'
       ),
       array(
         'pattern' => 'sort',
