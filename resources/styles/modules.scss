@@ -16,6 +16,11 @@ $green: #8dae28;
   margin-bottom: 0.25em;
   position: relative;
 
+  &[data-visible="false"] {
+    // border-style: dashed;
+    background: mix($gray-lightest, $white, 50%);
+  }
+
   &__preview {
     border-bottom: 1px solid $gray-lightest;
   }
@@ -32,6 +37,7 @@ $green: #8dae28;
     white-space: nowrap;
     flex: 1 0 100%;
     line-height: 1.25em;
+    font-size: 1em;
   }
 
   &__title {
@@ -42,7 +48,8 @@ $green: #8dae28;
     flex: 0 0 auto;
     border: none;
     border-left: 1px solid $gray-lightest;
-    background: $white;
+    background: transparent;
     cursor: pointer;
+    outline: 0;
   }
 }
