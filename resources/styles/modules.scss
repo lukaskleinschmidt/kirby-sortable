@@ -15,4 +15,34 @@ $green: #8dae28;
   border: 2px solid $gray-lighter;
   margin-bottom: 0.25em;
   position: relative;
+
+  &__preview {
+    border-bottom: 1px solid $gray-lightest;
+  }
+
+  &__navigation {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  &__title,
+  &__button {
+    padding: 0.2em;
+    padding: 0.75em 1.25em;
+    white-space: nowrap;
+    flex: 1 0 100%;
+    line-height: 1.25em;
+  }
+
+  &__title {
+    flex: 1 0 auto;
+  }
+
+  &__button {
+    flex: 0 0 auto;
+    border: none;
+    border-left: 1px solid $gray-lightest;
+    background: $white;
+    cursor: pointer;
+  }
 }

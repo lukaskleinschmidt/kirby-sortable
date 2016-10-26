@@ -41,7 +41,7 @@ class ModulesField extends InputListField {
     $input->attr(array(
       'id'           => $value,
       'name'         => $this->name() . '[]',
-      'type'         => 'text',
+      'type'         => 'hidden',
       'value'        => $value,
       'required'     => false,
       'autocomplete' => false,

@@ -17,8 +17,6 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     $uid = get('uid');
     $to  = get('to');
-
-    // Sort current module
     $this->field->modules()->find($uid)->sort($to);
 
   }
@@ -26,8 +24,6 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   public function hide() {
 
     $uid = get('uid');
-
-    // Hide current module
     $this->field->modules()->find($uid)->hide();
 
   }
@@ -36,7 +32,6 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     $uid = get('uid');
     $to  = get('to');
-
     $modules = $this->field->modules();
     $value = $modules->not($uid)->pluck('uid');
 
