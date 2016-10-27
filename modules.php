@@ -123,8 +123,12 @@ class ModulesField extends InputListField {
 
   }
 
-  public function url($action) {
-    return purl($this->model(), implode('/', array('field', $this->name(), 'modules', $action)));
+  public function url($action, $query = array()) {
+
+    $query = url::queryToString($query);
+    $query = $query ? '?' . $query : '';
+    return purl($this->model(), implode('/', array('field', $this->name(), 'modules', $action)) . $query);
+
   }
 
 }

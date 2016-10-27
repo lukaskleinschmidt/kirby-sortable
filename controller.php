@@ -15,16 +15,44 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function show() {
 
-    $uid = get('uid');
-    $to  = get('to');
-    $this->field->modules()->find($uid)->sort($to);
+    $model = $this->model;
+    $self  = $this;
+    $uid   = get('uid');
+    $to    = get('to');
+
+    $form = $this->form('show', array($model), function($form) use($model, $self, $uid, $to) {
+      $form->validate();
+
+      if(!$form->isValid()) {
+        return false;
+      }
+
+      $self->field()->modules()->find($uid)->sort($to);
+      $self->redirect($model);
+    });
+
+    return $this->modal('show', compact('form'));
 
   }
 
   public function hide() {
 
-    $uid = get('uid');
-    $this->field->modules()->find($uid)->hide();
+    $model = $this->model;
+    $self  = $this;
+    $uid   = get('uid');
+
+    $form = $this->form('hide', array($model), function($form) use($model, $self, $uid) {
+      $form->validate();
+
+      if(!$form->isValid()) {
+        return false;
+      }
+
+      $self->field()->modules()->find($uid)->hide();
+      $self->redirect($model);
+    });
+
+    return $this->modal('hide', compact('form'));
 
   }
 
@@ -59,6 +87,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       // Sort the page
       $page->sort($collection->visible()->count() + 1);
     }
+
+    return $this->modal('sort');
 
   }
 

@@ -16,10 +16,30 @@ $green: #8dae28;
   margin-bottom: 0.25em;
   position: relative;
 
-  &[data-visible="false"] {
-    // border-style: dashed;
-    background: mix($gray-lightest, $white, 50%);
+  a,
+  button {
+    color: inherit;
   }
+
+  .icon {
+    vertical-align: -10%;
+
+    button & {
+      vertical-align: -5%;
+    }
+  }
+
+  &[data-visible="false"] {
+    background: mix($gray-lightest, $white, 33.3333%);
+
+    &:not(:hover) {
+      color: $gray;
+    }
+  }
+
+  // &.ui-sortable-helper {
+  //   border-color: $green;
+  // }
 
   &__preview {
     border-bottom: 1px solid $gray-lightest;
@@ -32,16 +52,16 @@ $green: #8dae28;
 
   &__title,
   &__button {
-    padding: 0.2em;
-    padding: 0.75em 1.25em;
+    padding: 0.6em 0.9em;
     white-space: nowrap;
     flex: 1 0 100%;
-    line-height: 1.25em;
+    line-height: 1.5em;
     font-size: 1em;
   }
 
   &__title {
     flex: 1 0 auto;
+    cursor: move;
   }
 
   &__button {

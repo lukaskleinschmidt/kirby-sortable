@@ -4,9 +4,12 @@
     constructor(element) {
       this.element = $(element);
 
+      this.api = this.element.data('api');
+
       // if (this.element.hasClass('modules-readonly') || $('.modules-empty', this.element).length) return;
 
       this.element._sortable({
+        handle: '.module__preview, .module__title',
         start: () => {
           this.element._sortable('refreshPositions');
         },
@@ -52,17 +55,17 @@
 
     sort(uid, to) {
       this.disable();
-      $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/sort', {uid: uid, to: to + 1}, this.reload.bind(this));
+      $.post(this.api + '/sort', {uid: uid, to: to + 1}, this.reload.bind(this));
     }
 
     show(uid, to) {
       this.disable();
-      $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/show', {uid: uid, to: to + 1}, this.reload.bind(this));
+      $.post(this.api + '/show', {uid: uid, to: to + 1}, this.reload.bind(this));
     }
 
     hide(uid) {
       this.disable();
-      $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/hide', {uid: uid}, this.reload.bind(this));
+      $.post(this.api + '/hide', {uid: uid}, this.reload.bind(this));
     }
 
     disable() {
