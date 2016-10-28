@@ -26,31 +26,37 @@
         this.sort(uid, to);
       });
 
-      this.element.on('click', '[data-show]', event => {
+      this.element.on('click', '[data-action]', event => {
         event.preventDefault();
-        var element = $(event.target).parents('.module');
-        var uid = element.data('uid');
-
-        var to = 0;
-        this.element.children().each((index, child) => {
-          child = $(child);
-          if (child.is(element)) {
-            return false;
-          } else if (child.data('visible')) {
-            to++;
-          }
-        });
-
-        this.show(uid, to);
+        $.post($(event.target).data('action'), this.reload.bind(this));
+        console.log($(event.target).data('action'));
       });
 
-      this.element.on('click', '[data-hide]', event => {
-        event.preventDefault();
-        var element = $(event.target).parents('.module');
-        var uid = element.data('uid');
-
-        this.hide(uid);
-      });
+      // this.element.on('click', '[data-show]', event => {
+      //   event.preventDefault();
+      //   var element = $(event.target).parents('.module');
+      //   var uid = element.data('uid');
+      //
+      //   var to = 0;
+      //   this.element.children().each((index, child) => {
+      //     child = $(child);
+      //     if (child.is(element)) {
+      //       return false;
+      //     } else if (child.data('visible')) {
+      //       to++;
+      //     }
+      //   });
+      //
+      //   this.show(uid, to);
+      // });
+      //
+      // this.element.on('click', '[data-hide]', event => {
+      //   event.preventDefault();
+      //   var element = $(event.target).parents('.module');
+      //   var uid = element.data('uid');
+      //
+      //   this.hide(uid);
+      // });
     }
 
     sort(uid, to) {
@@ -58,15 +64,15 @@
       $.post(this.api + '/sort', {uid: uid, to: to + 1}, this.reload.bind(this));
     }
 
-    show(uid, to) {
-      this.disable();
-      $.post(this.api + '/show', {uid: uid, to: to + 1}, this.reload.bind(this));
-    }
-
-    hide(uid) {
-      this.disable();
-      $.post(this.api + '/hide', {uid: uid}, this.reload.bind(this));
-    }
+    // show(uid, to) {
+    //   this.disable();
+    //   $.post(this.api + '/show', {uid: uid, to: to + 1}, this.reload.bind(this));
+    // }
+    //
+    // hide(uid) {
+    //   this.disable();
+    //   $.post(this.api + '/hide', {uid: uid}, this.reload.bind(this));
+    // }
 
     disable() {
       this.element._sortable('disable');

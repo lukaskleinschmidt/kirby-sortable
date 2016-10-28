@@ -17,6 +17,21 @@ class ModulesField extends InputListField {
   public function routes() {
     return array(
       array(
+        'pattern' => 'add',
+        'method'  => 'get|post',
+        'action'  => 'add'
+      ),
+      array(
+        'pattern' => 'delete',
+        'method'  => 'get|post',
+        'action'  => 'delete'
+      ),
+      array(
+        'pattern' => 'duplicate',
+        'method'  => 'get|post',
+        'action'  => 'duplicate'
+      ),
+      array(
         'pattern' => 'show',
         'method'  => 'get|post',
         'action'  => 'show'
@@ -100,6 +115,23 @@ class ModulesField extends InputListField {
 
   }
 
+  public function label() {
+
+    $add = new Brick('a');
+    $add->addClass('label-option');
+    $add->html('<i class="icon icon-left fa fa-plus-circle"></i>Add');
+    $add->data('context', $this->url('add'));
+    $add->attr('href', '#' . $this->id());
+
+    $label = new Brick('label');
+    $label->addClass('label');
+    $label->html($this->label);
+    $label->append($add);
+
+    return $label;
+
+  }
+
   public function validate() {
     return true;
   }
@@ -126,7 +158,10 @@ class ModulesField extends InputListField {
   public function url($action, $query = array()) {
 
     $query = url::queryToString($query);
-    $query = $query ? '?' . $query : '';
+    if($query) {
+      $query = '?' . $query;
+    }
+
     return purl($this->model(), implode('/', array('field', $this->name(), 'modules', $action)) . $query);
 
   }

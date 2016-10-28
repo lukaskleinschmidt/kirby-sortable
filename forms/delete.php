@@ -5,7 +5,7 @@ return function($model) {
   $form = new Kirby\Panel\Form(array(
     'uid' => array(
       'label'        => 'uid',
-      'type'         => 'hidden',
+      'type'         => 'text',
       'autocomplete' => false,
       'autofocus'    => true,
       'required'     => true

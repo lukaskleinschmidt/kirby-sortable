@@ -8,7 +8,24 @@ $gray-lightest: #efefef;
 
 $green: #8dae28;
 
-.modules {}
+.modules {
+  // &__add {
+  //   background: $gray-lightest;
+  //   border: 2px dashed $gray-lighter;
+  //   margin-bottom: 0.25em;
+  //   display: block;
+  //   padding: 1.2em 1.8em;
+  //   white-space: nowrap;
+  //   flex: 1 0 100%;
+  //   line-height: 1.5em;
+  //   font-size: 1em;
+  // }
+
+  &__add {
+    margin-top: 1em;
+    text-align: right;
+  }
+}
 
 .module {
   background: $white;
@@ -30,10 +47,12 @@ $green: #8dae28;
   }
 
   &[data-visible="false"] {
-    background: mix($gray-lightest, $white, 33.3333%);
+    background: mix($gray-lightest, $white, 50%);
+    border-color: mix($gray-lightest, $black, 97.5%);
 
+    color: $gray;
     &:not(:hover) {
-      color: $gray;
+      // background: mix($gray-lightest, $white, 50%);
     }
   }
 
