@@ -44,6 +44,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $uid  = 'test-' . time();
 
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
+    panel()->notify(':)');
 
     $this->update($uid, $to);
 
@@ -51,11 +52,9 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function show() {
 
-    $uid = get('uid');
-    $to  = get('to');
-
     try {
-      $this->field()->modules()->find($uid)->sort($to);
+      $this->field()->modules()->find(get('uid'))->sort(get('to'));
+      panel()->notify(':)');
     } catch(Exception $e) {
       echo $e->getMessage();
     }
@@ -64,10 +63,9 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function hide() {
 
-    $uid = get('uid');
-
     try {
-      $this->field()->modules()->find($uid)->hide();
+      $this->field()->modules()->find(get('uid'))->hide();
+      panel()->notify(':)');
     } catch(Exception $e) {
       echo $e->getMessage();
     }
@@ -75,12 +73,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   }
 
   public function sort() {
-
-    $uid = get('uid');
-    $to  = get('to');
-
-    $this->update($uid, $to);
-
+    $this->update(get('uid'), get('to'));
   }
 
   public function update($uid, $to) {
@@ -91,8 +84,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     // Order modules value
     array_splice($value, $to - 1, 0, $uid);
 
-    // Update field
     try {
+      // Update field
       $this->model->update(array(
         $this->field->name() => implode(', ', $value)
       ));
@@ -113,8 +106,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         }
       }
 
-      // Sort the page
       try {
+        // Sort the page
         $page->sort($collection->visible()->count() + 1);
       } catch(Exception $e) {
         echo $e->getMessage();

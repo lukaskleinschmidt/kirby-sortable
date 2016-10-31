@@ -2,13 +2,7 @@
 
   <?php $i = 0; $n = 0; foreach($field->modules() as $module): $i++; if($module->isVisible()) $n++; ?>
     <div class="module" data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>" data-uid="<?php echo $module->uid(); ?>">
-
-      <?php if(true): ?>
-        <!-- <div class="module__preview">
-          <?php echo $field->url('sort'); ?>
-        </div> -->
-      <?php endif; ?>
-
+      <?php echo $field->preview($module); ?>
       <nav class="module__navigation">
         <div class="module__title">
           <?php echo $module->icon(); ?>
@@ -28,13 +22,12 @@
           <!-- <a href="<?php echo $field->url('show', array('uid' => $module->uid(), 'to' => $n + 1)); ?>" class="module__button" data-modal title="Show"><?php i('toggle-off'); ?></a> -->
         <?php endif; ?>
       </nav>
-
       <?php echo $field->input($module->uid()); ?>
     </div>
   <?php endforeach; ?>
 
-  <!-- <div class="modules__add">
-    <a href="#" class="label-option" data-context><?php i('plus-circle', 'left'); ?>Add</a>
-  </div> -->
+  <div class="modules__add">
+    <a href="#" data-context><?php i('plus-circle', 'left'); ?> Add</a>
+  </div>
 
 </div>

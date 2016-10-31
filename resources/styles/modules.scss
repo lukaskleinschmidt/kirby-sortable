@@ -9,22 +9,27 @@ $gray-lightest: #efefef;
 $green: #8dae28;
 
 .modules {
-  // &__add {
-  //   background: $gray-lightest;
-  //   border: 2px dashed $gray-lighter;
-  //   margin-bottom: 0.25em;
-  //   display: block;
-  //   padding: 1.2em 1.8em;
-  //   white-space: nowrap;
-  //   flex: 1 0 100%;
-  //   line-height: 1.5em;
-  //   font-size: 1em;
-  // }
-
   &__add {
-    margin-top: 1em;
+    // background: $gray-lighter;
+    // border: 2px dashed $gray-lighter;
+    margin-bottom: 0.25em;
+    display: block;
+    padding: 0.6em 0.9em;
+    white-space: nowrap;
+    flex: 1 0 100%;
+    line-height: 1.5em;
+    font-size: 1em;
     text-align: right;
+
+    a {
+      // color: $white;
+    }
   }
+
+  // &__add {
+  //   margin-top: 1em;
+  //   text-align: right;
+  // }
 }
 
 .module {
@@ -46,15 +51,15 @@ $green: #8dae28;
     }
   }
 
-  &[data-visible="false"] {
-    background: mix($gray-lightest, $white, 50%);
-    border-color: mix($gray-lightest, $black, 97.5%);
-
-    color: $gray;
-    &:not(:hover) {
-      // background: mix($gray-lightest, $white, 50%);
-    }
-  }
+  // &[data-visible="false"] {
+  //   background: mix($gray-lightest, $white, 50%);
+  //   border-color: mix($gray-lightest, $black, 97.5%);
+  //   color: $gray;
+  //
+  //   &:not(:hover) {
+  //     // background: mix($gray-lightest, $white, 50%);
+  //   }
+  // }
 
   // &.ui-sortable-helper {
   //   border-color: $green;
@@ -62,6 +67,13 @@ $green: #8dae28;
 
   &__preview {
     border-bottom: 1px solid $gray-lightest;
+    cursor: move;
+
+    // > * {
+    //   .module[data-visible="false"] & {
+    //     opacity: 0.75;
+    //   }
+    // }
   }
 
   &__navigation {

@@ -13,7 +13,8 @@ return function($model) {
   ));
 
   $form->cancel($model);
-  $form->buttons->submit->val(l('save'));
+  $form->style('delete');
+  $form->buttons->submit->val(l('delete'));
 
   return $form;
 };

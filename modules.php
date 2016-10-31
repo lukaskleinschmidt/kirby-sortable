@@ -66,11 +66,31 @@ class ModulesField extends InputListField {
 
   }
 
+  public function preview($page) {
+
+    $module = Kirby\Modules\Modules::module($page);
+    $template = $module->path() . DS . $module->name() . '.preview.php';
+
+    if(!is_file($template)) {
+      return null;
+    }
+
+    $preview = new Brick('div');
+    $preview->addClass('module__preview');
+    $preview->data('module', $module->name());
+    $preview->html(tpl::load($template, array('module' => $page)));
+
+    return $preview;
+  }
+
   public function content() {
     return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
   }
 
   public function modules() {
+
+		// Return from cache if possible
+		if($this->modules) return $this->modules;
 
     // Filter the modules by valid module
     $modules = $this->origin()->children()->filter(function($page) {
