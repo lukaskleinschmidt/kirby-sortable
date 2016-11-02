@@ -52,12 +52,21 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function show() {
 
+    // return $this->modal('confirm');
+
+
+
     try {
       $this->field()->modules()->find(get('uid'))->sort(get('to'));
       panel()->notify(':)');
     } catch(Exception $e) {
       echo $e->getMessage();
     }
+
+    $string = 'You can\'t have more than %1$d visible %2$s Modules';
+    $string = 'You can\'t have more than 1 visible %2$s Module';
+
+    panel()->alert('You can\'t have more than 3 visible Text Modules');
 
   }
 

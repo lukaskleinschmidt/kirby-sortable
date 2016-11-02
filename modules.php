@@ -1,9 +1,12 @@
 <?php
 
-class ModulesField extends InputListField {
+class ModulesField extends InputField {
 
+  protected $defaults;
   protected $modules;
   protected $origin;
+
+  public $options = array();
 
   static public $assets = array(
     'js' => array(
@@ -83,6 +86,53 @@ class ModulesField extends InputListField {
     return $preview;
   }
 
+  public function counter($page) {
+
+    if(!$page->isVisible() || !$this->options($page)->limit()) {
+      return null;
+    }
+
+    $modules = $this->modules()->filterBy('template', $page->intendedTemplate());
+
+    $index = $modules->visible()->indexOf($page) + 1;
+    $limit = $this->options($page)->limit();
+
+    $counter = new Brick('span');
+    $counter->addClass('module__counter');
+    $counter->html('( ' . $index . ' / ' . $limit . ' )');
+
+    return $counter;
+  }
+
+  public function defaults() {
+
+    // Return from cache if possible
+    if($this->defaults) {
+      return $this->defaults;
+    }
+
+    // Filter options for default values
+    $defaults = array_filter($this->options, function($value) {
+      return !is_array($value);
+    });
+
+    return $this->defaults = $defaults;
+
+  }
+
+  public function options($template) {
+
+    if(is_a($template, 'Page')) {
+      $template = $template->intendedTemplate();
+    }
+
+    // Get module specific options
+    $options = a::get($this->options, $template, array());
+
+    return new Obj(a::update($this->defaults(), $options));
+
+  }
+
   public function content() {
     return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
   }
@@ -90,7 +140,9 @@ class ModulesField extends InputListField {
   public function modules() {
 
 		// Return from cache if possible
-		if($this->modules) return $this->modules;
+		if($this->modules) {
+      return $this->modules;
+    }
 
     // Filter the modules by valid module
     $modules = $this->origin()->children()->filter(function($page) {
@@ -121,7 +173,9 @@ class ModulesField extends InputListField {
   public function origin() {
 
     // Return from cache if possible
-    if($this->origin) return $this->origin;
+    if($this->origin) {
+      return $this->origin;
+    }
 
     // Get parent uid
     $parentUid = Kirby\Modules\Modules::parentUid();
@@ -139,13 +193,16 @@ class ModulesField extends InputListField {
 
     $add = new Brick('a');
     $add->addClass('label-option');
-    $add->html('<i class="icon icon-left fa fa-plus-circle"></i>Add');
+    $add->html('<i class="icon icon-left fa fa-plus-circle"></i> Add');
     $add->data('context', $this->url('add'));
     $add->attr('href', '#' . $this->id());
 
     $label = new Brick('label');
     $label->addClass('label');
     $label->html($this->label);
+
+    $label->append(' <span class="modules__counter">( 3 / 10 )</span>');
+
     $label->append($add);
 
     return $label;
@@ -158,7 +215,7 @@ class ModulesField extends InputListField {
 
   public function value() {
 
-    $value = InputListField::value();
+    $value = parent::value();
 
     if(is_array($value)) {
       return $value;
