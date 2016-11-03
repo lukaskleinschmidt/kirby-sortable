@@ -3,7 +3,28 @@
 class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function add() {
-    return $this->view('add');
+
+    $templates = array();
+
+    foreach($this->field()->origin()->blueprint()->pages()->template() as $template) {
+      $templates[] = array(
+        'options' => $this->options($template->name()),
+        'title' => $template->title(),
+        'name' => $template->name(),
+      );
+    }
+
+    $page = $this->model();
+
+    $form = $this->form('add', array($this->field()->origin(), $page, $templates));
+
+    $options = array(
+      'templates' => $templates,
+      'redirect' => $page->uri('edit'),
+    );
+
+    return $this->modal('add', compact('form', 'options'));
+    // return $this->view('add');
   }
 
   public function delete() {

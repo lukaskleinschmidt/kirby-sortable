@@ -237,8 +237,10 @@ class ModulesField extends InputField {
     $add = new Brick('a');
     $add->addClass('label-option');
     $add->html('<i class="icon icon-left fa fa-plus-circle"></i> Add');
-    $add->data('context', $this->url('add'));
-    $add->attr('href', '#' . $this->id());
+    $add->data('modal', true);
+    $add->attr('href', $this->url('add'));
+    // $add->data('context', $this->url('add'));
+    // $add->attr('href', '#' . $this->id());
 
     $label = new Brick('label');
     $label->addClass('label');
@@ -279,6 +281,7 @@ class ModulesField extends InputField {
   public function url($action, $query = array()) {
 
     $query = url::queryToString($query);
+
     if($query) {
       $query = '?' . $query;
     }

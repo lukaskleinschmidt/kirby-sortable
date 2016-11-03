@@ -26,5 +26,5 @@
 </div>
 
 <div class="modules__add">
-  <a href="#" data-context><?php i('plus-circle', 'left'); ?> Add</a>
+  <a href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?> Add</a>
 </div>
