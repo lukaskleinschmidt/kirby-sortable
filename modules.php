@@ -7,6 +7,7 @@ class ModulesField extends InputField {
   protected $origin;
 
   public $options = array();
+  public $limit = false;
 
   static public $assets = array(
     'js' => array(
@@ -71,11 +72,15 @@ class ModulesField extends InputField {
 
   public function preview($page) {
 
+    if(!$this->options($page)->preview()) {
+      return;
+    }
+
     $module = Kirby\Modules\Modules::module($page);
     $template = $module->path() . DS . $module->name() . '.preview.php';
 
     if(!is_file($template)) {
-      return null;
+      return;
     }
 
     $preview = new Brick('div');
@@ -93,15 +98,36 @@ class ModulesField extends InputField {
     }
 
     $modules = $this->modules()->filterBy('template', $page->intendedTemplate());
-
-    $index = $modules->visible()->indexOf($page) + 1;
-    $limit = $this->options($page)->limit();
+    $index   = $modules->visible()->indexOf($page) + 1;
+    $limit   = $this->options($page)->limit();
 
     $counter = new Brick('span');
     $counter->addClass('module__counter');
     $counter->html('( ' . $index . ' / ' . $limit . ' )');
 
     return $counter;
+  }
+
+  public function status($page) {
+
+    // Check module specific limit
+    $count = $this->modules()->filterBy('template', $page->intendedTemplate())->visible()->count();
+    $limit = $this->options($page)->limit();
+
+    if($limit && $count >= $limit) {
+      return false;
+    }
+
+    // Check limit
+    $count = $this->modules()->visible()->count();
+    $limit = $this->limit();
+
+    if($limit && $count >= $limit) {
+      return false;
+    }
+
+    return true;
+
   }
 
   public function defaults() {
@@ -111,12 +137,25 @@ class ModulesField extends InputField {
       return $this->defaults;
     }
 
+    // Default values
+    $defaults = array(
+      // 'redirect' => false,
+      'preview' => true,
+      // 'delete' => true,
+      'limit' => false,
+      // 'edit' => true,
+    );
+
+    if(!$this->options) {
+      return $defaults;
+    }
+
     // Filter options for default values
-    $defaults = array_filter($this->options, function($value) {
+    $options = array_filter($this->options, function($value) {
       return !is_array($value);
     });
 
-    return $this->defaults = $defaults;
+    return $this->defaults = a::update($defaults, $options);
 
   }
 
@@ -128,6 +167,10 @@ class ModulesField extends InputField {
 
     // Get module specific options
     $options = a::get($this->options, $template, array());
+
+    if(!$options) {
+      return new Obj($this->defaults());
+    }
 
     return new Obj(a::update($this->defaults(), $options));
 
@@ -201,7 +244,9 @@ class ModulesField extends InputField {
     $label->addClass('label');
     $label->html($this->label);
 
-    $label->append(' <span class="modules__counter">( 3 / 10 )</span>');
+    if($this->limit()) {
+      $label->append(' <span class="modules__counter">( ' . $this->modules()->visible()->count() . ' / ' . $this->limit() . ' )</span>');
+    }
 
     $label->append($add);
 
@@ -216,7 +261,6 @@ class ModulesField extends InputField {
   public function value() {
 
     $value = parent::value();
-
     if(is_array($value)) {
       return $value;
     } else {

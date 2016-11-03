@@ -2,8 +2,6 @@
 
 class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
-  protected $origin;
-
   public function add() {
     return $this->view('add');
   }
@@ -52,21 +50,20 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function show() {
 
-    // return $this->modal('confirm');
+    $to   = get('to');
+    $uid  = get('uid');
+    $page = $this->field()->modules()->find($uid);
 
-
+    if(!$this->field()->status($page)) {
+      return panel()->alert('Limit reached');
+    }
 
     try {
-      $this->field()->modules()->find(get('uid'))->sort(get('to'));
+      $page->sort($to);
       panel()->notify(':)');
     } catch(Exception $e) {
       echo $e->getMessage();
     }
-
-    $string = 'You can\'t have more than %1$d visible %2$s Modules';
-    $string = 'You can\'t have more than 1 visible %2$s Module';
-
-    panel()->alert('You can\'t have more than 3 visible Text Modules');
 
   }
 
