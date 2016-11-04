@@ -4,32 +4,56 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function add() {
 
-    $templates = array();
-
-    foreach($this->field()->origin()->blueprint()->pages()->template() as $template) {
-      $templates[] = array(
-        'options' => $this->options($template->name()),
-        'title' => $template->title(),
-        'name' => $template->name(),
-      );
-    }
-
-    $page = $this->model();
-
-    $form = $this->form('add', array($this->field()->origin(), $page, $templates));
-
-    $options = array(
-      'templates' => $templates,
-      'redirect' => $page->uri('edit'),
-    );
-
-    return $this->modal('add', compact('form', 'options'));
+    // $templates = array();
+    //
+    // foreach($this->field()->origin()->blueprint()->pages()->template() as $template) {
+    //   $templates[] = array(
+    //     'options' => $this->options($template->name()),
+    //     'title' => $template->title(),
+    //     'name' => $template->name(),
+    //   );
+    // }
+    //
+    // $page = $this->model();
+    //
+    // $form = $this->form('add', array($this->field()->origin(), $page, $templates));
+    //
+    // $options = array(
+    //   'templates' => $templates,
+    //   'redirect' => $page->uri('edit'),
+    // );
+    //
+    // return $this->modal('add', compact('form', 'options'));
     // return $this->view('add');
+
+    $model = $this->model();
+    $field = $this->field();
+    $self  = $this;
+
+    $form = $this->form('add', array($model, $field), function($form) use($model, $self) {
+
+      $form->validate();
+
+      if(!$form->isValid()) {
+        return false;
+      }
+
+      try {
+        // $self->field()->modules()->find($uid)->delete(true);
+      } catch(Exception $e) {
+        // $self->alert($e->getMessage());
+      }
+
+      $self->redirect($model);
+    });
+
+    return $this->modal('add', compact('form'));
+
   }
 
   public function delete() {
 
-    $model = $this->model;
+    $model = $this->model();
     $self  = $this;
     $uid = get('uid');
 
@@ -44,7 +68,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       try {
         $self->field()->modules()->find($uid)->delete(true);
       } catch(Exception $e) {
-        echo $e->getMessage();
+        $self->alert($e->getMessage());
       }
 
       $self->redirect($model);
@@ -63,8 +87,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $uid  = 'test-' . time();
 
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
-    panel()->notify(':)');
 
+    $this->notify(':)');
     $this->update($uid, $to);
 
   }
@@ -76,14 +100,14 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $page = $this->field()->modules()->find($uid);
 
     if(!$this->field()->status($page)) {
-      return panel()->alert('Limit reached');
+      return $this->alert('Limit reached');
     }
 
     try {
       $page->sort($to);
-      panel()->notify(':)');
+      $this->notify(':)');
     } catch(Exception $e) {
-      echo $e->getMessage();
+      $this->alert($e->getMessage());
     }
 
   }
@@ -92,9 +116,9 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     try {
       $this->field()->modules()->find(get('uid'))->hide();
-      panel()->notify(':)');
+      $this->notify(':)');
     } catch(Exception $e) {
-      echo $e->getMessage();
+      $this->alert($e->getMessage());
     }
 
   }
@@ -117,7 +141,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         $this->field->name() => implode(', ', $value)
       ));
     } catch(Exception $e) {
-      echo $e->getMessage();
+      $this->alert($e->getMessage());
     }
 
     // Get current page
@@ -137,7 +161,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         // Sort the page
         $page->sort($collection->visible()->count() + 1);
       } catch(Exception $e) {
-        echo $e->getMessage();
+        $this->alert($e->getMessage());
       }
     }
 
