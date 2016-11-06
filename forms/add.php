@@ -8,10 +8,6 @@ return function($model, $field) {
     $options[$template->name()] = icon($template->icon(), 'left') . ' ' . $template->title();
   }
 
-  // dump($field->origin()->blueprint()->pages()->template());
-
-  // $uid = substr(sprintf('%u', crc32(time())), 0, 8);
-
   $form = new Kirby\Panel\Form(array(
     'module' => array(
       'label'    => 'fields.modules.add.template.label',

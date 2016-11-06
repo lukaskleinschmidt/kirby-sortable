@@ -4,28 +4,6 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function add() {
 
-    // $templates = array();
-    //
-    // foreach($this->field()->origin()->blueprint()->pages()->template() as $template) {
-    //   $templates[] = array(
-    //     'options' => $this->options($template->name()),
-    //     'title' => $template->title(),
-    //     'name' => $template->name(),
-    //   );
-    // }
-    //
-    // $page = $this->model();
-    //
-    // $form = $this->form('add', array($this->field()->origin(), $page, $templates));
-    //
-    // $options = array(
-    //   'templates' => $templates,
-    //   'redirect' => $page->uri('edit'),
-    // );
-    //
-    // return $this->modal('add', compact('form', 'options'));
-    // return $this->view('add');
-
     $model = $this->model();
     $field = $this->field();
     $self  = $this;
@@ -38,10 +16,14 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         return false;
       }
 
+      $modules = $self->field()->modules();
+      $uid = 'module' . time();
+
       try {
-        // $self->field()->modules()->find($uid)->delete(true);
+        $modules->create($uid, get('module'));
+        $self->update($uid, get('to', $modules->count()));
       } catch(Exception $e) {
-        // $self->alert($e->getMessage());
+        $self->alert($e->getMessage());
       }
 
       $self->redirect($model);
@@ -65,8 +47,11 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         return false;
       }
 
+      $modules = $self->field()->modules();
+
       try {
-        $self->field()->modules()->find($uid)->delete(true);
+        $modules->find($uid)->delete(true);
+        $self->_update($modules->not($uid)->pluck('uid'));
       } catch(Exception $e) {
         $self->alert($e->getMessage());
       }
@@ -80,11 +65,11 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function duplicate() {
 
-    $uid   = get('uid');
-    $to    = get('to');
+    $uid = get('uid');
+    $to  = get('to');
 
     $page = $this->field()->modules()->find($uid);
-    $uid  = 'test-' . time();
+    $uid  = 'duplicate-' . time();
 
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
 
@@ -127,28 +112,27 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $this->update(get('uid'), get('to'));
   }
 
+  /**
+   * Update field value and sort number
+   * @param [string] $uid
+   * @param [int] $to
+   */
   public function update($uid, $to) {
 
-    $modules = $this->field->modules();
+    $modules = $this->field()->modules();
     $value = $modules->not($uid)->pluck('uid');
 
     // Order modules value
     array_splice($value, $to - 1, 0, $uid);
 
-    try {
-      // Update field
-      $this->model->update(array(
-        $this->field->name() => implode(', ', $value)
-      ));
-    } catch(Exception $e) {
-      $this->alert($e->getMessage());
-    }
+    // Update field value
+    $this->_update($value);
 
     // Get current page
     $page = $modules->find($uid);
 
     // Figure out the correct sort num
-    if($page->isVisible()) {
+    if($page && $page->isVisible()) {
       $collection = new Children($page->parent());
 
       foreach(array_slice($value, 0, $to - 1) as $id) {
@@ -163,6 +147,22 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       } catch(Exception $e) {
         $this->alert($e->getMessage());
       }
+    }
+
+  }
+
+  /**
+   * Update the field value
+   * @param [array] $value
+   */
+  public function _update($value) {
+
+    try {
+      $this->model()->update(array(
+        $this->field()->name() => implode(', ', $value)
+      ));
+    } catch(Exception $e) {
+      $this->alert($e->getMessage());
     }
 
   }

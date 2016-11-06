@@ -22,7 +22,6 @@
       this.element.on('_sortableupdate', (event, ui) => {
         var to = this.element.children().index(ui.item);
         var uid = ui.item.data('uid');
-
         this.sort(uid, to);
       });
 
