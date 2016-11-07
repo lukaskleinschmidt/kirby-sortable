@@ -112,6 +112,16 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $this->update(get('uid'), get('to'));
   }
 
+  public function options() {
+
+    $uid    = get('uid');
+    $field  = $this->field();
+    $module = $field->modules()->find($uid);
+
+    return $this->view('options', compact('field', 'module'));
+
+  }
+
   /**
    * Update field value and sort number
    * @param [string] $uid

@@ -60,6 +60,22 @@ $red: #b3000a;
     }
   }
 
+  &.is-selected,
+  &.ui-sortable-helper {
+    // border-color: $green;
+    border-color: $black;
+  }
+
+  &__icon {
+    display: inline;
+  }
+
+  // opacity: 0.5;
+  // &.is-selected {
+  //   // opacity: 1;
+  //   border-color: $green;
+  // }
+
   &__counter {
     padding-left: 0.25em;
     font-size: 0.8em;
@@ -81,13 +97,11 @@ $red: #b3000a;
   //   }
   // }
 
-  // &.ui-sortable-helper {
-  //   border-color: $green;
-  // }
-
   &__preview {
     border-bottom: 1px solid $gray-lightest;
     cursor: move;
+
+    // display: none;
 
     // > * {
     //   .module[data-visible="false"] & {
@@ -126,5 +140,7 @@ $red: #b3000a;
     background: transparent;
     cursor: pointer;
     outline: 0;
+
+    // display: none;
   }
 }

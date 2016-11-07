@@ -50,6 +50,11 @@ class ModulesField extends InputField {
         'method'  => 'get|post',
         'action'  => 'sort',
       ),
+      array(
+        'pattern' => 'options',
+        'method'  => 'get|post',
+        'action'  => 'options',
+      ),
     );
   }
 

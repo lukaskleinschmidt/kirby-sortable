@@ -3,8 +3,14 @@
   class Modules {
     constructor(element) {
       this.element = $(element);
+      this.modules = $('.module', element);
 
       this.api = this.element.data('api');
+
+      this.shift = false;
+      this.strg  = false;
+
+      console.log(this.modules);
 
       // if (this.element.hasClass('modules-readonly') || $('.modules-empty', this.element).length) return;
 
@@ -12,6 +18,7 @@
         handle: '.module__preview, .module__title',
         start: () => {
           this.element._sortable('refreshPositions');
+          this.modules.removeClass('is-selected');
         },
       });
 
@@ -31,22 +38,66 @@
         console.log($(event.target).data('action'));
       });
 
-      // $(document).on('keydown', (event) => {
-      //   switch (event.keyCode) {
-      //     case 67:
-      //       if (!event.metaKey && !event.ctrlKey) return true;
-      //       console.log('strg + c')
-      //       app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/copy');
-      //       return false;
-      //       break;
-      //     case 86:
-      //       if (!event.metaKey && !event.ctrlKey) return true;
-      //       console.log('strg + v')
-      //       app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/paste');
-      //       return false;
-      //       break;
-      //   }
-      // });
+      this.modules.on('click', event => {
+        this.select($(event.delegateTarget));
+      });
+
+      $(document)
+        .off('.modules')
+        .on('keydown.modules', event => {
+          switch (event.keyCode) {
+            case 16:
+              if (this.shift) return true;
+              console.log('shift');
+              this.shift = true;
+              break;
+            case 17:
+              if (this.strg) return true;
+              console.log('strg');
+              this.strg = true;
+              break;
+            case 67:
+              if (!event.metaKey && !event.ctrlKey) return true;
+              console.log('strg + c')
+              if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/copy');
+              return false;
+              break;
+            case 86:
+              if (!event.metaKey && !event.ctrlKey) return true;
+              console.log('strg + v')
+              if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/paste');
+              return false;
+              break;
+          }
+        })
+        .on('keyup.modules', event => {
+          switch (event.keyCode) {
+            case 16:
+              console.log('shift false');
+              this.shift = false;
+              break;
+            case 17:
+              console.log('strg false');
+              this.strg = false;
+              break;
+          }
+        })
+        .on('click.modules', event => {
+          if (!$(event.target).closest('.module').length) {
+            this.modules.removeClass('is-selected');
+          }
+        });
+    }
+
+    select(element) {
+      if (this.shift && this.strg) {
+      } else if (this.shift) {
+      } else if (this.strg) {
+        element.toggleClass('is-selected');
+      } else {
+        this.modules.removeClass('is-selected');
+        element.addClass('is-selected');
+      }
     }
 
     sort(uid, to) {
