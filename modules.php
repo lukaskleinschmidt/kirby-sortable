@@ -77,7 +77,7 @@ class ModulesField extends InputField {
 
   public function preview($page) {
 
-    if(!$this->options($page)->preview()) {
+    if(!$preview = $this->options($page)->preview()) {
       return;
     }
 
@@ -88,8 +88,10 @@ class ModulesField extends InputField {
       return;
     }
 
+    $position = $preview === true ? 'top' : $preview;
+
     $preview = new Brick('div');
-    $preview->addClass('module__preview');
+    $preview->addClass('module__preview module__preview--' . $position);
     $preview->data('module', $module->name());
     $preview->html(tpl::load($template, array('module' => $page)));
 

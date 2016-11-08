@@ -1,31 +1,36 @@
 <div id="<?php echo $field->id(); ?>" class="modules" data-field="modules" data-api="<?php echo purl($field->model(), implode('/', array('field', $field->name(), 'modules'))); ?>">
 
   <?php $i = 0; $n = 0; foreach($field->modules() as $module): $i++; if($module->isVisible()) $n++; $options = $field->options($module); ?>
-    <div class="module" data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>" data-uid="<?php echo $module->uid(); ?>">
-      <?php echo $field->preview($module); ?>
-      <nav class="module__navigation">
-        <div class="module__title">
-          <div class="module__icon">
-            <?php echo $module->icon('left'); ?>
-            <!-- <a href="#<?php echo $field->id(); ?>" data-context="<?php echo $field->url('options', array('uid' => $module->uid())); ?>"><?php i('ellipsis-h'); ?></a> -->
-          </div>
-          <?php echo $module->title(); ?>
-          <?php echo $field->counter($module); ?>
+  <div class="module" data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>" data-uid="<?php echo $module->uid(); ?>">
+
+    <?php if($options->preview() === true || $options->preview() === 'top') echo $field->preview($module); ?>
+
+    <nav class="module__navigation">
+      <div class="module__title">
+        <div class="module__icon">
+          <?php echo $module->icon('left'); ?>
+          <!-- <a href="#<?php echo $field->id(); ?>" data-context="<?php echo $field->url('options', array('uid' => $module->uid())); ?>"><?php i('ellipsis-h'); ?></a> -->
         </div>
-        <a class="module__button" href="<?php echo $module->url('edit'); ?>" title="Edit"><?php i('pencil', 'left'); ?> Edit</a>
-        <a class="module__button" href="<?php echo $field->url('delete', array('uid' => $module->uid())); ?>" data-modal title="Delete"><?php i('trash-o', 'left'); ?> Delete</a>
-        <button class="module__button" data-action="<?php echo $field->url('duplicate', array('uid' => $module->uid(), 'to' => $i + 1)); ?>" type="button" tabindex="-1" title="Duplicate"><?php i('clone'); ?></button>
-        <?php if($module->isVisible()): ?>
-          <button class="module__button" data-action="<?php echo $field->url('hide', array('uid' => $module->uid())); ?>" type="button" tabindex="-1" title="Hide"><?php i('toggle-on'); ?></button>
-        <?php else: ?>
-          <button class="module__button" data-action="<?php echo $field->url('show', array('uid' => $module->uid(), 'to' => $n + 1)); ?>" type="button" tabindex="-1" title="Show"><?php i('toggle-off'); ?></button>
-          <!-- <a class="module__button" data-modal href="<?php echo $field->url('show', array('uid' => $module->uid(), 'to' => $n + 1)); ?>" title="Show"><?php i('toggle-off'); ?>m</a>
-          <a class="module__button" data-action="<?php echo $field->url('show', array('uid' => $module->uid(), 'to' => $n + 1)); ?>" href="#<?php echo $field->id(); ?>" title="Show"><?php i('toggle-off'); ?>a</a> -->
-        <?php endif; ?>
-      </nav>
-      <?php echo $field->input($module->uid()); ?>
-    </div>
+        <?php echo $module->title(); ?>
+        <?php echo $field->counter($module); ?>
+      </div>
+      <a class="module__button" href="<?php echo $module->url('edit'); ?>" title="Edit"><?php i('pencil', 'left'); ?> Edit</a>
+      <a class="module__button" href="<?php echo $field->url('delete', array('uid' => $module->uid())); ?>" data-modal title="Delete"><?php i('trash-o', 'left'); ?> Delete</a>
+      <button class="module__button" data-action="<?php echo $field->url('duplicate', array('uid' => $module->uid(), 'to' => $i + 1)); ?>" type="button" tabindex="-1" title="Duplicate"><?php i('clone'); ?></button>
+      <?php if($module->isVisible()): ?>
+        <button class="module__button" data-action="<?php echo $field->url('hide', array('uid' => $module->uid())); ?>" type="button" tabindex="-1" title="Hide"><?php i('toggle-on'); ?></button>
+      <?php else: ?>
+        <button class="module__button" data-action="<?php echo $field->url('show', array('uid' => $module->uid(), 'to' => $n + 1)); ?>" type="button" tabindex="-1" title="Show"><?php i('toggle-off'); ?></button>
+      <?php endif; ?>
+    </nav>
+
+    <?php if($options->preview() === 'bottom') echo $field->preview($module); ?>
+
+    <?php echo $field->input($module->uid()); ?>
+
+  </div>
   <?php endforeach; ?>
+
 </div>
 
 <nav class="modules__navigation">
