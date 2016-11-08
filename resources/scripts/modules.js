@@ -95,6 +95,9 @@
 
       $('.form input:focus, .form select:focus, .form textarea:focus').blur();
 
+      // Make sure focus is not set after reload
+      app.content.focus.forget();
+
       if (this.shift && this.strg) {
       } else if (this.shift) {
       } else if (this.strg) {
