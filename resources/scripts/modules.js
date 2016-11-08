@@ -1,5 +1,7 @@
 (function($) {
 
+  var selection = 0;
+
   class Modules {
     constructor(element) {
       this.element = $(element);
@@ -11,6 +13,8 @@
       this.strg  = false;
 
       console.log(this.modules);
+      console.log(selection);
+      selection++;
 
       // if (this.element.hasClass('modules-readonly') || $('.modules-empty', this.element).length) return;
 
@@ -48,25 +52,23 @@
           switch (event.keyCode) {
             case 16:
               if (this.shift) return true;
-              console.log('shift');
+              // console.log('shift');
               this.shift = true;
               break;
             case 17:
               if (this.strg) return true;
-              console.log('strg');
+              // console.log('strg');
               this.strg = true;
               break;
             case 67:
               if (!event.metaKey && !event.ctrlKey) return true;
-              console.log('strg + c')
+              // console.log('strg + c');
               if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/copy');
-              return false;
               break;
             case 86:
               if (!event.metaKey && !event.ctrlKey) return true;
-              console.log('strg + v')
+              // console.log('strg + v');
               if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/paste');
-              return false;
               break;
           }
         })
@@ -90,6 +92,9 @@
     }
 
     select(element) {
+
+      $('.form input:focus, .form select:focus, .form textarea:focus').blur();
+
       if (this.shift && this.strg) {
       } else if (this.shift) {
       } else if (this.strg) {

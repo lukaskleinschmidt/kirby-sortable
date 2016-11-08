@@ -6,14 +6,14 @@
       <nav class="module__navigation">
         <div class="module__title">
           <div class="module__icon">
-            <?php echo $module->icon(''); ?>
-            <a href="#<?php echo $field->id(); ?>" data-context="<?php echo $field->url('options', array('uid' => $module->uid())); ?>"><?php i('ellipsis-h'); ?></a>
+            <?php echo $module->icon('left'); ?>
+            <!-- <a href="#<?php echo $field->id(); ?>" data-context="<?php echo $field->url('options', array('uid' => $module->uid())); ?>"><?php i('ellipsis-h'); ?></a> -->
           </div>
           <?php echo $module->title(); ?>
           <?php echo $field->counter($module); ?>
         </div>
         <a class="module__button" href="<?php echo $module->url('edit'); ?>" title="Edit"><?php i('pencil', 'left'); ?> Edit</a>
-        <a class="module__button" href="<?php echo $field->url('delete', array('uid' => $module->uid())); ?>" data-modal title="Delete"><i class="icon icon-left fa fa-trash-o"></i> Delete</a>
+        <a class="module__button" href="<?php echo $field->url('delete', array('uid' => $module->uid())); ?>" data-modal title="Delete"><?php i('trash-o', 'left'); ?> Delete</a>
         <button class="module__button" data-action="<?php echo $field->url('duplicate', array('uid' => $module->uid(), 'to' => $i + 1)); ?>" type="button" tabindex="-1" title="Duplicate"><?php i('clone'); ?></button>
         <?php if($module->isVisible()): ?>
           <button class="module__button" data-action="<?php echo $field->url('hide', array('uid' => $module->uid())); ?>" type="button" tabindex="-1" title="Hide"><?php i('toggle-on'); ?></button>
@@ -28,6 +28,8 @@
   <?php endforeach; ?>
 </div>
 
-<div class="modules__add">
+<nav class="modules__navigation">
+  <button type="button" data-action="<?php echo $field->url('copy'); ?>"><?php i('copy', 'left'); ?> Copy</button>
+  <button type="button" data-action="<?php echo $field->url('paste'); ?>"><?php i('paste', 'left'); ?> Paste</button>
   <a href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?> Add</a>
-</div>
+</nav>
