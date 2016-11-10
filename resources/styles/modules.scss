@@ -75,8 +75,12 @@ $red: #b3000a;
 
   &.is-selected,
   &.ui-sortable-helper {
+    // border-color: $gray;
     // border-color: $green;
     border-color: $black;
+
+    // border-color: $gray-lighter;
+    // background: $gray-lightest;
   }
 
   &__icon {

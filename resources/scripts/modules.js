@@ -1,6 +1,8 @@
+import Selection from './selection';
+
 (function($) {
 
-  var selection = 0;
+  var selection = new Selection();
 
   class Modules {
     constructor(element) {
@@ -12,17 +14,16 @@
       this.shift = false;
       this.strg  = false;
 
-      console.log(this.modules);
-      console.log(selection);
-      selection++;
+      selection.set(this.modules);
+      selection.recall();
 
       // if (this.element.hasClass('modules-readonly') || $('.modules-empty', this.element).length) return;
 
       this.element._sortable({
         handle: '.module__preview, .module__title',
-        start: () => {
+        start: (event, ui) => {
           this.element._sortable('refreshPositions');
-          this.modules.removeClass('is-selected');
+          selection.add($(ui.item), true);
         },
       });
 
@@ -86,27 +87,32 @@
         })
         .on('click.modules', event => {
           if (!$(event.target).closest('.module').length) {
-            this.modules.removeClass('is-selected');
+            selection.flush();
           }
         });
     }
 
     select(element) {
 
+      // Blur focus
       $('.form input:focus, .form select:focus, .form textarea:focus').blur();
 
       // Make sure focus is not set after reload
       app.content.focus.forget();
 
+      element = $(element);
+
       if (this.shift && this.strg) {
       } else if (this.shift) {
       } else if (this.strg) {
-        element.toggleClass('is-selected');
+        selection.toggle(element);
       } else {
-        this.modules.removeClass('is-selected');
-        element.addClass('is-selected');
+        selection.add(element, true);
       }
+
+      console.log(selection.get());
     }
+
 
     sort(uid, to) {
       this.disable();

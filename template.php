@@ -1,7 +1,7 @@
 <div id="<?php echo $field->id(); ?>" class="modules" data-field="modules" data-api="<?php echo purl($field->model(), implode('/', array('field', $field->name(), 'modules'))); ?>">
 
   <?php $i = 0; $n = 0; foreach($field->modules() as $module): $i++; if($module->isVisible()) $n++; $options = $field->options($module); ?>
-  <div class="module" data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>" data-uid="<?php echo $module->uid(); ?>">
+  <div class="module" data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>" data-uid="<?php echo $module->uid(); ?>" data-uri="<?php echo $module->uri(); ?>">
 
     <?php if($options->preview() === true || $options->preview() === 'top') echo $field->preview($module); ?>
 
