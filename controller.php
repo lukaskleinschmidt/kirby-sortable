@@ -122,6 +122,14 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
+  public function copy() {
+    $this->notify(implode(', ', get('modules', array())));
+  }
+
+  public function paste() {
+    return $this->modal('paste');
+  }
+
   /**
    * Update field value and sort number
    * @param [string] $uid

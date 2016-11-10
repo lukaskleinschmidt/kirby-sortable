@@ -55,6 +55,16 @@ class ModulesField extends InputField {
         'method'  => 'get|post',
         'action'  => 'options',
       ),
+      array(
+        'pattern' => 'copy',
+        'method'  => 'get|post',
+        'action'  => 'copy',
+      ),
+      array(
+        'pattern' => 'paste',
+        'method'  => 'get|post',
+        'action'  => 'paste',
+      ),
     );
   }
 

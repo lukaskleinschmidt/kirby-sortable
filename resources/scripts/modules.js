@@ -24,10 +24,19 @@ import Selection from './selection';
         start: (event, ui) => {
           this.element._sortable('refreshPositions');
           selection.add($(ui.item), true);
+          this.blur();
         },
       });
 
       this.events();
+    }
+
+    blur() {
+      // Blur focus
+      $('.form input:focus, .form select:focus, .form textarea:focus').blur();
+
+      // Make sure focus is not set after reload
+      app.content.focus.forget();
     }
 
     events() {
@@ -40,7 +49,7 @@ import Selection from './selection';
       this.element.on('click', '[data-action]', event => {
         event.preventDefault();
         $.post($(event.target).data('action'), this.reload.bind(this));
-        console.log($(event.target).data('action'));
+        // console.log($(event.target).data('action'));
       });
 
       this.modules.on('click', event => {
@@ -63,42 +72,44 @@ import Selection from './selection';
               break;
             case 67:
               if (!event.metaKey && !event.ctrlKey) return true;
-              // console.log('strg + c');
-              if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/copy');
+              console.log('strg + c', selection.get());
+              $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy', {
+                modules: selection.get(),
+              }, this.reload.bind(this));
+              // if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy');
               break;
             case 86:
               if (!event.metaKey && !event.ctrlKey) return true;
               // console.log('strg + v');
-              if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/sections/modules/paste');
+              if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/modules/modules/paste');
               break;
           }
         })
         .on('keyup.modules', event => {
           switch (event.keyCode) {
             case 16:
-              console.log('shift false');
+              // console.log('shift false');
               this.shift = false;
               break;
             case 17:
-              console.log('strg false');
+              // console.log('strg false');
               this.strg = false;
               break;
           }
         })
         .on('click.modules', event => {
           if (!$(event.target).closest('.module').length) {
-            selection.flush();
+            selection.reset();
           }
         });
+
+      selection.on('change', selection => {
+        console.log(selection.length);
+      });
     }
 
     select(element) {
-
-      // Blur focus
-      $('.form input:focus, .form select:focus, .form textarea:focus').blur();
-
-      // Make sure focus is not set after reload
-      app.content.focus.forget();
+      this.blur();
 
       element = $(element);
 
@@ -109,8 +120,6 @@ import Selection from './selection';
       } else {
         selection.add(element, true);
       }
-
-      console.log(selection.get());
     }
 
 
