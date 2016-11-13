@@ -15,6 +15,7 @@ class Module extends \Kirby\Modules\Module {
   public $preview = true;
   public $delete = true;
   public $limit = null;
+  public $label = true;
   public $edit = true;
 
   public function __construct($field, $page, $name, $path) {
