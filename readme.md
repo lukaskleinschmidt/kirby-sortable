@@ -41,6 +41,7 @@ Option|Default|Description
 `preview`|`true`|The template for this preview must be located inside the modules folder `site/modules/gallery/` and must be named `gallery.preview.php`. The `$module` object is available in the template.
 `delete`|`true`|Hide or show the delete button.
 `limit`|`null`|Limit how many modules with the same template can be visible.
+`label`|`true`|Show or hide labels for the edit and delete link.
 `edit`|`true`|Hide or show the edit button.
 
 ### Template specific options
