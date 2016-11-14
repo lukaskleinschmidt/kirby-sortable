@@ -3,50 +3,49 @@ export default class Selection {
     this.collection = {};
     this.selection = [];
     this.events = {};
-    this.class = 'is-selected';
+    this.options = {
+      class: 'is-selected',
+      data: 'uid',
+    }
   }
 
-  set(collection) {
-    this.collection = collection;
-  }
-
-  index(uri) {
-    return this.selection.indexOf(uri);
+  index(uid) {
+    return this.selection.indexOf(uid);
   }
 
   add(element, reset = false) {
-    var uri = element.data('uri');
+    var uid = element.data(this.options.data);
     if (reset) this.reset();
-    if (this.index(uri) === -1) {
-      element.addClass(this.class);
-      this.selection.push(uri);
+    if (this.index(uid) === -1) {
+      element.addClass(this.options.class);
+      this.selection.push(uid);
       this.trigger('change', this.selection);
     }
   }
 
   remove(element) {
-    var index = this.index(element.data('uri'));
+    var index = this.index(element.data(this.options.data));
     if (index !== -1) {
-      element.removeClass(this.class);
+      element.removeClass(this.options.class);
       this.selection.splice(index, 1);
       this.trigger('change', this.selection);
     }
   }
 
   toggle(element, reset = false) {
-    if (this.index(element.data('uri')) === -1) {
+    if (this.index(element.data(this.options.data)) === -1) {
       this.add(element, reset);
     } else {
       this.remove(element);
     }
   }
 
-  get() {
+  selected() {
     var selection = [];
     this.collection.each((index, element) => {
-      var uri = $(element).data('uri');
-      if (this.index(uri) !== -1)
-        selection.push(uri);
+      var uid = $(element).data(this.options.data);
+      if (this.index(uid) !== -1)
+        selection.push(uid);
     });
     return selection;
   }
@@ -54,13 +53,13 @@ export default class Selection {
   recall() {
     if (this.selection.length) {
       this.collection.filter((index, element) => {
-        return this.index($(element).data('uri')) !== -1;
-      }).addClass(this.class);
+        return this.index($(element).data(this.options.data)) !== -1;
+      }).addClass(this.options.class);
     }
   }
 
   reset() {
-    this.collection.removeClass(this.class);
+    this.collection.removeClass(this.options.class);
     this.selection = [];
   }
 

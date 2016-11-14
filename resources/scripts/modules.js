@@ -3,6 +3,8 @@ import Selection from './selection';
 (function($) {
 
   var selection = new Selection();
+  var shift = false;
+  var strg = false;
 
   class Modules {
     constructor(element) {
@@ -11,10 +13,7 @@ import Selection from './selection';
 
       this.api = this.element.data('api');
 
-      this.shift = false;
-      this.strg  = false;
-
-      selection.set(this.modules);
+      selection.collection = this.modules;
       selection.recall();
 
       // if (this.element.hasClass('modules-readonly') || $('.modules-empty', this.element).length) return;
@@ -40,16 +39,17 @@ import Selection from './selection';
     }
 
     events() {
+      var self = this;
+
       this.element.on('_sortableupdate', (event, ui) => {
         var to = this.element.children().index(ui.item);
         var uid = ui.item.data('uid');
         this.sort(uid, to);
       });
 
-      this.element.on('click', '[data-action]', event => {
+      this.element.on('click', '[data-action]', function(event) {
         event.preventDefault();
-        $.post($(event.target).data('action'), this.reload.bind(this));
-        // console.log($(event.target).data('action'));
+        $.post($(this).data('action'), self.reload.bind(self));
       });
 
       this.modules.on('click', event => {
@@ -61,21 +61,25 @@ import Selection from './selection';
         .on('keydown.modules', event => {
           switch (event.keyCode) {
             case 16:
-              if (this.shift) return true;
+              if (shift) return true;
               // console.log('shift');
-              this.shift = true;
+              shift = true;
               break;
             case 17:
-              if (this.strg) return true;
+              if (strg) return true;
               // console.log('strg');
-              this.strg = true;
+              strg = true;
               break;
             case 67:
               if (!event.metaKey && !event.ctrlKey) return true;
-              console.log('strg + c', selection.get());
-              $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy', {
-                modules: selection.get(),
-              }, this.reload.bind(this));
+              // console.log('strg + c', selection.selected());
+              var selected = selection.selected();
+              // console.log(selection);
+              if (selected.length) {
+                $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy', {
+                  modules: selected,
+                }, this.reload.bind(this));
+              }
               // if (this.modules.hasClass('is-selected')) app.modal.open('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy');
               break;
             case 86:
@@ -89,11 +93,11 @@ import Selection from './selection';
           switch (event.keyCode) {
             case 16:
               // console.log('shift false');
-              this.shift = false;
+              shift = false;
               break;
             case 17:
               // console.log('strg false');
-              this.strg = false;
+              strg = false;
               break;
           }
         })
@@ -104,7 +108,8 @@ import Selection from './selection';
         });
 
       selection.on('change', selection => {
-        console.log(selection.length);
+        console.log(selection);
+        // console.log(selection.length);
       });
     }
 
@@ -113,15 +118,14 @@ import Selection from './selection';
 
       element = $(element);
 
-      if (this.shift && this.strg) {
-      } else if (this.shift) {
-      } else if (this.strg) {
+      if (shift && strg) {
+      } else if (shift) {
+      } else if (strg) {
         selection.toggle(element);
       } else {
         selection.add(element, true);
       }
     }
-
 
     sort(uid, to) {
       this.disable();

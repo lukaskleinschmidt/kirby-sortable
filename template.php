@@ -1,7 +1,7 @@
 <div id="<?php echo $field->id(); ?>" class="modules" data-field="modules" data-api="<?php echo purl($field->model(), implode('/', array('field', $field->name(), 'modules'))); ?>">
 
   <?php $i = 0; $n = 0; foreach($field->modules() as $module): $i++; if($module->isVisible()) $n++; $options = $field->options($module); ?>
-  <div class="module" data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>" data-uid="<?php echo $module->uid(); ?>" data-uri="<?php echo $module->uri(); ?>">
+  <div class="module" data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>" data-uid="<?php echo $module->uid(); ?>">
 
     <?php if($options->preview() === true || $options->preview() === 'top') echo $field->preview($module); ?>
 
@@ -14,14 +14,29 @@
         <?php echo $module->title(); ?>
         <?php echo $field->counter($module); ?>
       </div>
-      <a class="module__button" href="<?php echo $module->url('edit'); ?>" title="Edit"><?php i('pencil', 'left'); ?> Edit</a>
-      <a class="module__button" href="<?php echo $field->url('delete', array('uid' => $module->uid())); ?>" data-modal title="Delete"><?php i('trash-o', 'left'); ?> Delete</a>
-      <button class="module__button" data-action="<?php echo $field->url('duplicate', array('uid' => $module->uid(), 'to' => $i + 1)); ?>" type="button" tabindex="-1" title="Duplicate"><?php i('clone'); ?></button>
+      
+      <a class="module__button" href="<?php echo $module->url('edit'); ?>" title="Edit">
+        <?php i('pencil', 'left'); ?> Edit
+      </a>
+
+      <a class="module__button" href="<?php echo $field->url('delete', array('uid' => $module->uid())); ?>" data-modal title="Delete">
+        <?php i('trash-o', 'left'); ?> Delete
+      </a>
+
+      <a class="module__button" href="#" data-action="<?php echo $field->url('duplicate', array('uid' => $module->uid(), 'to' => $i + 1)); ?>" title="Duplicate">
+        <?php i('clone'); ?>
+      </a>
+
       <?php if($module->isVisible()): ?>
-        <button class="module__button" data-action="<?php echo $field->url('hide', array('uid' => $module->uid())); ?>" type="button" tabindex="-1" title="Hide"><?php i('toggle-on'); ?></button>
+        <a class="module__button" href="#" data-action="<?php echo $field->url('hide', array('uid' => $module->uid())); ?>" title="Hide">
+          <?php i('toggle-on'); ?>
+        </a>
       <?php else: ?>
-        <button class="module__button" data-action="<?php echo $field->url('show', array('uid' => $module->uid(), 'to' => $n + 1)); ?>" type="button" tabindex="-1" title="Show"><?php i('toggle-off'); ?></button>
+        <a class="module__button" href="#" data-action="<?php echo $field->url('show', array('uid' => $module->uid(), 'to' => $n + 1)); ?>" title="Show">
+          <?php i('toggle-off'); ?>
+        </a>
       <?php endif; ?>
+
     </nav>
 
     <?php if($options->preview() === 'bottom') echo $field->preview($module); ?>
