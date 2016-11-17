@@ -71,6 +71,10 @@ $red: #b3000a;
     button & {
       vertical-align: -5%;
     }
+
+    &:not(.icon-left) {
+      width: 1.28571em;
+    }
   }
 
   &.is-selected,
@@ -97,6 +101,7 @@ $red: #b3000a;
     padding-left: 0.25em;
     font-size: 0.8em;
     color: $gray-light;
+    line-height: 1;
   }
 
   // &[data-visible="false"] {

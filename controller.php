@@ -75,6 +75,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     $this->notify(':)');
     $this->update($uid, $to);
+    $this->redirect($this->model());
 
   }
 
@@ -85,15 +86,17 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $page = $this->field()->modules()->find($uid);
 
     if(!$this->field()->status($page)) {
-      return $this->alert('Limit reached');
+      $this->alert('Limit reached');
+    } else {
+      try {
+        $page->sort($to);
+        $this->notify(':)');
+      } catch(Exception $e) {
+        $this->alert($e->getMessage());
+      }
     }
 
-    try {
-      $page->sort($to);
-      $this->notify(':)');
-    } catch(Exception $e) {
-      $this->alert($e->getMessage());
-    }
+    $this->redirect($this->model());
 
   }
 
@@ -105,6 +108,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     } catch(Exception $e) {
       $this->alert($e->getMessage());
     }
+
+    $this->redirect($this->model());
 
   }
 

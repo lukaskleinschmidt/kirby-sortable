@@ -8,6 +8,7 @@ class ModulesField extends InputField {
 
   public $options = array();
   public $limit = false;
+  public $copy = true;
 
   static public $assets = array(
     'js' => array(
@@ -106,6 +107,7 @@ class ModulesField extends InputField {
     $preview->html(tpl::load($template, array('module' => $page)));
 
     return $preview;
+
   }
 
   public function counter($page) {
@@ -123,6 +125,7 @@ class ModulesField extends InputField {
     $counter->html('( ' . $index . ' / ' . $limit . ' )');
 
     return $counter;
+
   }
 
   public function status($page) {
@@ -157,9 +160,11 @@ class ModulesField extends InputField {
     // Default values
     $defaults = array(
       // 'redirect' => false,
+      'duplicate' => true,
       'preview' => true,
       // 'delete' => true,
       'limit' => false,
+      'label' => false,
       // 'edit' => true,
     );
 
@@ -194,7 +199,22 @@ class ModulesField extends InputField {
   }
 
   public function content() {
+
+    // Path to language files
+    $path = __DIR__ . DS . 'translations' . DS;
+
+    // Intendet language file
+    $language = $path . panel()->translation()->code() . '.php';
+
+    // Try to load intended language file and fallback to default language
+    if(is_file($language)) {
+      require_once($language);
+    } else {
+      require_once($path . 'en.php');
+    }
+
     return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
+
   }
 
   public function modules() {
