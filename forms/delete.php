@@ -7,7 +7,7 @@ return function($model) {
       'label'        => 'uid',
       'type'         => 'text',
       'autocomplete' => false,
-      'autofocus'    => true,
+      'autofocus'    => false,
       'required'     => true
     )
   ));

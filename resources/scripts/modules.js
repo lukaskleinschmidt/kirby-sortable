@@ -19,12 +19,15 @@ import Selection from './selection';
       this.options.api = this.element.data('api');
       this.options.copy = this.element.data('copy');
 
-      var id = this.element.attr('id');
-      if (!selection.id || selection.id == id) {
-        selection.collection = this.modules;
-        selection.id = id;
-        selection.recall();
-      }
+      // var id = this.element.attr('id');
+      // if (!selection.id || selection.id == id) {
+      //   selection.collection = this.modules;
+      //   selection.id = id;
+      //   selection.recall();
+      // }
+
+      selection.collection = this.modules;
+      selection.recall();
 
       // if (this.element.hasClass('modules-readonly') || $('.modules-empty', this.element).length) return;
 
@@ -62,61 +65,59 @@ import Selection from './selection';
       });
 
       this.modules.on('click', event => {
-        var id = this.element.attr('id');
-        if (selection.id !== id) {
-          selection.reset();
-          selection.collection = this.modules;
-          selection.id = id;
-        }
+        // var id = this.element.attr('id');
+        // if (selection.id !== id) {
+        //   selection.reset();
+        //   selection.collection = this.modules;
+        //   selection.id = id;
+        // }
         this.select($(event.delegateTarget));
       });
 
-      if (this.options.copy) {
-        $(document)
-          .off('.modules')
-          .on('keydown.modules', event => {
-            switch (event.keyCode) {
-              case 16:
-                if (shift) return true;
-                shift = true;
-                break;
-              case 17:
-                if (strg) return true;
-                strg = true;
-                break;
-              case 67:
-                if (!event.metaKey && !event.ctrlKey) return true;
-                var selected = selection.selected();
-                if (selected.length) {
-                  $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy', {
-                    modules: selected,
-                  }, this.reload.bind(this));
-                }
-                break;
-              case 86:
-                if (!event.metaKey && !event.ctrlKey) return true;
-                if (this.modules.hasClass('is-selected')) {
-                  app.modal.open('http://www.kirby.dev/panel/pages/home/field/modules/modules/paste');
-                }
-                break;
-            }
-          })
-          .on('keyup.modules', event => {
-            switch (event.keyCode) {
-              case 16:
-                shift = false;
-                break;
-              case 17:
-                strg = false;
-                break;
-            }
-          })
-          .on('click.modules', event => {
-            if (!$(event.target).closest('.module').length) {
-              selection.reset();
-            }
-          });
-      }
+      $(document)
+        .off('.modules')
+        .on('keydown.modules', event => {
+          switch (event.keyCode) {
+            case 16:
+              if (shift) return true;
+              shift = true;
+              break;
+            case 17:
+              if (strg) return true;
+              strg = true;
+              break;
+            case 67:
+              if (!event.metaKey && !event.ctrlKey) return true;
+              var selected = selection.selected();
+              if (selected.length) {
+                $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy', {
+                  modules: selected,
+                }, this.reload.bind(this));
+              }
+              break;
+            case 86:
+              if (!event.metaKey && !event.ctrlKey) return true;
+              if (this.modules.hasClass('is-selected')) {
+                app.modal.open('http://www.kirby.dev/panel/pages/home/field/modules/modules/paste');
+              }
+              break;
+          }
+        })
+        .on('keyup.modules', event => {
+          switch (event.keyCode) {
+            case 16:
+              shift = false;
+              break;
+            case 17:
+              strg = false;
+              break;
+          }
+        })
+        .on('click.modules', event => {
+          if (!$(event.target).closest('.module').length) {
+            selection.reset();
+          }
+        });
     }
 
     select(element) {

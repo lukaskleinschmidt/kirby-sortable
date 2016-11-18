@@ -2,10 +2,20 @@
 
 class ModulesField extends InputField {
 
+  // protected $cache;
+  protected $translation;
   protected $defaults;
   protected $modules;
   protected $origin;
 
+  public $translations = array();
+  public $actions = array(
+    'edit',
+    'delete',
+    'duplicate',
+    'show',
+    'hide',
+  );
   public $options = array();
   public $limit = false;
   public $copy = true;
@@ -18,6 +28,33 @@ class ModulesField extends InputField {
       'modules.css',
     ),
   );
+
+  public function translation() {
+
+    // Return from cache if possible
+    if($this->translation) {
+      return $this->translation;
+    }
+
+    $root = __DIR__ . DS . 'translations';
+    $code = panel()->translation()->code();
+
+    // Check if translation exists
+    if(!is_file($root . DS . $code . '.json')) {
+      $code = 'en';
+    }
+
+    // Load default and custom translations
+    $default = data::read($root . DS . $code . '.json');
+    $translation = $this->i18n($this->translations);
+
+    if(!is_null($translation)) {
+      $default = a::update($default, $translation);
+    }
+
+    return $this->translation = l::set($default);
+
+  }
 
   public function routes() {
     return array(
@@ -128,28 +165,6 @@ class ModulesField extends InputField {
 
   }
 
-  public function status($page) {
-
-    // Check module specific limit
-    $count = $this->modules()->filterBy('template', $page->intendedTemplate())->visible()->count();
-    $limit = $this->options($page)->limit();
-
-    if($limit && $count >= $limit) {
-      return false;
-    }
-
-    // Check limit
-    $count = $this->modules()->visible()->count();
-    $limit = $this->limit();
-
-    if($limit && $count >= $limit) {
-      return false;
-    }
-
-    return true;
-
-  }
-
   public function defaults() {
 
     // Return from cache if possible
@@ -199,22 +214,7 @@ class ModulesField extends InputField {
   }
 
   public function content() {
-
-    // Path to language files
-    $path = __DIR__ . DS . 'translations' . DS;
-
-    // Intendet language file
-    $language = $path . panel()->translation()->code() . '.php';
-
-    // Try to load intended language file and fallback to default language
-    if(is_file($language)) {
-      require_once($language);
-    } else {
-      require_once($path . 'en.php');
-    }
-
     return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
-
   }
 
   public function modules() {
@@ -250,6 +250,18 @@ class ModulesField extends InputField {
 
   }
 
+  public function actions($data) {
+
+    $html = '';
+
+    foreach($this->actions as $action) {
+      $html .= tpl::load(__DIR__ . DS . 'actions' . DS . $action . '.php', $data);
+    }
+
+    return $html;
+
+  }
+
   public function origin() {
 
     // Return from cache if possible
@@ -271,9 +283,12 @@ class ModulesField extends InputField {
 
   public function label() {
 
+    // Load translation
+    $this->translation();
+
     $add = new Brick('a');
     $add->addClass('label-option');
-    $add->html('<i class="icon icon-left fa fa-plus-circle"></i> Add');
+    $add->html('<i class="icon icon-left fa fa-plus-circle"></i> ' . l('fields.modules.add'));
     $add->data('modal', true);
     $add->attr('href', $this->url('add'));
     // $add->data('context', $this->url('add'));
@@ -281,7 +296,7 @@ class ModulesField extends InputField {
 
     $label = new Brick('label');
     $label->addClass('label');
-    $label->html($this->label);
+    $label->html($this->i18n($this->label));
 
     if($this->limit()) {
       $label->append(' <span class="modules__counter">( ' . $this->modules()->visible()->count() . ' / ' . $this->limit() . ' )</span>');

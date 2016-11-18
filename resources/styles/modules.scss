@@ -33,6 +33,7 @@ $red: #b3000a;
     font-size: 0.8em;
     font-weight: normal;
     color: $gray-light;
+    line-height: 1;
   }
 
   // &__navigation {
@@ -122,6 +123,10 @@ $red: #b3000a;
   &__preview {
     border-bottom: 1px solid $gray-lightest;
     cursor: move;
+
+    &:empty {
+      border: none;
+    }
 
     // display: none;
 

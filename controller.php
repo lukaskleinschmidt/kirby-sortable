@@ -8,6 +8,9 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $field = $this->field();
     $self  = $this;
 
+    // Load translation
+    $field->translation();
+
     $form = $this->form('add', array($model, $field), function($form) use($model, $self) {
 
       $form->validate();
@@ -21,7 +24,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
       try {
         $modules->create($uid, get('module'));
-        $self->update($uid, get('to', $modules->count()));
+        $self->_sort($uid, get('to', $modules->count()));
       } catch(Exception $e) {
         $self->alert($e->getMessage());
       }
@@ -74,7 +77,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
 
     $this->notify(':)');
-    $this->update($uid, $to);
+    $this->_sort($uid, $to);
     $this->redirect($this->model());
 
   }
@@ -85,15 +88,11 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $uid  = get('uid');
     $page = $this->field()->modules()->find($uid);
 
-    if(!$this->field()->status($page)) {
-      $this->alert('Limit reached');
-    } else {
-      try {
-        $page->sort($to);
-        $this->notify(':)');
-      } catch(Exception $e) {
-        $this->alert($e->getMessage());
-      }
+    try {
+      $this->_show($page, $to);
+      $this->notify(':)');
+    } catch (Exception $e) {
+      $this->alert($e->getMessage());
     }
 
     $this->redirect($this->model());
@@ -102,29 +101,13 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function hide() {
 
-    try {
-      $this->field()->modules()->find(get('uid'))->hide();
-      $this->notify(':)');
-    } catch(Exception $e) {
-      $this->alert($e->getMessage());
-    }
-
+    $this->_hide($this->field()->modules()->find(get('uid')));
     $this->redirect($this->model());
 
   }
 
   public function sort() {
-    $this->update(get('uid'), get('to'));
-  }
-
-  public function options() {
-
-    $uid    = get('uid');
-    $field  = $this->field();
-    $module = $field->modules()->find($uid);
-
-    return $this->view('options', compact('field', 'module'));
-
+    $this->_sort(get('uid'), get('to'));
   }
 
   public function copy() {
@@ -135,12 +118,22 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     return $this->modal('paste');
   }
 
+  // public function options() {
+  //
+  //   $uid    = get('uid');
+  //   $field  = $this->field();
+  //   $module = $field->modules()->find($uid);
+  //
+  //   return $this->view('options', compact('field', 'module'));
+  //
+  // }
+
   /**
    * Update field value and sort number
-   * @param [string] $uid
-   * @param [int] $to
+   * @param string $uid
+   * @param int $to
    */
-  public function update($uid, $to) {
+  public function _sort($uid, $to) {
 
     $modules = $this->field()->modules();
     $value = $modules->not($uid)->pluck('uid');
@@ -176,7 +169,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   /**
    * Update the field value
-   * @param [array] $value
+   * @param array $value
    */
   public function _update($value) {
 
@@ -188,6 +181,53 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       $this->alert($e->getMessage());
     }
 
+  }
+
+  /**
+   * Show page
+   * @param Page $page Page object
+   */
+  public function _show($page, $to) {
+
+    $field = $this->field();
+
+    // Load translation
+    $field->translation();
+
+    // Check module specific limit
+    $count = $field->modules()->filterBy('template', $page->intendedTemplate())->visible()->count();
+    $limit = $field->options($page)->limit();
+
+    if($limit && $count >= $limit) {
+      throw new Exception(l('fields.modules.module.limit'));
+      return;
+    }
+
+    // Check limit
+    $count = $field->modules()->visible()->count();
+    $limit = $field->limit();
+
+    if($limit && $count >= $limit) {
+      throw new Exception(l('fields.modules.limit'));
+      return;
+    }
+
+    // Update page
+    $page->sort($to);
+
+  }
+
+  /**
+   * Hide page
+   * @param Page $page Page object
+   */
+  public function _hide($page) {
+    try {
+      $page->hide();
+      $this->notify(':)');
+    } catch(Exception $e) {
+      $this->alert($e->getMessage());
+    }
   }
 
 }
