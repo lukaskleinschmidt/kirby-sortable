@@ -52,7 +52,7 @@ import Selection from './selection';
       var self = this;
 
       this.element.on('_sortableupdate', (event, ui) => {
-        var to = this.element.children().index(ui.item);
+        var to = this.element.children().index(ui.item) + 1;
         var uid = ui.item.data('uid');
         this.sort(uid, to);
       });
@@ -90,15 +90,15 @@ import Selection from './selection';
               if (!event.metaKey && !event.ctrlKey) return true;
               var selected = selection.selected();
               if (selected.length) {
-                $.post('http://www.kirby.dev/panel/pages/home/field/modules/modules/copy', {
-                  modules: selected,
-                }, this.reload.bind(this));
+                this.action('copy', {
+                  modules: selected
+                });
               }
               break;
             case 86:
               if (!event.metaKey && !event.ctrlKey) return true;
               if (this.modules.hasClass('is-selected')) {
-                app.modal.open('http://www.kirby.dev/panel/pages/home/field/modules/modules/paste');
+                app.modal.open(this.options.api + '/paste');
               }
               break;
           }
@@ -134,9 +134,16 @@ import Selection from './selection';
       }
     }
 
+    action(action, data = {}) {
+      $.post(this.options.api + '/' + action, data, this.reload.bind(this));
+    }
+
     sort(uid, to) {
       this.disable();
-      $.post(this.options.api + '/sort', {uid: uid, to: to + 1}, this.reload.bind(this));
+      this.action('sort', {
+        uid: uid,
+        to: to
+      })
     }
 
     disable() {

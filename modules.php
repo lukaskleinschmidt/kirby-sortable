@@ -13,8 +13,7 @@ class ModulesField extends InputField {
     'edit',
     'delete',
     'duplicate',
-    'show',
-    'hide',
+    'toggle',
   );
   public $options = array();
   public $limit = false;
@@ -174,13 +173,13 @@ class ModulesField extends InputField {
 
     // Default values
     $defaults = array(
-      // 'redirect' => false,
-      'duplicate' => true,
-      'preview' => true,
-      // 'delete' => true,
       'limit' => false,
-      'label' => false,
-      // 'edit' => true,
+      'preview' => true,
+      'duplicate' => true,
+      'duplicate' => true,
+      'delete' => true,
+      'toggle' => true,
+      'edit' => true,
     );
 
     if(!$this->options) {
@@ -247,18 +246,6 @@ class ModulesField extends InputField {
     }
 
     return $this->modules = $modules;
-
-  }
-
-  public function actions($data) {
-
-    $html = '';
-
-    foreach($this->actions as $action) {
-      $html .= tpl::load(__DIR__ . DS . 'actions' . DS . $action . '.php', $data);
-    }
-
-    return $html;
 
   }
 

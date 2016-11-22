@@ -148,7 +148,7 @@ $red: #b3000a;
   }
 
   &__title,
-  &__button {
+  &__action {
     padding: 0.6em 0.9em;
     white-space: nowrap;
     flex: 1 0 100%;
@@ -161,17 +161,22 @@ $red: #b3000a;
     cursor: move;
 
     .module[data-visible="false"] & {
-      color: $gray-light;
+      color: mix($white, $gray-light, 20%);
     }
   }
 
-  &__button {
+  &__action {
     flex: 0 0 auto;
     border: none;
     border-left: 1px solid $gray-lightest;
     background: transparent;
     cursor: pointer;
     outline: 0;
+
+    &.is-disabled {
+      pointer-events: none;
+      color: mix($white, $gray-light, 20%);
+    }
 
     // display: none;
   }
