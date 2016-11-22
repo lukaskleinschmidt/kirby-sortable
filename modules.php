@@ -2,20 +2,19 @@
 
 class ModulesField extends InputField {
 
-  // protected $cache;
   protected $translation;
   protected $defaults;
   protected $modules;
   protected $origin;
 
-  public $translations = array();
+  public $variant = 'modules';
+  public $options = array();
   public $actions = array(
     'edit',
     'delete',
     'duplicate',
     'toggle',
   );
-  public $options = array();
   public $limit = false;
   public $copy = true;
 
@@ -37,21 +36,21 @@ class ModulesField extends InputField {
 
     $root = __DIR__ . DS . 'translations';
     $code = panel()->translation()->code();
+    $variant = $this->variant();
 
-    // Check if translation exists
-    if(!is_file($root . DS . $code . '.json')) {
+    if(!is_dir($root . DS . $code)) {
       $code = 'en';
     }
 
-    // Load default and custom translations
-    $default = data::read($root . DS . $code . '.json');
-    $translation = $this->i18n($this->translations);
-
-    if(!is_null($translation)) {
-      $default = a::update($default, $translation);
+    if(!is_file($root . DS . $code . DS . $variant . '.json')) {
+      $variant = 'modules';
     }
 
-    return $this->translation = l::set($default);
+    // Load translation
+    $this->translation = data::read($root . DS . $code . DS . $variant . '.json');
+    l::set($this->translation);
+
+    return $this->translation;
 
   }
 
@@ -173,12 +172,11 @@ class ModulesField extends InputField {
 
     // Default values
     $defaults = array(
-      'limit' => false,
+      'duplicate' => true,
       'preview' => true,
-      'duplicate' => true,
-      'duplicate' => true,
       'delete' => true,
       'toggle' => true,
+      'limit' => false,
       'edit' => true,
     );
 

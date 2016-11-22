@@ -6,6 +6,7 @@ return function($model) {
     'uid' => array(
       'label'        => 'uid',
       'type'         => 'text',
+      'readonly'     => true,
       'autocomplete' => false,
       'autofocus'    => false,
       'required'     => true
@@ -17,4 +18,5 @@ return function($model) {
   $form->buttons->submit->val(l('delete'));
 
   return $form;
+
 };

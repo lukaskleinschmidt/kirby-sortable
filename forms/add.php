@@ -25,4 +25,5 @@ return function($model, $field) {
   $form->buttons->submit->val(l('add'));
 
   return $form;
+
 };

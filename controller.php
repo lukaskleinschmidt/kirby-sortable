@@ -42,6 +42,9 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $self  = $this;
     $uid = get('uid');
 
+    // Load translation
+    $this->field()->translation();
+
     $form = $this->form('delete', array($model), function($form) use($model, $self, $uid) {
 
       $form->validate();

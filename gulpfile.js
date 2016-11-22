@@ -29,16 +29,7 @@ gulp.task('scripts', function() {
 
 gulp.task('styles', function() {
   return gulp.src('resources/styles/modules.scss')
-    .pipe(sass().on('error', sass.logError)) 
-    .pipe(cssmin())
-    .pipe(gulp.dest('assets/css'));
-});
-
-gulp.task('form-css', function() {
-  return gulp.src('app/fields/*/assets/css/*.css')
-    .pipe(concat('form.css'))
-    .pipe(gulp.dest('assets/css'))
-    .pipe(rename('form.min.css'))
+    .pipe(sass().on('error', sass.logError))
     .pipe(cssmin())
     .pipe(gulp.dest('assets/css'));
 });
