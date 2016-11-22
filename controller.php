@@ -11,7 +11,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     // Load translation
     $field->translation();
 
-    $form = $this->form('add', array($model, $field), function($form) use($model, $self) {
+    $form = $this->form('add', array($model, $field), function($form) use($model, $self, $field) {
 
       $form->validate();
 
@@ -19,12 +19,13 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         return false;
       }
 
-      $modules = $self->field()->modules();
-      $uid = 'module' . time();
-
       try {
-        $modules->create($uid, get('module'));
-        $self->_sort($uid, get('to', $modules->count()));
+        $template = get('module');
+        $modules = $field->modules();
+        $uid = $self->_uid($template);
+
+        $modules->create($uid, $template);
+        $self->_sort($uid, $modules->count());
       } catch(Exception $e) {
         $self->alert($e->getMessage());
       }
@@ -75,7 +76,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $to  = get('to');
 
     $page = $this->field()->modules()->find($uid);
-    $uid  = 'duplicate-' . time();
+    $uid  = $this->_uid($page->intendedTemplate());
 
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
 
@@ -130,6 +131,22 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   //   return $this->view('options', compact('field', 'module'));
   //
   // }
+
+  /**
+   * Create more or less unique id
+   * @param  string $template
+   * @return string
+   */
+  public function _uid($template) {
+
+    $templatePrefix = Kirby\Modules\Modules::templatePrefix();
+    $name = str::substr($template, str::length($templatePrefix));
+
+    // add a unique hash
+    $checksum = sprintf('%u', crc32($name . microtime()));
+    return $name . '-' . base_convert($checksum, 10, 36);
+
+  }
 
   /**
    * Update field value and sort number

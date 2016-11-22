@@ -125,7 +125,7 @@ $red: #b3000a;
     cursor: move;
 
     &:empty {
-      border: none;
+      display: none;
     }
 
     // display: none;
