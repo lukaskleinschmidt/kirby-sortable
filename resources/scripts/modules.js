@@ -19,6 +19,8 @@ import Selection from './selection';
       this.options.api = this.element.data('api');
       this.options.copy = this.element.data('copy');
 
+      console.log(this.options);
+
       // var id = this.element.attr('id');
       // if (!selection.id || selection.id == id) {
       //   selection.collection = this.modules;
@@ -54,7 +56,8 @@ import Selection from './selection';
       this.element.on('_sortableupdate', (event, ui) => {
         var to = this.element.children().index(ui.item) + 1;
         var uid = ui.item.data('uid');
-        this.sort(uid, to);
+        this.disable();
+        this.action([uid, to, 'sort'].join('/'));
       });
 
       this.element.on('click', '[data-action]', function(event) {
@@ -135,15 +138,8 @@ import Selection from './selection';
     }
 
     action(action, data = {}) {
+      console.log(this.options.api + '/' + action, data);
       $.post(this.options.api + '/' + action, data, this.reload.bind(this));
-    }
-
-    sort(uid, to) {
-      this.disable();
-      this.action('sort', {
-        uid: uid,
-        to: to
-      })
     }
 
     disable() {

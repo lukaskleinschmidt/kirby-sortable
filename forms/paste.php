@@ -5,6 +5,8 @@ return function($model, $field) {
   $cookie = cookie::get('kirby_field_modules_clipboard');
   $cookie = new Obj(json_decode($cookie));
 
+  // dump($cookie);
+
   $options = array();
 
   $templates = $field->origin()->blueprint()->pages()->template();
@@ -15,11 +17,8 @@ return function($model, $field) {
     $options[$module->uri()] = $module->title();
   }
 
-  dump($options);
-
   $form = new Kirby\Panel\Form(array(
     'modules' => array(
-      'name' => 'test',
       'label'    => 'fields.modules.add.template.label',
       'type'     => 'checkboxes',
       'columns'  => 1,

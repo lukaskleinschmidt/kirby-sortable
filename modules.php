@@ -80,32 +80,36 @@ class ModulesField extends InputField {
         'action'  => 'sort',
         'filter'  => 'auth',
       ),
-
-
       array(
-        'pattern' => 'show',
-        'method'  => 'get|post',
-        'action'  => 'show'
+        'pattern' => '(:all)/(:all)/show',
+        'method'  => 'POST|GET',
+        'action'  => 'show',
+        'filter'  => 'auth',
       ),
       array(
-        'pattern' => 'hide',
-        'method'  => 'get|post',
-        'action'  => 'hide'
+        'pattern' => '(:all)/hide',
+        'method'  => 'POST|GET',
+        'action'  => 'hide',
+        'filter'  => 'auth',
       ),
+      array(
+        'pattern' => 'copy',
+        'method'  => 'POST|GET',
+        'action'  => 'copy',
+        'filter'  => 'auth',
+      ),
+      array(
+        'pattern' => 'paste',
+        'method'  => 'POST|GET',
+        'action'  => 'paste',
+        'filter'  => 'auth',
+      ),
+
       array(
         'pattern' => 'options',
         'method'  => 'get|post',
         'action'  => 'options',
-      ),
-      array(
-        'pattern' => 'copy',
-        'method'  => 'get|post',
-        'action'  => 'copy',
-      ),
-      array(
-        'pattern' => 'paste',
-        'method'  => 'get|post',
-        'action'  => 'paste',
+        'filter'  => 'auth',
       ),
     );
   }
@@ -247,6 +251,13 @@ class ModulesField extends InputField {
       }, $order);
 
       $modules = $modules->find(array_flip($order));
+    }
+
+    // Always return a collection
+    if(!is_a($modules, 'Collection')) {
+      $module = $modules;
+      $modules = new Children($this->origin());
+      $modules->data[$module->id()] = $module;
     }
 
     return $this->modules = $modules;

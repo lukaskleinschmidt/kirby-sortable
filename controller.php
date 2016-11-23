@@ -31,7 +31,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
           'title' => $parent->blueprint()->pages()->template()->findBy('name', $template)->title()
         ));
 
-        $self->update();
+        $self->update($self->field()->modules()->pluck('uid'));
         $self->notify(':)');
         $this->redirect($self->model());
         // $this->redirect($page, 'edit');
@@ -63,7 +63,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       try {
 
         $page->delete();
-        $self->update();
+        $self->update($self->field()->modules()->not($page)->pluck('uid'));
         $self->notify(':)');
         $self->redirect($self->model());
 
@@ -85,14 +85,17 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
 
-    $modules->add($uid);
-
     $this->sort($uid, $to);
     $this->notify(':)');
     $this->redirect($this->model());
 
   }
 
+  /**
+   * Update field value and sort number
+   * @param string $uid
+   * @param int $to
+   */
   public function sort($uid, $to) {
 
     $modules = $this->field()->modules();
@@ -102,7 +105,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     array_splice($value, $to - 1, 0, $uid);
 
     // Update field value
-    $this->_update($value);
+    $this->update($value);
 
     // Get current page
     $page = $modules->find($uid);
@@ -127,34 +130,71 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
+  /**
+   * Show page
+   * @param string $uid
+   * @param int $to
+   */
+  public function show($uid, $to) {
 
-  public function show() {
+    // Load translation
+    $this->field()->translation();
 
-    $to   = get('to');
-    $uid  = get('uid');
-    $page = $this->field()->modules()->find($uid);
+    $modules = $this->field()->modules();
+    $page    = $modules->find($uid);
 
     try {
-      $this->_show($page, $to);
+
+      // Check module specific limit
+      $count = $modules->filterBy('template', $page->intendedTemplate())->visible()->count();
+      $limit = $this->field()->options($page)->limit();
+
+      if($limit && $count >= $limit) {
+        throw new Exception(l('fields.modules.module.limit'));
+        return;
+      }
+
+      // Check limit
+      $count = $modules->visible()->count();
+      $limit = $this->field()->limit();
+
+      if($limit && $count >= $limit) {
+        throw new Exception(l('fields.modules.limit'));
+        return;
+      }
+
+      $page->sort($to);
       $this->notify(':)');
+      $this->redirect($this->model());
+
     } catch(Exception $e) {
       $this->alert($e->getMessage());
     }
 
-    $this->redirect($this->model());
+  }
+
+
+  /**
+   * Hide page
+   * @param string $uid
+   */
+  public function hide($uid) {
+
+    $page = $this->field()->modules()->find($uid);
+
+    try {
+      $page->hide();
+      $this->notify(':)');
+      $this->redirect($this->model());
+    } catch(Exception $e) {
+      $this->alert($e->getMessage());
+    }
 
   }
 
-  public function hide() {
 
-    $this->_hide($this->field()->modules()->find(get('uid')));
-    $this->redirect($this->model());
 
-  }
 
-  // public function sort() {
-  //   $this->_sort(get('uid'), get('to'));
-  // }
 
   public function copy() {
 
@@ -162,6 +202,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $modules = get('modules', array());
 
     cookie::set('kirby_field_modules_clipboard', compact('origin', 'modules'), 60);
+
+    $this->notify(implode(', ', $modules));
 
   }
 
@@ -185,7 +227,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       try {
         // $template = get('module');
         // $modules = $field->modules();
-        // $uid = $self->_uid($template);
+        // $uid = $self->uid($template);
 
         // $modules->create($uid, $template);
         // $self->_sort($uid, $modules->count());
@@ -200,24 +242,24 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-  // public function options() {
-  //
-  //   $uid    = get('uid');
-  //   $field  = $this->field();
-  //   $module = $field->modules()->find($uid);
-  //
-  //   return $this->view('options', compact('field', 'module'));
-  //
-  // }
 
 
-  public function update() {
-    $value = $this->field()->origin()->children()->pluck('uid');
-    $this->_update($value);
-  }
 
-  public function uid($template) {
-    return $this->_uid($template);
+
+  /**
+   * Update the field value
+   * @param array $value
+   */
+  public function update($value) {
+
+    try {
+      $this->model()->update(array(
+        $this->field()->name() => implode(', ', $value)
+      ));
+    } catch(Exception $e) {
+      $this->alert($e->getMessage());
+    }
+
   }
 
   /**
@@ -225,7 +267,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
    * @param  string $template
    * @return string
    */
-  public function _uid($template) {
+  public function uid($template) {
 
     if(is_a($template, 'Page')) {
       $template = $template->intendedTemplate();
@@ -241,108 +283,15 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-  /**
-   * Update field value and sort number
-   * @param string $uid
-   * @param int $to
-   */
-  public function _sort($uid, $to) {
 
-    $modules = $this->field()->modules();
-    $value = $modules->not($uid)->pluck('uid');
 
-    // Order modules value
-    array_splice($value, $to - 1, 0, $uid);
-
-    // Update field value
-    $this->_update($value);
-
-    // Get current page
-    $page = $modules->find($uid);
-
-    // Figure out the correct sort num
-    if($page && $page->isVisible()) {
-      $collection = new Children($page->parent());
-
-      foreach(array_slice($value, 0, $to - 1) as $id) {
-        if($module = $modules->find($id)) {
-          $collection->data[$module->id()] = $module;
-        }
-      }
-
-      try {
-        // Sort the page
-        $page->sort($collection->visible()->count() + 1);
-      } catch(Exception $e) {
-        $this->alert($e->getMessage());
-      }
-    }
-
-  }
-
-  /**
-   * Update the field value
-   * @param array $value
-   */
-  public function _update($value) {
-
-    try {
-      $this->model()->update(array(
-        $this->field()->name() => implode(', ', $value)
-      ));
-    } catch(Exception $e) {
-      $this->alert($e->getMessage());
-    }
-
-  }
-
-  /**
-   * Show page
-   * @param Page $page Page object
-   */
-  public function _show($page, $to) {
-
-    $field = $this->field();
-
-    // Load translation
-    $field->translation();
-
-    // Check module specific limit
-    $count = $field->modules()->filterBy('template', $page->intendedTemplate())->visible()->count();
-    $limit = $field->options($page)->limit();
-
-    if($limit && $count >= $limit) {
-      throw new Exception(l('fields.modules.module.limit'));
-      return;
-    }
-
-    // Check limit
-    $count = $field->modules()->visible()->count();
-    $limit = $field->limit();
-
-    if($limit && $count >= $limit) {
-      throw new Exception(l('fields.modules.limit'));
-      return;
-    }
-
-    // Update page
-    $page->sort($to);
-
-  }
-
-  /**
-   * Hide page
-   * @param Page $page Page object
-   */
-  public function _hide($page) {
-
-    try {
-      $page->hide();
-      $this->notify(':)');
-    } catch(Exception $e) {
-      $this->alert($e->getMessage());
-    }
-
-  }
-
+  // public function options() {
+  //
+  //   $uid    = get('uid');
+  //   $field  = $this->field();
+  //   $module = $field->modules()->find($uid);
+  //
+  //   return $this->view('options', compact('field', 'module'));
+  //
+  // }
 }
