@@ -7,9 +7,11 @@
   "fields.modules.add.title.label": "Add a new module",
   "fields.modules.add.url.label": "URL-appendix",
   "fields.modules.add.template.label": "Template",
-  "fields.modules.delete.headline": "Do you really want to delete this module?",
   "fields.modules.empty": "No modules yet.",
   "fields.modules.add.first": "Add the first module",
+
+  "fields.modules.add.headline": "Add a new module",
+  "fields.modules.delete.headline": "Do you really want to delete this module?",
 
   "fields.modules.limit": "Limit reached",
   "fields.modules.module.limit": "Limit reached for this module type",

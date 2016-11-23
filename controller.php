@@ -4,79 +4,85 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function add() {
 
-    $model = $this->model();
-    $field = $this->field();
-    $self  = $this;
-
     // Load translation
-    $field->translation();
+    $this->field()->translation();
 
-    $form = $this->form('add', array($model, $field), function($form) use($model, $self, $field) {
+    $self   = $this;
+    $parent = $this->field()->origin();
 
-      $form->validate();
+    if($parent->ui()->create() === false) {
+      throw new PermissionsException();
+    }
 
-      if(!$form->isValid()) {
-        return false;
-      }
+    $form = $this->form('add', array($parent, $this->model()), function($form) use($parent, $self) {
 
       try {
-        $template = get('module');
-        $modules = $field->modules();
-        $uid = $self->_uid($template);
 
-        $modules->create($uid, $template);
-        $self->_sort($uid, $modules->count());
+        $form->validate();
+
+        if(!$form->isValid()) {
+          throw new Exception(l('pages.add.error.template'));
+        }
+
+        $data = $form->serialize();
+        $template = $data['template'];
+
+        $page = $parent->children()->create($self->uid($template), $template, array(
+          'title' => $parent->blueprint()->pages()->template()->findBy('name', $template)->title()
+        ));
+
+        $self->update();
+        $self->notify(':)');
+        $this->redirect($self->model());
+        // $this->redirect($page, 'edit');
+
       } catch(Exception $e) {
         $self->alert($e->getMessage());
       }
 
-      $self->redirect($model);
     });
 
     return $this->modal('add', compact('form'));
 
   }
 
-  public function delete() {
-
-    $model = $this->model();
-    $self  = $this;
-    $uid = get('uid');
+  public function delete($uid) {
 
     // Load translation
     $this->field()->translation();
 
-    $form = $this->form('delete', array($model), function($form) use($model, $self, $uid) {
+    $self = $this;
+    $page = $this->field()->modules()->find($uid);
 
-      $form->validate();
+    if($page->ui()->delete() === false) {
+      throw new PermissionsException();
+    }
 
-      if(!$form->isValid()) {
-        return false;
-      }
-
-      $modules = $self->field()->modules();
+    $form = $this->form('delete', array($page, $this->model()), function($form) use($page, $self) {
 
       try {
-        $modules->find($uid)->delete(true);
-        $self->_update($modules->not($uid)->pluck('uid'));
+
+        $page->delete();
+        $self->update();
+        $self->notify(':)');
+        $self->redirect($self->model());
+
       } catch(Exception $e) {
-        $self->alert($e->getMessage());
+        $form->alert($e->getMessage());
       }
 
-      $self->redirect($model);
     });
 
     return $this->modal('delete', compact('form'));
 
   }
 
-  public function duplicate() {
 
-    $uid = get('uid');
-    $to  = get('to');
+
+  public function duplicate($uid, $to) {
 
     $page = $this->field()->modules()->find($uid);
-    $uid  = $this->_uid($page->intendedTemplate());
+    $uid  = $this->_uid($page);
 
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
 
@@ -115,11 +121,47 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   }
 
   public function copy() {
-    $this->notify(implode(', ', get('modules', array())));
+
+    $origin = $this->field()->origin()->uri();
+    $modules = get('modules', array());
+
+    cookie::set('kirby_field_modules_clipboard', compact('origin', 'modules'), 60);
+
   }
 
   public function paste() {
-    return $this->modal('paste');
+
+    $model = $this->model();
+    $field = $this->field();
+    $self  = $this;
+
+    // Load translation
+    $field->translation();
+
+    $form = $this->form('paste', array($model, $field), function($form) use($model, $self, $field) {
+
+      $form->validate();
+
+      if(!$form->isValid()) {
+        return false;
+      }
+
+      try {
+        // $template = get('module');
+        // $modules = $field->modules();
+        // $uid = $self->_uid($template);
+
+        // $modules->create($uid, $template);
+        // $self->_sort($uid, $modules->count());
+      } catch(Exception $e) {
+        $self->alert($e->getMessage());
+      }
+
+      $self->redirect($model);
+    });
+
+    return $this->modal('paste', compact('form'));
+
   }
 
   // public function options() {
@@ -132,15 +174,30 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   //
   // }
 
+
+  public function update() {
+    $value = $this->field()->origin()->children()->pluck('uid');
+    $this->_update($value);
+  }
+
+  public function uid($template) {
+    return $this->_uid($template);
+  }
+
   /**
-   * Create more or less unique id
+   * Create uid
    * @param  string $template
    * @return string
    */
   public function _uid($template) {
 
+    if(is_a($template, 'Page')) {
+      $template = $template->intendedTemplate();
+    }
+
     $templatePrefix = Kirby\Modules\Modules::templatePrefix();
-    $name = str::substr($template, str::length($templatePrefix));
+    $length = str::length($templatePrefix);
+    $name = str::substr($template, $length);
 
     // add a unique hash
     $checksum = sprintf('%u', crc32($name . microtime()));
@@ -242,12 +299,14 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
    * @param Page $page Page object
    */
   public function _hide($page) {
+
     try {
       $page->hide();
       $this->notify(':)');
     } catch(Exception $e) {
       $this->alert($e->getMessage());
     }
+
   }
 
 }

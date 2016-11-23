@@ -1,21 +1,19 @@
 <?php
 
-return function($model) {
+return function($page, $model) {
 
   $form = new Kirby\Panel\Form(array(
-    'uid' => array(
-      'label'        => 'uid',
-      'type'         => 'text',
-      'readonly'     => true,
-      'autocomplete' => false,
-      'autofocus'    => false,
-      'required'     => true
+    'page' => array(
+      'label'    => 'fields.modules.delete.headline',
+      'type'     => 'text',
+      'readonly' => true,
+      'default'  => $page->title(),
+      'help'     => $page->id(),
     )
   ));
 
   $form->cancel($model);
   $form->style('delete');
-  $form->buttons->submit->val(l('delete'));
 
   return $form;
 

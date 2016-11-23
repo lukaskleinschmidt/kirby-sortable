@@ -1,24 +1,23 @@
 <?php
 
-return function($model, $field) {
+return function($page, $model) {
 
-  $options = array();
+  $options = [];
 
-  foreach($field->origin()->blueprint()->pages()->template() as $template) {
-    $options[$template->name()] = icon($template->icon(), 'left') . ' ' . $template->title();
+  foreach($page->blueprint()->pages()->template() as $template) {
+    $options[$template->name()] = $template->title();
   }
 
   $form = new Kirby\Panel\Form(array(
-    'module' => array(
-      'label'    => 'fields.modules.add.template.label',
+    'template' => array(
+      'label'    => 'fields.modules.add.headline',
       'type'     => 'select',
-      'columns'  => 1,
       'options'  => $options,
       'default'  => key($options),
       'required' => true,
       'readonly' => count($options) == 1 ? true : false,
-      'icon'     => count($options) == 1 ? $templates->first()->icon() : 'chevron-down',
-    ),
+      'icon'     => count($options) == 1 ? $page->blueprint()->pages()->template()->first()->icon() : 'chevron-down',
+    )
   ));
 
   $form->cancel($model);

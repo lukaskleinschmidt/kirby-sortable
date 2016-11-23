@@ -11,8 +11,8 @@ class ModulesField extends InputField {
   public $options = array();
   public $actions = array(
     'edit',
-    'delete',
     'duplicate',
+    'delete',
     'toggle',
   );
   public $limit = false;
@@ -58,19 +58,23 @@ class ModulesField extends InputField {
     return array(
       array(
         'pattern' => 'add',
-        'method'  => 'get|post',
-        'action'  => 'add'
+        'method'  => 'POST|GET',
+        'action'  => 'add',
+        'filter'  => 'auth',
       ),
       array(
-        'pattern' => 'delete',
-        'method'  => 'get|post',
-        'action'  => 'delete'
+        'pattern' => '(:all)/delete',
+        'method'  => 'POST|GET',
+        'action'  => 'delete',
+        'filter'  => 'auth',
       ),
       array(
-        'pattern' => 'duplicate',
-        'method'  => 'get|post',
-        'action'  => 'duplicate'
+        'pattern' => '(:all)/(:all)/duplicate',
+        'method'  => 'POST|GET',
+        'action'  => 'duplicate',
+        'filter'  => 'auth',
       ),
+
       array(
         'pattern' => 'show',
         'method'  => 'get|post',
@@ -317,13 +321,17 @@ class ModulesField extends InputField {
 
   public function url($action, $query = array()) {
 
-    $query = url::queryToString($query);
+    // $query = url::queryToString($query);
+    //
+    // if($query) {
+    //   $query = '?' . $query;
+    // }
 
-    if($query) {
-      $query = '?' . $query;
-    }
+    $action = $query ? implode('/', $query) . '/' . $action : $action;
 
-    return purl($this->model(), implode('/', array('field', $this->name(), 'modules', $action)) . $query);
+    return purl($this->model(), implode('/', array('field', $this->name(), $this->type(), $action)));
+
+    // return purl($this->model(), implode('/', array('field', $this->name(), 'modules', $action)) . $query);
 
   }
 
