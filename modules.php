@@ -74,6 +74,13 @@ class ModulesField extends InputField {
         'action'  => 'duplicate',
         'filter'  => 'auth',
       ),
+      array(
+        'pattern' => '(:all)/(:all)/sort',
+        'method'  => 'POST|GET',
+        'action'  => 'sort',
+        'filter'  => 'auth',
+      ),
+
 
       array(
         'pattern' => 'show',
@@ -84,11 +91,6 @@ class ModulesField extends InputField {
         'pattern' => 'hide',
         'method'  => 'get|post',
         'action'  => 'hide'
-      ),
-      array(
-        'pattern' => 'sort',
-        'method'  => 'get|post',
-        'action'  => 'sort',
       ),
       array(
         'pattern' => 'options',
@@ -319,19 +321,18 @@ class ModulesField extends InputField {
 
   }
 
-  public function url($action, $query = array()) {
+  public function url($action, $params = array()) {
 
-    // $query = url::queryToString($query);
-    //
-    // if($query) {
-    //   $query = '?' . $query;
-    // }
+    if($params) {
+      $action = implode('/', $params) . '/' . $action;
+    }
 
-    $action = $query ? implode('/', $query) . '/' . $action : $action;
-
-    return purl($this->model(), implode('/', array('field', $this->name(), $this->type(), $action)));
-
-    // return purl($this->model(), implode('/', array('field', $this->name(), 'modules', $action)) . $query);
+    return purl($this->model(), implode('/', array(
+      'field',
+      $this->name(),
+      'modules',
+      $action
+    )));
 
   }
 

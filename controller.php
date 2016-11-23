@@ -77,20 +77,56 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-
-
   public function duplicate($uid, $to) {
 
-    $page = $this->field()->modules()->find($uid);
-    $uid  = $this->_uid($page);
+    $modules = $this->field()->modules();
+    $page    = $modules->find($uid);
+    $uid     = $this->uid($page);
 
     dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
 
+    $modules->add($uid);
+
+    $this->sort($uid, $to);
     $this->notify(':)');
-    $this->_sort($uid, $to);
     $this->redirect($this->model());
 
   }
+
+  public function sort($uid, $to) {
+
+    $modules = $this->field()->modules();
+    $value = $modules->not($uid)->pluck('uid');
+
+    // Order modules value
+    array_splice($value, $to - 1, 0, $uid);
+
+    // Update field value
+    $this->_update($value);
+
+    // Get current page
+    $page = $modules->find($uid);
+
+    // Figure out the correct sort num
+    if($page && $page->isVisible()) {
+      $collection = new Children($page->parent());
+
+      foreach(array_slice($value, 0, $to - 1) as $id) {
+        if($module = $modules->find($id)) {
+          $collection->data[$module->id()] = $module;
+        }
+      }
+
+      try {
+        // Sort the page
+        $page->sort($collection->visible()->count() + 1);
+      } catch(Exception $e) {
+        $this->alert($e->getMessage());
+      }
+    }
+
+  }
+
 
   public function show() {
 
@@ -101,7 +137,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     try {
       $this->_show($page, $to);
       $this->notify(':)');
-    } catch (Exception $e) {
+    } catch(Exception $e) {
       $this->alert($e->getMessage());
     }
 
@@ -116,9 +152,9 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-  public function sort() {
-    $this->_sort(get('uid'), get('to'));
-  }
+  // public function sort() {
+  //   $this->_sort(get('uid'), get('to'));
+  // }
 
   public function copy() {
 
