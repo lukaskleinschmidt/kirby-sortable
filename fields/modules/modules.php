@@ -104,13 +104,6 @@ class ModulesField extends InputField {
         'action'  => 'paste',
         'filter'  => 'auth',
       ),
-
-      array(
-        'pattern' => 'options',
-        'method'  => 'get|post',
-        'action'  => 'options',
-        'filter'  => 'auth',
-      ),
     );
   }
 
@@ -254,7 +247,7 @@ class ModulesField extends InputField {
     }
 
     // Always return a collection
-    if(!is_a($modules, 'Collection')) {
+    if(is_a($modules, 'Page')) {
       $module = $modules;
       $modules = new Children($this->origin());
       $modules->data[$module->id()] = $module;

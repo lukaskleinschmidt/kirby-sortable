@@ -2,6 +2,9 @@
 
 class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
+  /**
+   * Add a module
+   */
   public function add() {
 
     // Load translation
@@ -46,6 +49,10 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
+  /**
+   * Delete a module
+   * @param string $uid
+   */
   public function delete($uid) {
 
     // Load translation
@@ -77,13 +84,23 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
+  /**
+   * Duplicate a module
+   * @param string $uid
+   * @param int $to
+   */
   public function duplicate($uid, $to) {
 
     $modules = $this->field()->modules();
+    $parent  = $this->field()->origin();
     $page    = $modules->find($uid);
     $uid     = $this->uid($page);
 
-    dir::copy($page->root(), $this->field()->origin()->root() . DS . $uid);
+    if($parent->ui()->create() === false) {
+      throw new PermissionsException();
+    }
+
+    dir::copy($page->root(), $parent->root() . DS . $uid);
 
     $this->sort($uid, $to);
     $this->notify(':)');
@@ -143,6 +160,10 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $modules = $this->field()->modules();
     $page    = $modules->find($uid);
 
+    if($page->ui()->visibility() === false) {
+      throw new PermissionsException();
+    }
+
     try {
 
       // Check module specific limit
@@ -173,7 +194,6 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-
   /**
    * Hide page
    * @param string $uid
@@ -181,6 +201,10 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   public function hide($uid) {
 
     $page = $this->field()->modules()->find($uid);
+
+    if($page->ui()->visibility() === false) {
+      throw new PermissionsException();
+    }
 
     try {
       $page->hide();
@@ -192,31 +216,36 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-
-
-
-
+  /**
+   * Copy to clipboard
+   */
   public function copy() {
 
-    $origin = $this->field()->origin()->uri();
+    $origin  = $this->field()->origin()->uri();
     $modules = get('modules', array());
 
-    cookie::set('kirby_field_modules_clipboard', compact('origin', 'modules'), 60);
+    cookie::set('kirby_field_modules', compact('origin', 'modules'), 60);
 
-    $this->notify(implode(', ', $modules));
+    $this->notify(':)');
 
   }
 
+  /**
+   * Add from clipboard
+   */
   public function paste() {
 
-    $model = $this->model();
-    $field = $this->field();
-    $self  = $this;
-
     // Load translation
-    $field->translation();
+    $this->field()->translation();
 
-    $form = $this->form('paste', array($model, $field), function($form) use($model, $self, $field) {
+    $self = $this;
+    $page = $this->field()->origin();
+
+    if($page->ui()->create() === false) {
+      throw new PermissionsException();
+    }
+
+    $form = $this->form('paste', array($page, $this->model()), function($form) use($page, $self) {
 
       $form->validate();
 
@@ -235,16 +264,12 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         $self->alert($e->getMessage());
       }
 
-      $self->redirect($model);
+      $self->redirect($self->model());
     });
 
     return $this->modal('paste', compact('form'));
 
   }
-
-
-
-
 
   /**
    * Update the field value
@@ -283,15 +308,4 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-
-
-  // public function options() {
-  //
-  //   $uid    = get('uid');
-  //   $field  = $this->field();
-  //   $module = $field->modules()->find($uid);
-  //
-  //   return $this->view('options', compact('field', 'module'));
-  //
-  // }
 }
