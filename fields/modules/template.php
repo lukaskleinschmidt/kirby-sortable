@@ -33,8 +33,8 @@
 
 <nav class="modules__navigation">
   <?php if($field->copy()): ?>
-    <button type="button" data-action="<?php echo $field->url('copy'); ?>"><?php i('copy', 'left'); ?> Copy</button>
-    <button type="button" data-action="<?php echo $field->url('paste'); ?>"><?php i('paste', 'left'); ?> Paste</button>
+    <a href="<?php echo $field->url('copy'); ?>" data-action><?php i('copy', 'left'); ?> Copy</a>
+    <a href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?> Paste</a>
   <?php endif; ?>
   <a href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?> Add</a>
 </nav>

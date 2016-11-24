@@ -8,7 +8,10 @@ class OptionsField extends CheckboxesField {
     $data  = func_get_arg(1);
 
     $input = parent::input($value);
-    $input->attr('checked', v::accepted($this->value()) || v::accepted($data->checked()));
+
+    if(!$this->error) {
+      $input->attr('checked', v::accepted($this->value()) || v::accepted($data->checked()));
+    }
 
     if($data->readonly()) {
       $input->attr('disabled', true);

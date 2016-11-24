@@ -10,6 +10,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     // Load translation
     $this->field()->translation();
 
+
     $self   = $this;
     $parent = $this->field()->origin();
 
@@ -172,7 +173,6 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
       if($limit && $count >= $limit) {
         throw new Exception(l('fields.modules.module.limit'));
-        return;
       }
 
       // Check limit
@@ -181,16 +181,16 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
       if($limit && $count >= $limit) {
         throw new Exception(l('fields.modules.limit'));
-        return;
       }
 
       $page->sort($to);
       $this->notify(':)');
-      $this->redirect($this->model());
 
     } catch(Exception $e) {
       $this->alert($e->getMessage());
     }
+
+    $this->redirect($this->model());
 
   }
 
@@ -209,10 +209,11 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     try {
       $page->hide();
       $this->notify(':)');
-      $this->redirect($this->model());
     } catch(Exception $e) {
       $this->alert($e->getMessage());
     }
+
+    $this->redirect($this->model());
 
   }
 
@@ -241,11 +242,29 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $self = $this;
     $page = $this->field()->origin();
 
+
+    if(cookie::exists('kirby_field_modules')) {
+
+      $cookie = cookie::get('kirby_field_modules', array());
+      $cookie = new Obj(json_decode($cookie));
+
+      $modules = page($cookie->origin())->children()->find($cookie->modules());
+      // return $this->modal('paste', array('form' => 'test'));
+
+      if(is_a($modules, 'Page')) {
+        $module = $modules;
+        $modules = new Children(page($cookie->origin()));
+        $modules->data[$module->id()] = $module;
+      }
+    } else {
+      $modules = new Children('test');
+    }
+
     if($page->ui()->create() === false) {
       throw new PermissionsException();
     }
 
-    $form = $this->form('paste', array($page, $this->model()), function($form) use($page, $self) {
+    $form = $this->form('paste', array($page, $modules, $this->model()), function($form) use($page, $self) {
 
       $form->validate();
 
@@ -265,9 +284,12 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       }
 
       $self->redirect($self->model());
+
     });
 
     return $this->modal('paste', compact('form'));
+
+    // $this->redirect($this->model());
 
   }
 

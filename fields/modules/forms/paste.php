@@ -1,20 +1,11 @@
 <?php
 
-return function($page, $model) {
-
-  $cookie = cookie::get('kirby_field_modules');
-  $cookie = new Obj(json_decode($cookie));
+return function($page, $modules, $model) {
 
   $templates = $page->blueprint()->pages()->template();
-  $modules   = page($cookie->origin())->children()->find($cookie->modules());
-
-  if(is_a($modules, 'Page')) {
-    $module = $modules;
-    $modules = new Children(page($cookie->origin()));
-    $modules->data[$module->id()] = $module;
-  }
 
   $options = [];
+  $fields  = [];
 
   foreach($modules as $module) {
     $template = $module->intendedTemplate();
@@ -33,29 +24,37 @@ return function($page, $model) {
     }
   }
 
-  $form = new Kirby\Panel\Form(array(
-    'modules' => array(
+  if(!$modules->count()) {
+    $fields['info'] = array(
+      'label' => 'Nothing to see here',
+      'type' => 'info',
+      'text' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam.'
+    );
+  }
+
+  if($modules->count()) {
+    $fields['modules'] = array(
       'label'   => 'fields.modules.paste.headline',
       'type'    => 'options',
       'columns' => 1,
+      'required' => true,
       'options' => $options,
       'help'    => 'One or more modules are not available in this page',
-    ),
-    'to' => array(
+    );
+  }
+
+  if($modules->count()) {
+    $count = range(1, $page->moduleList()->count() + 1);
+    $fields['to'] = array(
       'label'    => 'Position',
       'type'     => 'select',
       'required' => true,
       'default'  => 1,
-      'options'  => array(
-        1 => 1,
-        2 => 2,
-        3 => 3,
-        4 => 4,
-        5 => 5,
-      ),
-    ),
+      'options'  => array_combine($count, $count),
+    );
+  }
 
-  ));
+  $form = new Kirby\Panel\Form($fields);
 
   $form->cancel($model);
   $form->buttons->submit->val(l('add'));
