@@ -78,10 +78,14 @@ $red: #b3000a;
     }
   }
 
+  // &:hover {
+  //   animation: pulse 1s;
+  // }
+
   &.is-selected,
   &.ui-sortable-helper {
-    // border-color: $gray;
     // border-color: $green;
+    // border-color: $gray;
     border-color: $black;
 
     // border-color: $gray-lighter;
@@ -181,3 +185,12 @@ $red: #b3000a;
     // display: none;
   }
 }
+
+// @keyframes pulse {
+//   from {
+//     border-color: $green;
+//   }
+//   to {
+//     border-color: $gray-lighter;
+//   }
+// }

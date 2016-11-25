@@ -3,62 +3,59 @@
 return function($page, $modules, $model) {
 
   $templates = $page->blueprint()->pages()->template();
+  $options   = [];
+  $fields    = [];
+  $help      = false;
 
-  $options = [];
-  $fields  = [];
+  if($modules) {
 
-  foreach($modules as $module) {
-    $template = $module->intendedTemplate();
-    $value    = $module->uri();
+    foreach($modules as $module) {
+      $template = $module->intendedTemplate();
+      $value    = $module->uri();
 
-    $options[$value] = array(
-      // 'label'    => icon($templates->findBy('name', $template)->icon(), 'left') . ' ' . $module->title(),
-      'label'    => $module->title(),
-      'checked'  => true,
-      'readonly' => false,
-    );
+      $options[$value] = array(
+        // 'label'    => icon($templates->findBy('name', $template)->icon(), 'left') . ' ' . $module->title(),
+        'label'    => $module->title(),
+        'checked'  => true,
+        'readonly' => false,
+      );
 
-    if(v::notIn($template, $templates->pluck('name'))) {
-      $options[$value]['checked'] = false;
-      $options[$value]['readonly'] = true;
+      if(v::notIn($template, $templates->pluck('name'))) {
+        $options[$value]['checked'] = false;
+        $options[$value]['readonly'] = true;
+
+        $help = true;
+      }
     }
-  }
 
-  if(!$modules->count()) {
-    $fields['info'] = array(
-      'label' => 'Nothing to see here',
-      'type' => 'info',
-      'text' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam.'
-    );
-  }
-
-  if($modules->count()) {
     $fields['modules'] = array(
-      'label'   => 'fields.modules.paste.headline',
-      'type'    => 'options',
-      'columns' => 1,
+      'label'    => 'fields.modules.paste.headline',
+      'type'     => 'options',
+      'columns'  => 1,
       'required' => true,
-      'options' => $options,
-      'help'    => 'One or more modules are not available in this page',
+      'options'  => $options,
+      'help'     => $help ? 'One or more modules are not available in this page' : '',
     );
-  }
 
-  if($modules->count()) {
-    $count = range(1, $page->moduleList()->count() + 1);
-    $fields['to'] = array(
-      'label'    => 'Position',
-      'type'     => 'select',
-      'required' => true,
-      'default'  => 1,
-      'options'  => array_combine($count, $count),
+  } else {
+
+    $fields['info'] = array(
+      'label' => 'Clipboard is empty',
+      'type'  => 'info',
+      'text'  => 'There are no modules stored in the clipboard at the moment. For further information please refer to the documentaion on (link:https://github.com/lukaskleinschmidt/kirby-field-modules text: github target: _blank).'
     );
+
   }
 
   $form = new Kirby\Panel\Form($fields);
 
   $form->cancel($model);
   $form->buttons->submit->val(l('add'));
-  // unset($form->buttons->submit);
+
+  if(!$modules) {
+    $form->buttons->submit = $form->buttons->cancel;
+    $form->style('centered');
+  }
 
   return $form;
 

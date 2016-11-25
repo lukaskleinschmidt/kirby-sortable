@@ -103,6 +103,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     dir::copy($page->root(), $parent->root() . DS . $uid);
 
+    $modules->add($uid);
     $this->sort($uid, $to);
     $this->notify(':)');
     $this->redirect($this->model());
@@ -223,11 +224,14 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
   public function copy() {
 
     $origin  = $this->field()->origin()->uri();
-    $modules = get('modules', array());
+    $modules = get('modules');
 
-    cookie::set('kirby_field_modules', compact('origin', 'modules'), 60);
+    if(is_array($modules)) {
+      cookie::set('kirby_modules', compact('origin', 'modules'), 60);
+      $this->notify(':)');
+    }
 
-    $this->notify(':)');
+    $this->redirect($this->model());
 
   }
 
@@ -239,57 +243,66 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     // Load translation
     $this->field()->translation();
 
-    $self = $this;
-    $page = $this->field()->origin();
-
-
-    if(cookie::exists('kirby_field_modules')) {
-
-      $cookie = cookie::get('kirby_field_modules', array());
-      $cookie = new Obj(json_decode($cookie));
-
-      $modules = page($cookie->origin())->children()->find($cookie->modules());
-      // return $this->modal('paste', array('form' => 'test'));
-
-      if(is_a($modules, 'Page')) {
-        $module = $modules;
-        $modules = new Children(page($cookie->origin()));
-        $modules->data[$module->id()] = $module;
-      }
-    } else {
-      $modules = new Children('test');
-    }
+    $self    = $this;
+    $page    = $this->field()->origin();
+    $modules = [];
 
     if($page->ui()->create() === false) {
       throw new PermissionsException();
     }
 
+    if(cookie::exists('kirby_modules')) {
+
+      $data    = json_decode(cookie::get('kirby_modules'));
+      $origin  = page($data->origin);
+      $modules = $origin->children()->find($data->modules);
+
+      if(is_a($modules, 'Page')) {
+        $module  = $modules;
+        $modules = new Children($origin);
+
+        $modules->data[$module->id()] = $module;
+      }
+    }
+
     $form = $this->form('paste', array($page, $modules, $this->model()), function($form) use($page, $self) {
 
-      $form->validate();
+        $form->validate();
 
-      if(!$form->isValid()) {
-        return false;
-      }
+        if(!$form->isValid()) {
+          return false;
+        }
 
-      try {
-        // $template = get('module');
-        // $modules = $field->modules();
-        // $uid = $self->uid($template);
+        $data = $form->serialize();
 
-        // $modules->create($uid, $template);
-        // $self->_sort($uid, $modules->count());
-      } catch(Exception $e) {
-        $self->alert($e->getMessage());
-      }
+        try {
 
-      $self->redirect($self->model());
+          $templates = $page->blueprint()->pages()->template()->pluck('name');
+          $modules   = $self->field()->modules();
+          $to        = $modules->count();
 
-    });
+          foreach(str::split($data['modules'], ',') as $module) {
+
+            $module = page($module);
+            $uid    = $this->uid($module);
+
+            if(v::in($module->intendedTemplate(), $templates)) {
+              dir::copy($module->root(), $page->root() . DS . $uid);
+              $modules->add($uid);
+              $self->sort($uid, ++$to);
+            }
+          }
+
+          $this->notify(':)');
+          $this->redirect($this->model());
+
+        } catch(Exception $e) {
+          $self->alert($e->getMessage());
+        }
+
+      });
 
     return $this->modal('paste', compact('form'));
-
-    // $this->redirect($this->model());
 
   }
 

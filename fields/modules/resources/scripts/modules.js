@@ -100,8 +100,8 @@ import Selection from './selection';
               break;
             case 86:
               if (!event.metaKey && !event.ctrlKey) return true;
-              // console.log($.cookie('kirby_field_modules'));
-              if (this.modules.hasClass('is-selected')) {
+              // console.log(app.content.focus.id);
+              if (selection.selected().length) {
                 app.modal.open(this.options.api + '/paste');
               }
               break;
