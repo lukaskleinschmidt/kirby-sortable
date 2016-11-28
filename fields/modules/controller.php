@@ -267,40 +267,40 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     $form = $this->form('paste', array($page, $modules, $this->model()), function($form) use($page, $self) {
 
-        $form->validate();
+      $form->validate();
 
-        if(!$form->isValid()) {
-          return false;
-        }
+      if(!$form->isValid()) {
+        return false;
+      }
 
-        $data = $form->serialize();
+      $data = $form->serialize();
 
-        try {
+      try {
 
-          $templates = $page->blueprint()->pages()->template()->pluck('name');
-          $modules   = $self->field()->modules();
-          $to        = $modules->count();
+        $templates = $page->blueprint()->pages()->template()->pluck('name');
+        $modules   = $self->field()->modules();
+        $to        = $modules->count();
 
-          foreach(str::split($data['modules'], ',') as $module) {
+        foreach(str::split($data['uri'], ',') as $module) {
 
-            $module = page($module);
-            $uid    = $this->uid($module);
+          $module = page($module);
+          $uid    = $this->uid($module);
 
-            if(v::in($module->intendedTemplate(), $templates)) {
-              dir::copy($module->root(), $page->root() . DS . $uid);
-              $modules->add($uid);
-              $self->sort($uid, ++$to);
-            }
+          if(v::in($module->intendedTemplate(), $templates)) {
+            dir::copy($module->root(), $page->root() . DS . $uid);
+            $modules->add($uid);
+            $self->sort($uid, ++$to);
           }
-
-          $this->notify(':)');
-          $this->redirect($this->model());
-
-        } catch(Exception $e) {
-          $self->alert($e->getMessage());
         }
 
-      });
+        $this->notify(':)');
+        $this->redirect($this->model());
+
+      } catch(Exception $e) {
+        $self->alert($e->getMessage());
+      }
+
+    });
 
     return $this->modal('paste', compact('form'));
 

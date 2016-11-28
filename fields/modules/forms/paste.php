@@ -28,7 +28,7 @@ return function($page, $modules, $model) {
       }
     }
 
-    $fields['modules'] = array(
+    $fields['uri'] = array(
       'label'    => 'fields.modules.paste.headline',
       'type'     => 'options',
       'columns'  => 1,
