@@ -6,9 +6,9 @@ import Selection from './selection';
   var shift = false;
   var strg = false;
 
-  selection.on('change', selection => {
-    console.log(selection);
-  });
+  // selection.on('change', selection => {
+  //   console.log(selection);
+  // });
 
   class Modules {
     constructor(element) {
@@ -18,8 +18,9 @@ import Selection from './selection';
       this.options = {};
       this.options.api = this.element.data('api');
       this.options.copy = this.element.data('copy');
+      this.options.pointer = true;
 
-      console.log(this.options);
+      // console.log(this.options);
 
       // var id = this.element.attr('id');
       // if (!selection.id || selection.id == id) {
@@ -30,8 +31,6 @@ import Selection from './selection';
 
       selection.collection = this.modules;
       selection.recall();
-
-      // if (this.element.hasClass('modules-readonly') || $('.modules-empty', this.element).length) return;
 
       this.element._sortable({
         handle: '.module__preview, .module__title',
@@ -46,18 +45,22 @@ import Selection from './selection';
     }
 
     blur() {
-      $('.form input:focus, .form select:focus, .form textarea:focus').blur();
-      app.content.focus.forget();
+      if (!selection.count()) {
+        $('.form input:focus, .form select:focus, .form textarea:focus').blur();
+        app.content.focus.forget();
+      }
     }
 
     events() {
       var self = this;
 
       this.element.on('_sortableupdate', (event, ui) => {
-        var to = this.element.children().index(ui.item) + 1;
+        var to = this.element.children().index(ui.item);
         var uid = ui.item.data('uid');
+        this.options.pointer = false;
+        selection.pointer = to;
         this.disable();
-        this.action([uid, to, 'sort'].join('/'));
+        this.action([uid, to + 1, 'sort'].join('/'));
       });
 
       this.element.on('click', '[data-action]', function(event) {
@@ -67,7 +70,6 @@ import Selection from './selection';
         return false;
       });
 
-      // this.modules.on('mousedown', event => {
       this.modules.on('click', event => {
         // var id = this.element.attr('id');
         // if (selection.id !== id) {
@@ -92,17 +94,15 @@ import Selection from './selection';
               break;
             case 67:
               if (!event.metaKey && !event.ctrlKey) return true;
-              var selected = selection.selected();
-              if (selected.length) {
+              if (selection.count()) {
                 this.action('copy', {
-                  modules: selected
+                  modules: selection.selected()
                 });
               }
               break;
             case 86:
               if (!event.metaKey && !event.ctrlKey) return true;
-              // console.log(app.content.focus.id);
-              if (selection.selected().length) {
+              if (selection.count()) {
                 app.modal.open(this.options.api + '/paste');
               }
               break;
@@ -126,10 +126,8 @@ import Selection from './selection';
     }
 
     select(element) {
-      this.blur();
-
       element = $(element);
-
+      this.blur();
       if (shift && strg) {
         selection.batch(element);
       } else if (shift) {
@@ -137,7 +135,7 @@ import Selection from './selection';
       } else if (strg) {
         selection.toggle(element);
       } else {
-        selection.add(element, true);
+        selection.add(element, true, this.options.pointer);
       }
     }
 
