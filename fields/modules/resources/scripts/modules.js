@@ -67,6 +67,7 @@ import Selection from './selection';
         return false;
       });
 
+      // this.modules.on('mousedown', event => {
       this.modules.on('click', event => {
         // var id = this.element.attr('id');
         // if (selection.id !== id) {
@@ -130,7 +131,9 @@ import Selection from './selection';
       element = $(element);
 
       if (shift && strg) {
+        selection.batch(element);
       } else if (shift) {
+        selection.batch(element, true);
       } else if (strg) {
         selection.toggle(element);
       } else {

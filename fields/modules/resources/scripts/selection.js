@@ -2,6 +2,7 @@ export default class Selection {
   constructor() {
     this.collection = {};
     this.selection = [];
+    this.pointer = 0;
     this.events = {};
     this.options = {
       class: 'is-selected',
@@ -13,9 +14,10 @@ export default class Selection {
     return this.selection.indexOf(uid);
   }
 
-  add(element, reset = false) {
-    var uid = element.data(this.options.data);
+  add(element, reset = false, pointer = true) {
     if (reset) this.reset();
+    if (pointer) this.pointer = this.collection.index(element);
+    var uid = element.data(this.options.data);
     if (this.index(uid) === -1) {
       element.addClass(this.options.class);
       this.selection.push(uid);
@@ -32,12 +34,29 @@ export default class Selection {
     }
   }
 
-  toggle(element, reset = false) {
+  toggle(element, reset = false, pointer = true) {
+    if (pointer) this.pointer = this.collection.index(element);
     if (this.index(element.data(this.options.data)) === -1) {
-      this.add(element, reset);
+      this.add(element, reset, false);
     } else {
       this.remove(element);
     }
+  }
+
+  batch(element, reset = false) {
+    if (reset) this.reset();
+    var end = this.collection.index(element),
+        start = this.pointer;
+    if (start > end) {
+      start = end;
+      end = this.pointer;
+    }
+    var elements = this.collection.filter(index => {
+      return index >= start && index <= end;
+    });
+    elements.each((index, element) => {
+      this.add($(element), false, false);
+    });
   }
 
   selected() {
