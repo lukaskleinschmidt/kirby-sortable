@@ -16,7 +16,9 @@ class ModulesField extends InputField {
     'toggle',
   );
   public $limit = false;
+  public $paste = true;
   public $copy = true;
+  public $add = true;
 
   static public $assets = array(
     'js' => array(
@@ -282,14 +284,6 @@ class ModulesField extends InputField {
     // Load translation
     $this->translation();
 
-    $add = new Brick('a');
-    $add->addClass('label-option');
-    $add->html('<i class="icon icon-left fa fa-plus-circle"></i> ' . l('fields.modules.add'));
-    $add->data('modal', true);
-    $add->attr('href', $this->url('add'));
-    // $add->data('context', $this->url('add'));
-    // $add->attr('href', '#' . $this->id());
-
     $label = new Brick('label');
     $label->addClass('label');
     $label->html($this->i18n($this->label));
@@ -298,7 +292,15 @@ class ModulesField extends InputField {
       $label->append(' <span class="modules__counter">( ' . $this->modules()->visible()->count() . ' / ' . $this->limit() . ' )</span>');
     }
 
-    $label->append($add);
+    if($this->add()) {
+      $add = new Brick('a');
+      $add->addClass('modules__action modules__action--add');
+      $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.modules.add'));
+      $add->data('modal', true);
+      $add->attr('href', $this->url('add'));
+
+      $label->append($add);
+    }
 
     return $label;
 

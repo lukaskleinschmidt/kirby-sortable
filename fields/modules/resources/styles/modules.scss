@@ -36,6 +36,53 @@ $red: #b3000a;
     line-height: 1;
   }
 
+  &__empty {
+    background: $gray-lighter;
+    padding: 1.5em;
+
+    a {
+      border-bottom: 2px solid $gray-light;
+      margin: 0 0.25em;
+
+      &:hover {
+        border-color: $black;
+      }
+
+      &:first-child {
+        margin-left: 0.5em;
+      }
+    }
+  }
+
+  &.is-unselectable {
+    user-select: none;
+  }
+
+  &__navigation {
+    padding-top: 0.5em;
+    position: relative;
+  }
+
+  &__action {
+    color: $gray;
+    font-weight: 400;
+    line-height: 1.5em;
+
+    .icon,
+    &:hover {
+      color: $black;
+    }
+
+    &--add {
+      position: absolute;
+      right: 0;
+    }
+
+    &:nth-child(n+2) {
+      margin-left: 1em;
+    }
+  }
+
   // &__navigation {
   //   input::-moz-focus-inner {
   //   	border: 0;

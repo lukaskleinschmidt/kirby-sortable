@@ -6,36 +6,27 @@ import Selection from './selection';
   var shift = false;
   var strg = false;
 
-  // selection.on('change', selection => {
-  //   console.log(selection);
-  // });
-
   class Modules {
     constructor(element) {
       this.element = $(element);
       this.modules = $('.module', element);
+      this.container = $('.modules__container', element);
 
       this.options = {};
       this.options.api = this.element.data('api');
       this.options.copy = this.element.data('copy');
+      this.options.paste = this.element.data('paste');
+
+      // Weather the pointer should get updated or not
       this.options.pointer = true;
-
-      // console.log(this.options);
-
-      // var id = this.element.attr('id');
-      // if (!selection.id || selection.id == id) {
-      //   selection.collection = this.modules;
-      //   selection.id = id;
-      //   selection.recall();
-      // }
 
       selection.collection = this.modules;
       selection.recall();
 
-      this.element._sortable({
+      this.container._sortable({
         handle: '.module__preview, .module__title',
         start: (event, ui) => {
-          this.element._sortable('refreshPositions');
+          this.container._sortable('refreshPositions');
           selection.add($(ui.item), true);
           this.blur();
         },
@@ -54,8 +45,8 @@ import Selection from './selection';
     events() {
       var self = this;
 
-      this.element.on('_sortableupdate', (event, ui) => {
-        var to = this.element.children().index(ui.item);
+      this.container.on('_sortableupdate', (event, ui) => {
+        var to = this.container.children().index(ui.item);
         var uid = ui.item.data('uid');
         this.options.pointer = false;
         selection.pointer = to;
@@ -66,63 +57,73 @@ import Selection from './selection';
       this.element.on('click', '[data-action]', function(event) {
         var element = $(this);
         var action = element.data('action') || element.attr('href');
-        $.post(action, self.reload.bind(self));
+
+        if (element.hasClass('modules__action--copy')) {
+          $.post(action, {
+            modules: selection.selected()
+          }, self.reload.bind(self));
+        } else {
+          $.post(action, self.reload.bind(self));
+        }
+
         return false;
       });
 
       this.modules.on('click', event => {
-        // var id = this.element.attr('id');
-        // if (selection.id !== id) {
-        //   selection.reset();
-        //   selection.collection = this.modules;
-        //   selection.id = id;
-        // }
         this.select($(event.delegateTarget));
       });
 
-      $(document)
-        .off('.modules')
-        .on('keydown.modules', event => {
-          switch (event.keyCode) {
-            case 16:
-              if (shift) return true;
-              shift = true;
-              break;
-            case 17:
-              if (strg) return true;
-              strg = true;
-              break;
-            case 67:
-              if (!event.metaKey && !event.ctrlKey) return true;
-              if (selection.count()) {
-                this.action('copy', {
-                  modules: selection.selected()
-                });
-              }
-              break;
-            case 86:
-              if (!event.metaKey && !event.ctrlKey) return true;
-              if (selection.count()) {
-                app.modal.open(this.options.api + '/paste');
-              }
-              break;
-          }
-        })
-        .on('keyup.modules', event => {
-          switch (event.keyCode) {
-            case 16:
-              shift = false;
-              break;
-            case 17:
-              strg = false;
-              break;
-          }
-        })
-        .on('click.modules', event => {
-          if (!$(event.target).closest('.module').length) {
-            selection.reset();
-          }
-        });
+      if (this.options.copy || this.options.paste) {
+        $(document)
+          .off('.modules')
+          .on('keydown.modules', event => {
+            switch (event.keyCode) {
+              case 16:
+                if (!this.options.copy) return true;
+                if (shift) return true;
+                this.element.addClass('is-unselectable');
+                shift = true;
+                break;
+              case 17:
+                if (!this.options.copy) return true;
+                if (strg) return true;
+                strg = true;
+                break;
+              case 67:
+                if (!this.options.copy) return true;
+                if (!event.metaKey && !event.ctrlKey) return true;
+                if (selection.count()) {
+                  this.action('copy', {
+                    modules: selection.selected()
+                  });
+                }
+                break;
+              case 86:
+                if (!this.options.paste) return true;
+                if (!event.metaKey && !event.ctrlKey) return true;
+                if (selection.count()) {
+                  app.modal.open(this.options.api + '/paste');
+                }
+                break;
+            }
+          })
+          .on('keyup.modules', event => {
+            switch (event.keyCode) {
+              case 16:
+                this.element.removeClass('is-unselectable');
+                shift = false;
+                break;
+              case 17:
+                strg = false;
+                break;
+            }
+          })
+          .on('click.modules', event => {
+            if (!$(event.target).closest('.module').length) {
+              selection.reset();
+            }
+          });
+      }
     }
 
     select(element) {
@@ -140,12 +141,11 @@ import Selection from './selection';
     }
 
     action(action, data = {}) {
-      console.log(this.options.api + '/' + action, data);
       $.post(this.options.api + '/' + action, data, this.reload.bind(this));
     }
 
     disable() {
-      this.element._sortable('disable');
+      this.container._sortable('disable');
     }
 
     reload() {

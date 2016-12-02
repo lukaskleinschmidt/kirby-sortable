@@ -223,12 +223,17 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
    */
   public function copy() {
 
+    // Load translation
+    $this->field()->translation();
+
     $origin  = $this->field()->origin()->uri();
     $modules = get('modules');
 
     if(is_array($modules)) {
-      cookie::set('kirby_modules', compact('origin', 'modules'), 60);
+      cookie::set('kirby_modules', compact('origin', 'modules'), 120);
       $this->notify(':)');
+    } else {
+      $this->alert(l('fields.modules.copy.alert'));
     }
 
     $this->redirect($this->model());

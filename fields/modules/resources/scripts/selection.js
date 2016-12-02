@@ -14,8 +14,8 @@ export default class Selection {
     return this.selection.indexOf(uid);
   }
 
-  add(element, reset = false, pointer = true) {
-    if (reset) this.reset();
+  add(element, reset = false, pointer = true, trigger = true) {
+    if (reset) this.reset(false);
     if (pointer) this.pointer = this.collection.index(element);
 
     var uid = element.data(this.options.data);
@@ -23,7 +23,7 @@ export default class Selection {
     if (this.index(uid) === -1) {
       element.addClass(this.options.class);
       this.selection.push(uid);
-      this.trigger('change', this.selection);
+      if (trigger) this.trigger('change', this.selection);
     }
   }
 
@@ -47,8 +47,8 @@ export default class Selection {
     }
   }
 
-  batch(element, reset = false) {
-    if (reset) this.reset();
+  batch(element, reset = false, trigger = true) {
+    if (reset) this.reset(false);
 
     var start = this.pointer;
     var end = this.collection.index(element);
@@ -61,9 +61,11 @@ export default class Selection {
 
     this.collection.each((index, element) => {
       if (index >= start && index <= end) {
-        this.add($(element), false, false);
+        this.add($(element), false, false, false);
       }
     });
+
+    if (trigger) this.trigger('change', this.selection);
   }
 
   selected() {
@@ -88,9 +90,10 @@ export default class Selection {
     }
   }
 
-  reset() {
+  reset(trigger = true) {
     this.collection.removeClass(this.options.class);
     this.selection = [];
+    if(trigger) this.trigger('change', this.selection);
   }
 
   count() {

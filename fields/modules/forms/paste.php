@@ -34,15 +34,15 @@ return function($page, $modules, $model) {
       'columns'  => 1,
       'required' => true,
       'options'  => $options,
-      'help'     => $help ? 'One or more modules are not available in this page' : '',
+      'help'     => $help ? l('fields.modules.paste.help') : '',
     );
 
   } else {
 
     $fields['info'] = array(
-      'label' => 'Clipboard is empty',
+      'label' =>  l('fields.modules.paste.info.headline'),
       'type'  => 'info',
-      'text'  => 'There are no modules stored in the clipboard at the moment. For further information please refer to the documentaion on (link:https://github.com/lukaskleinschmidt/kirby-field-modules text: github target: _blank).'
+      'text'  => l('fields.modules.paste.info')
     );
 
   }
