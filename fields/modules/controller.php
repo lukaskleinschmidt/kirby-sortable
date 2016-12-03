@@ -10,7 +10,6 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     // Load translation
     $this->field()->translation();
 
-
     $self   = $this;
     $parent = $this->field()->origin();
 
@@ -226,17 +225,28 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     // Load translation
     $this->field()->translation();
 
-    $origin  = $this->field()->origin()->uri();
-    $modules = get('modules');
+    $self    = $this;
+    $page    = $this->field()->origin();
+    $modules = $this->field()->modules();
 
-    if(is_array($modules)) {
-      cookie::set('kirby_modules', compact('origin', 'modules'), 120);
-      $this->notify(':)');
-    } else {
-      $this->alert(l('fields.modules.copy.alert'));
-    }
+    $form = $this->form('copy', array($page, $modules, $this->model()), function($form) use($page, $self) {
 
-    $this->redirect($this->model());
+      $form->validate();
+
+      if(!$form->isValid()) {
+        return false;
+      }
+
+      $data = $form->serialize();
+
+      cookie::set('kirby_modules', $data['uri'], 120);
+
+      $self->notify(':)');
+      $self->redirect($this->model());
+
+    });
+
+    return $this->modal('copy', compact('form'));
 
   }
 
@@ -256,19 +266,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       throw new PermissionsException();
     }
 
-    if(cookie::exists('kirby_modules')) {
-
-      $data    = json_decode(cookie::get('kirby_modules'));
-      $origin  = page($data->origin);
-      $modules = $origin->children()->find($data->modules);
-
-      if(is_a($modules, 'Page')) {
-        $module  = $modules;
-        $modules = new Children($origin);
-
-        $modules->data[$module->id()] = $module;
-      }
-    }
+    $modules = cookie::get('kirby_modules');
+    $modules = pages(str::split($modules, ','));
 
     $form = $this->form('paste', array($page, $modules, $this->model()), function($form) use($page, $self) {
 
@@ -286,10 +285,9 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         $modules   = $self->field()->modules();
         $to        = $modules->count();
 
-        foreach(str::split($data['uri'], ',') as $module) {
+        foreach(pages(str::split($data['uri'], ',')) as $module) {
 
-          $module = page($module);
-          $uid    = $this->uid($module);
+          $uid = $self->uid($module);
 
           if(v::in($module->intendedTemplate(), $templates)) {
             dir::copy($module->root(), $page->root() . DS . $uid);
@@ -298,8 +296,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
           }
         }
 
-        $this->notify(':)');
-        $this->redirect($this->model());
+        $self->notify(':)');
+        $self->redirect($self->model());
 
       } catch(Exception $e) {
         $self->alert($e->getMessage());

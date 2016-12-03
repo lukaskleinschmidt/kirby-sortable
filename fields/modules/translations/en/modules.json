@@ -3,15 +3,22 @@
   "fields.modules.empty.or": "or",
   "fields.modules.empty.add": "Add the first module",
   "fields.modules.empty.paste": "add from clipboard",
+
   "fields.modules.add": "Add",
   "fields.modules.add.headline": "Add a new module",
+
   "fields.modules.copy": "Copy",
-  "fields.modules.copy.alert": "No modules selected to copy",
+  "fields.modules.copy.uri.label": "Add to clipboard",
+  "fields.modules.copy.info.label": "No modules yet",
+  "fields.modules.copy.info.text": "There are no modules you can store in the clipboard yet. For further information please refer to the documentaion on (link:https://github.com/lukaskleinschmidt/kirby-field-modules text: github target: _blank).",
+
+
   "fields.modules.paste": "Paste",
-  "fields.modules.paste.help": "One or more modules are not available in this page",
-  "fields.modules.paste.info.headline": "Clipboard is empty",
-  "fields.modules.paste.info": "There are no modules stored in the clipboard at the moment. For further information please refer to the documentaion on (link:https://github.com/lukaskleinschmidt/kirby-field-modules text: github target: _blank).",
-  "fields.modules.paste.headline": "Add from clipboard",
+  "fields.modules.paste.uri.label": "Add from clipboard",
+  "fields.modules.paste.uri.help": "One or more modules are not available in this page",
+  "fields.modules.paste.info.label": "Clipboard is empty",
+  "fields.modules.paste.info.text": "There are no modules stored in the clipboard at the moment. For further information please refer to the documentaion on (link:https://github.com/lukaskleinschmidt/kirby-field-modules text: github target: _blank).",
+
   "fields.modules.delete.headline": "Do you really want to delete this module?",
   "fields.modules.limit": "Limit reached",
   "fields.modules.module.limit": "Limit reached for this module type",

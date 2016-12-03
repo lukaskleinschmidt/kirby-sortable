@@ -7,7 +7,7 @@ return function($page, $modules, $model) {
   $fields    = [];
   $help      = false;
 
-  if($modules) {
+  if($modules->count()) {
 
     foreach($modules as $module) {
       $template = $module->intendedTemplate();
@@ -29,20 +29,20 @@ return function($page, $modules, $model) {
     }
 
     $fields['uri'] = array(
-      'label'    => 'fields.modules.paste.headline',
+      'label'    => 'fields.modules.paste.uri.label',
       'type'     => 'options',
       'columns'  => 1,
       'required' => true,
       'options'  => $options,
-      'help'     => $help ? l('fields.modules.paste.help') : '',
+      'help'     => $help ? l('fields.modules.paste.uri.help') : '',
     );
 
   } else {
 
     $fields['info'] = array(
-      'label' =>  l('fields.modules.paste.info.headline'),
+      'label' =>  l('fields.modules.paste.info.label'),
       'type'  => 'info',
-      'text'  => l('fields.modules.paste.info')
+      'text'  => l('fields.modules.paste.info.text')
     );
 
   }
@@ -52,7 +52,7 @@ return function($page, $modules, $model) {
   $form->cancel($model);
   $form->buttons->submit->val(l('add'));
 
-  if(!$modules) {
+  if(!$modules->count()) {
     $form->buttons->submit = $form->buttons->cancel;
     $form->style('centered');
   }

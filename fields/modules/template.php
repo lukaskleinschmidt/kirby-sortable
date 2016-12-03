@@ -45,7 +45,7 @@
 
   <nav class="modules__navigation">
     <?php if($field->copy()): ?>
-      <a class="modules__action modules__action--copy" href="<?php echo $field->url('copy'); ?>" data-action><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
+      <a class="modules__action modules__action--copy" href="<?php echo $field->url('copy'); ?>" data-modal><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
     <?php endif; ?>
     <?php if($field->paste()): ?>
       <a class="modules__action modules__action--paste" href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?><?php echo l('fields.modules.paste'); ?></a>
