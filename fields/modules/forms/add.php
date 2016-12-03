@@ -10,7 +10,7 @@ return function($page, $model) {
 
   $form = new Kirby\Panel\Form(array(
     'template' => array(
-      'label'    => 'fields.modules.add.headline',
+      'label'    => 'fields.modules.add.template.label',
       'type'     => 'select',
       'options'  => $options,
       'default'  => key($options),

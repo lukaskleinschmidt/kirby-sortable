@@ -17,7 +17,6 @@
           <div class="module__title">
             <div class="module__icon">
               <?php echo $module->icon('left'); ?>
-              <!-- <a href="#<?php echo $field->id(); ?>" data-context="<?php echo $field->url('options', array('uid' => $module->uid())); ?>"><?php i('ellipsis-h'); ?></a> -->
             </div>
             <?php echo $module->title(); ?>
             <?php echo $field->counter($module); ?>
@@ -38,7 +37,8 @@
         <a href="<?php echo $field->url('add'); ?>" data-modal><?php echo l('fields.modules.empty.add'); ?></a>
       <?php endif; ?>
       <?php if($field->add() && $field->paste()): ?>
-        <?php echo l('fields.modules.empty.or'); ?> <a href="<?php echo $field->url('paste'); ?>" data-modal data-shortcut="meta+v"><?php echo l('fields.modules.empty.paste'); ?></a>
+        <?php echo l('fields.modules.empty.or'); ?>
+        <a href="<?php echo $field->url('paste'); ?>" data-modal data-shortcut="meta+v"><?php echo l('fields.modules.empty.paste'); ?></a>
       <?php endif; ?>
     </div>
   <?php endif; ?>
@@ -47,7 +47,7 @@
     <?php if($field->copy()): ?>
       <a class="modules__action modules__action--copy" href="<?php echo $field->url('copy'); ?>" data-modal><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
     <?php endif; ?>
-    <?php if($field->paste()): ?>
+    <?php if($field->add() && $field->paste()): ?>
       <a class="modules__action modules__action--paste" href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?><?php echo l('fields.modules.paste'); ?></a>
     <?php endif; ?>
     <?php if($field->add()): ?>

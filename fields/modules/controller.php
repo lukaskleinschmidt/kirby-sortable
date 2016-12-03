@@ -233,11 +233,14 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
       $form->validate();
 
+      $data = $form->serialize();
+
       if(!$form->isValid()) {
+        if(!$data['uri']) {
+          $form->alert(l('fields.modules.copy.validate.uri.empty'));
+        }
         return false;
       }
-
-      $data = $form->serialize();
 
       cookie::set('kirby_modules', $data['uri'], 120);
 
@@ -273,11 +276,14 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
       $form->validate();
 
+      $data = $form->serialize();
+
       if(!$form->isValid()) {
+        if(!$data['uri']) {
+          $form->alert(l('fields.modules.paste.validate.uri.empty'));
+        }
         return false;
       }
-
-      $data = $form->serialize();
 
       try {
 

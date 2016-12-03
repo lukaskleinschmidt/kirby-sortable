@@ -11,23 +11,6 @@ $green: #8dae28;
 $red: #b3000a;
 
 .modules {
-  &__add {
-    // background: $gray-lighter;
-    // border: 2px dashed $gray-lighter;
-    margin-bottom: 0.25em;
-    display: block;
-    padding: 0.6em 0.9em;
-    white-space: nowrap;
-    flex: 1 0 100%;
-    line-height: 1.5em;
-    font-size: 1em;
-    text-align: right;
-
-    a {
-      // color: $white;
-    }
-  }
-
   &__counter {
     padding-left: 0.25em;
     font-size: 0.8em;
@@ -54,10 +37,6 @@ $red: #b3000a;
     }
   }
 
-  &.is-unselectable {
-    user-select: none;
-  }
-
   &__navigation {
     padding-top: 0.5em;
     position: relative;
@@ -82,24 +61,6 @@ $red: #b3000a;
       margin-left: 1em;
     }
   }
-
-  // &__navigation {
-  //   input::-moz-focus-inner {
-  //   	border: 0;
-  //   	padding: 0;
-  //   	margin-top:-2px;
-  //   	margin-bottom: -2px;
-  //   }
-  //
-  //   button {
-  //     border: none;
-  //   }
-  // }
-
-  // &__add {
-  //   margin-top: 1em;
-  //   text-align: right;
-  // }
 }
 
 .module {
@@ -125,29 +86,9 @@ $red: #b3000a;
     }
   }
 
-  // &:hover {
-  //   animation: pulse 1s;
-  // }
-
-  &.is-selected,
-  &.ui-sortable-helper {
-    // border-color: $green;
-    // border-color: $gray;
-    border-color: $black;
-
-    // border-color: $gray-lighter;
-    // background: $gray-lightest;
-  }
-
   &__icon {
     display: inline;
   }
-
-  // opacity: 0.5;
-  // &.is-selected {
-  //   // opacity: 1;
-  //   border-color: $green;
-  // }
 
   &__counter {
     padding-left: 0.25em;
@@ -156,21 +97,6 @@ $red: #b3000a;
     line-height: 1;
   }
 
-  // &[data-visible="false"] {
-  //   // border-style: dashed;
-  //   // border-color: $red;
-  // }
-
-  // &[data-visible="false"] {
-  //   background: mix($gray-lightest, $white, 50%);
-  //   border-color: mix($gray-lightest, $black, 97.5%);
-  //   color: $gray;
-  //
-  //   &:not(:hover) {
-  //     // background: mix($gray-lightest, $white, 50%);
-  //   }
-  // }
-
   &__preview {
     border-bottom: 1px solid $gray-lightest;
     cursor: move;
@@ -178,14 +104,6 @@ $red: #b3000a;
     &:empty {
       display: none;
     }
-
-    // display: none;
-
-    // > * {
-    //   .module[data-visible="false"] & {
-    //     opacity: 0.75;
-    //   }
-    // }
 
     &--bottom {
       border-bottom: none;
@@ -228,16 +146,5 @@ $red: #b3000a;
       pointer-events: none;
       color: mix($white, $gray-light, 20%);
     }
-
-    // display: none;
   }
 }
-
-// @keyframes pulse {
-//   from {
-//     border-color: $green;
-//   }
-//   to {
-//     border-color: $gray-lighter;
-//   }
-// }

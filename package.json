@@ -1,9 +1,9 @@
 {
   "name": "modules",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Kirby Modules Field",
   "license": "MIT",
-  "type": "kirby-field",
+  "type": "kirby-plugin",
   "devDependencies": {
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.5",

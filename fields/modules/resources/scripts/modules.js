@@ -1,10 +1,4 @@
-import Selection from './selection';
-
 (function($) {
-
-  var selection = new Selection();
-  var shift = false;
-  var strg = false;
 
   class Modules {
     constructor(element) {
@@ -16,18 +10,12 @@ import Selection from './selection';
       this.options.api = this.element.data('api');
       this.options.copy = this.element.data('copy');
       this.options.paste = this.element.data('paste');
-
-      // Weather the pointer should get updated or not
-      this.options.pointer = true;
-
-      selection.collection = this.modules;
-      selection.recall();
+      this.options.sortable = this.element.data('sortable');
 
       this.container._sortable({
         handle: '.module__preview, .module__title',
         start: (event, ui) => {
           this.container._sortable('refreshPositions');
-          selection.add($(ui.item), true);
           this.blur();
         },
       });
@@ -36,10 +24,8 @@ import Selection from './selection';
     }
 
     blur() {
-      if (!selection.count()) {
-        $('.form input:focus, .form select:focus, .form textarea:focus').blur();
-        app.content.focus.forget();
-      }
+      $('.form input:focus, .form select:focus, .form textarea:focus').blur();
+      app.content.focus.forget();
     }
 
     events() {
@@ -48,8 +34,6 @@ import Selection from './selection';
       this.container.on('_sortableupdate', (event, ui) => {
         var to = this.container.children().index(ui.item);
         var uid = ui.item.data('uid');
-        this.options.pointer = false;
-        selection.pointer = to;
         this.disable();
         this.action([uid, to + 1, 'sort'].join('/'));
       });
@@ -57,87 +41,9 @@ import Selection from './selection';
       this.element.on('click', '[data-action]', function(event) {
         var element = $(this);
         var action = element.data('action') || element.attr('href');
-
-        if (element.hasClass('modules__action--copy')) {
-          $.post(action, {
-            modules: selection.selected()
-          }, self.reload.bind(self));
-        } else {
-          $.post(action, self.reload.bind(self));
-        }
-
+        $.post(action, self.reload.bind(self))
         return false;
       });
-
-      this.modules.on('click', event => {
-        this.select($(event.delegateTarget));
-      });
-
-      if (this.options.copy || this.options.paste) {
-        $(document)
-          .off('.modules')
-          .on('keydown.modules', event => {
-            switch (event.keyCode) {
-              case 16:
-                if (!this.options.copy) return true;
-                if (shift) return true;
-                this.element.addClass('is-unselectable');
-                shift = true;
-                break;
-              case 17:
-                if (!this.options.copy) return true;
-                if (strg) return true;
-                strg = true;
-                break;
-              case 67:
-                if (!this.options.copy) return true;
-                if (!event.metaKey && !event.ctrlKey) return true;
-                if (selection.count()) {
-                  this.action('copy', {
-                    modules: selection.selected()
-                  });
-                }
-                break;
-              case 86:
-                if (!this.options.paste) return true;
-                if (!event.metaKey && !event.ctrlKey) return true;
-                if (selection.count()) {
-                  app.modal.open(this.options.api + '/paste');
-                }
-                break;
-            }
-          })
-          .on('keyup.modules', event => {
-            switch (event.keyCode) {
-              case 16:
-                this.element.removeClass('is-unselectable');
-                shift = false;
-                break;
-              case 17:
-                strg = false;
-                break;
-            }
-          })
-          .on('click.modules', event => {
-            if (!$(event.target).closest('.module').length) {
-              selection.reset();
-            }
-          });
-      }
-    }
-
-    select(element) {
-      element = $(element);
-      this.blur();
-      if (shift && strg) {
-        selection.batch(element);
-      } else if (shift) {
-        selection.batch(element, true);
-      } else if (strg) {
-        selection.toggle(element);
-      } else {
-        selection.add(element, true, this.options.pointer);
-      }
     }
 
     action(action, data = {}) {

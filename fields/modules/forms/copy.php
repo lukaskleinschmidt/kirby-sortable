@@ -2,10 +2,9 @@
 
 return function($page, $modules, $model) {
 
-  $options = [];
-  $fields  = [];
-
   if($modules->count()) {
+
+    $options = [];
 
     foreach($modules as $module) {
       $options[$module->uri()] = array(
@@ -15,28 +14,30 @@ return function($page, $modules, $model) {
       );
     }
 
-    $fields['uri'] = array(
-      'label'    => 'fields.modules.copy.uri.label',
-      'type'     => 'options',
-      'columns'  => 1,
-      'required' => true,
-      'options'  => $options
-    );
+    $form = new Kirby\Panel\Form(array(
+      'uri' => array(
+        'label'    => 'fields.modules.copy.uri.label',
+        'type'     => 'options',
+        'columns'  => 1,
+        'required' => true,
+        'options'  => $options,
+      )
+    ));
 
   } else {
 
-    $fields['info'] = array(
-      'label' =>  l('fields.modules.copy.info.label'),
-      'type'  => 'info',
-      'text'  => l('fields.modules.copy.info.text')
-    );
+    $form = new Kirby\Panel\Form(array(
+      'info' => array(
+        'label' =>  l('fields.modules.copy.info.label'),
+        'type'  => 'info',
+        'text'  => l('fields.modules.copy.info.text')
+      )
+    ));
 
   }
 
-  $form = new Kirby\Panel\Form($fields);
-
   $form->cancel($model);
-  $form->buttons->submit->val(l('add'));
+  $form->buttons->submit->val(l('fields.modules.copy'));
 
   if(!$modules->count()) {
     $form->buttons->submit = $form->buttons->cancel;

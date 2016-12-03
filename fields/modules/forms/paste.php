@@ -2,12 +2,11 @@
 
 return function($page, $modules, $model) {
 
-  $templates = $page->blueprint()->pages()->template();
-  $options   = [];
-  $fields    = [];
-  $help      = false;
-
   if($modules->count()) {
+
+    $templates = $page->blueprint()->pages()->template();
+    $options   = [];
+    $help      = false;
 
     foreach($modules as $module) {
       $template = $module->intendedTemplate();
@@ -28,29 +27,31 @@ return function($page, $modules, $model) {
       }
     }
 
-    $fields['uri'] = array(
-      'label'    => 'fields.modules.paste.uri.label',
-      'type'     => 'options',
-      'columns'  => 1,
-      'required' => true,
-      'options'  => $options,
-      'help'     => $help ? l('fields.modules.paste.uri.help') : '',
-    );
+    $form = new Kirby\Panel\Form(array(
+      'uri' => array(
+        'label'    => 'fields.modules.paste.uri.label',
+        'type'     => 'options',
+        'columns'  => 1,
+        'required' => true,
+        'options'  => $options,
+        'help'     => $help ? l('fields.modules.paste.uri.help') : '',
+      )
+    ));
 
   } else {
 
-    $fields['info'] = array(
-      'label' =>  l('fields.modules.paste.info.label'),
-      'type'  => 'info',
-      'text'  => l('fields.modules.paste.info.text')
-    );
+    $form = new Kirby\Panel\Form(array(
+      'info' => array(
+        'label' =>  l('fields.modules.paste.info.label'),
+        'type'  => 'info',
+        'text'  => l('fields.modules.paste.info.text')
+      )
+    ));
 
   }
 
-  $form = new Kirby\Panel\Form($fields);
-
   $form->cancel($model);
-  $form->buttons->submit->val(l('add'));
+  $form->buttons->submit->val(l('fields.modules.paste'));
 
   if(!$modules->count()) {
     $form->buttons->submit = $form->buttons->cancel;

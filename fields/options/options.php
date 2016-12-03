@@ -25,8 +25,7 @@ class OptionsField extends CheckboxesField {
 
   public function item($value, $data) {
 
-    $data = new Obj($data);
-
+    $data  = new Obj($data);
     $input = $this->input($value, $data);
 
     $label = new Brick('label', '<span>' . $this->i18n($data->label()) . '</span>');
