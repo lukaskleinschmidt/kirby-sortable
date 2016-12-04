@@ -3,12 +3,12 @@
 This field was built to extend the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) by providing a more user friendly interface to the plugin.  
 In version 2 it is now possible to duplicate modules and copy them across pages.
 
-![Preview](preview.gif)
-
 ## 🔥 Update info
 
-This field is now a plugin and must be installed accordingly.
+With v2 this field is now a plugin and must be installed accordingly.  
 See the installation instructions below.
+
+![Preview](preview.gif)
 
 ## Installation
 
