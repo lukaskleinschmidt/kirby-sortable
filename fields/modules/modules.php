@@ -144,7 +144,7 @@ class ModulesField extends InputField {
     $preview = new Brick('div');
     $preview->addClass('module__preview module__preview--' . $position);
     $preview->data('module', $module->name());
-    $preview->html(tpl::load($template, array('module' => $page)));
+    $preview->html(tpl::load($template, array('page' => $this->orign(), 'module' => $page, 'moduleName' => $module->name())));
 
     return $preview;
 
