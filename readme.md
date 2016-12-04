@@ -12,7 +12,7 @@ To install the plugin, please put it in the `site/plugins` directory.
 ```
 site/plugins
     modules-field/
-    	modules-field.php
+        modules-field.php
         ...
 ```
 
@@ -119,7 +119,7 @@ It is also possible to change the position in the module.
 
 Change the naming.
 
-```
+```yml
     # Modules is fine
     variant: modules
 
