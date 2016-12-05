@@ -1,12 +1,12 @@
+### 🔥 Update info
+
+With v2 this field is now a plugin and must be installed accordingly.  
+[See the installation instructions below](#installation).
+
 # Kirby Modules Field
 
 This field was built to extend the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) by providing a more user friendly interface to the plugin.  
 In version 2 it is now possible to duplicate modules and copy them across pages.
-
-## 🔥 Update info
-
-With v2 this field is now a plugin and must be installed accordingly.  
-See the installation instructions below.
 
 ![Preview](preview.gif)
 
@@ -15,7 +15,7 @@ See the installation instructions below.
 To install the plugin, please put it in the `site/plugins` directory.
 
 ```
-site/plugins
+site/plugins/
     modules-field/
         modules-field.php
         ...
