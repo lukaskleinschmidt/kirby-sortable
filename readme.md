@@ -1,8 +1,10 @@
 ---
+
 ### Update from v1.* to v2
 
 With v2 this field is now a plugin and must be installed accordingly.  
 [See the installation instructions below](#installation).
+
 ---
 
 # Kirby Modules Field
