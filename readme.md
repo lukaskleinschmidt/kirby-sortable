@@ -29,7 +29,7 @@ site/plugins/
 ## Blueprint
 
 After installing the plugin, you can use the new field type `modules`.  
-This blueprint shows all avalable options and their defauts.
+This blueprint shows all available options and their defaults.
 
 ```yml
 fields:
@@ -100,8 +100,8 @@ It is also possible to change the position in the module.
       preview: bottom
 
       # Or at the top
-      # preview: top
-      # preview: true
+      preview: top
+      preview: true
 ```
 
 
