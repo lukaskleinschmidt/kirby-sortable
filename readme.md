@@ -180,4 +180,3 @@ To change the actions or remove an action completely from the modules, you must 
 
 - [Kirby](https://getkirby.com/) 2.3+
 - [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.2+
-y
