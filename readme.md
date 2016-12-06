@@ -1,6 +1,6 @@
 ---
 
-### Update from v1.* to v2
+### Update from v1 to v2
 
 With v2 this field is now a plugin and must be installed accordingly.  
 [See the installation instructions below](#installation).
@@ -16,7 +16,8 @@ In version 2 it is now possible to duplicate modules and copy them across pages.
 
 ## Installation
 
-To install the plugin, please put it in the `site/plugins` directory.
+To install the plugin, please put it in the `site/plugins` directory.  
+The plugin folder must be named `modules-field`.
 
 ```
 site/plugins/
@@ -25,6 +26,15 @@ site/plugins/
         ...
 ```
 
+### Download
+
+You can download the latest version of the plugin from https://github.com/lukaskleinschmidt/kirby-field-modules/releases/latest
+
+### With Git
+
+If you are familiar with Git, you can clone this repository from Github into your plugins folder.
+
+```git clone https://github.com/lukaskleinschmidt/kirby-field-modules.git modules-field```
 
 ## Blueprint
 
