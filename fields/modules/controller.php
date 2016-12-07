@@ -1,5 +1,8 @@
 <?php
 
+use Kirby\Panel\Event;
+use Kirby\Panel\Exceptions\PermissionsException;
+
 class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
   /**
@@ -36,7 +39,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
         $self->update($self->field()->modules()->pluck('uid'));
         $self->notify(':)');
-        $this->redirect($self->model());
+        $self->redirect($self->model());
         // $this->redirect($page, 'edit');
 
       } catch(Exception $e) {
@@ -61,8 +64,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $self = $this;
     $page = $this->field()->modules()->find($uid);
 
+    throw new PermissionsException();
     if($page->ui()->delete() === false) {
-      throw new PermissionsException();
     }
 
     $form = $this->form('delete', array($page, $this->model()), function($form) use($page, $self) {
@@ -116,14 +119,22 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
    */
   public function sort($uid, $to) {
 
-    $modules = $this->field()->modules();
-    $value = $modules->not($uid)->pluck('uid');
+    try {
+      $modules = $this->field()->modules();
+      $value = $modules->not($uid)->pluck('uid');
 
-    // Order modules value
-    array_splice($value, $to - 1, 0, $uid);
+      // Order modules value
+      array_splice($value, $to - 1, 0, $uid);
 
-    // Update field value
-    $this->update($value);
+      if($modules->find($uid)->ui()->visibility() === false) {
+        throw new PermissionsException();
+      }
+
+      // Update field value
+      $this->update($value);
+    } catch(Exception $e) {
+      $this->alert($e->getMessage());
+    }
 
     // Get current page
     $page = $modules->find($uid);

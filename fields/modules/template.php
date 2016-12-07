@@ -2,7 +2,7 @@
   data-field="modules"
   data-api="<?php echo purl($field->model(), implode('/', array('field', $field->name(), 'modules'))); ?>"
   data-copy="<?php echo $field->copy() ? 'true' : 'false'; ?>"
-  data-paste="<?php echo $field->paste() ? 'true' : 'false'; ?>">
+  data-paste="<?php echo $field->paste() && $field->origin()->ui()->create() ? 'true' : 'false'; ?>">
 
   <?php if($field->modules()->count()): ?>
     <div class="modules__container">
@@ -47,10 +47,10 @@
     <?php if($field->copy()): ?>
       <a class="modules__action modules__action--copy" href="<?php echo $field->url('copy'); ?>" data-modal><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
     <?php endif; ?>
-    <?php if($field->add() && $field->paste()): ?>
+    <?php if($field->add() && $field->paste() && $field->origin()->ui()->create()): ?>
       <a class="modules__action modules__action--paste" href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?><?php echo l('fields.modules.paste'); ?></a>
     <?php endif; ?>
-    <?php if($field->add()): ?>
+    <?php if($field->add() && $field->origin()->ui()->create()): ?>
       <a class="modules__action modules__action--add" href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?><?php echo l('fields.modules.add'); ?></a>
     <?php endif; ?>
   </nav>
