@@ -64,8 +64,8 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
     $self = $this;
     $page = $this->field()->modules()->find($uid);
 
-    throw new PermissionsException();
     if($page->ui()->delete() === false) {
+      throw new PermissionsException();
     }
 
     $form = $this->form('delete', array($page, $this->model()), function($form) use($page, $self) {
