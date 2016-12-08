@@ -44,14 +44,11 @@
   <?php endif; ?>
 
   <nav class="modules__navigation">
-    <?php if($field->copy()): ?>
-      <a class="modules__action modules__action--copy" href="<?php echo $field->url('copy'); ?>" data-modal><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
-    <?php endif; ?>
-    <?php if($field->add() && $field->paste() && $field->origin()->ui()->create()): ?>
-      <a class="modules__action modules__action--paste" href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?><?php echo l('fields.modules.paste'); ?></a>
-    <?php endif; ?>
-    <?php if($field->add() && $field->origin()->ui()->create()): ?>
-      <a class="modules__action modules__action--add" href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?><?php echo l('fields.modules.add'); ?></a>
-    <?php endif; ?>
+    <?php $disabled = $field->copy() === false; ?>
+    <a class="modules__action modules__action--copy<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('copy'); ?>" data-modal><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
+    <?php $disabled = $field->add() === false || $field->paste() === false || $field->origin()->ui()->create() === false; ?>
+    <a class="modules__action modules__action--paste<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?><?php echo l('fields.modules.paste'); ?></a>
+    <?php $disabled = $field->add() === false || $field->origin()->ui()->create() === false; ?>
+    <a class="modules__action modules__action--add<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?><?php echo l('fields.modules.add'); ?></a>
   </nav>
 </div>
