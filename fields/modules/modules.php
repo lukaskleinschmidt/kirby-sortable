@@ -292,15 +292,17 @@ class ModulesField extends InputField {
       $label->append(' <span class="modules__counter">( ' . $this->modules()->visible()->count() . ' / ' . $this->limit() . ' )</span>');
     }
 
-    if($this->add() && $this->origin()->ui()->create()) {
-      $add = new Brick('a');
-      $add->addClass('modules__action modules__action--add');
-      $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.modules.add'));
-      $add->data('modal', true);
-      $add->attr('href', $this->url('add'));
+    $add = new Brick('a');
+    $add->addClass('modules__action modules__action--add');
+    $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.modules.add'));
+    $add->data('modal', true);
+    $add->attr('href', $this->url('add'));
 
-      $label->append($add);
+    if($this->add() === false || $this->origin()->ui()->create() === false) {
+      $add->addClasS('is-disabled');
     }
+
+    $label->append($add);
 
     return $label;
 

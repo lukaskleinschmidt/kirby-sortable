@@ -60,6 +60,15 @@ $red: #b3000a;
     &:nth-child(n+2) {
       margin-left: 1em;
     }
+
+    &.is-disabled {
+      pointer-events: none;
+      color: mix($white, $gray-light, 20%);
+
+      .icon {
+        color: inherit;
+      }
+    }
   }
 }
 
