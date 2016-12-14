@@ -40,16 +40,14 @@ class ModulesField extends InputField {
     $code = panel()->translation()->code();
     $variant = $this->variant();
 
-    if(!is_dir($root . DS . $code)) {
-      $code = 'en';
-    }
+    // Base translation
+    $this->translation = data::read($root . DS . 'en' . DS . 'modules' . '.json');
 
-    if(!is_file($root . DS . $code . DS . $variant . '.json')) {
-      $variant = 'modules';
+    if(is_file($root . DS . $code . DS . $variant . '.json')) {
+      $this->translation = a::update($this->translation, data::read($root . DS . $code . DS . $variant . '.json'));
     }
 
     // Load translation
-    $this->translation = data::read($root . DS . $code . DS . $variant . '.json');
     l::set($this->translation);
 
     return $this->translation;
