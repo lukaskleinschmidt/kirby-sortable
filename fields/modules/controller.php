@@ -27,7 +27,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         $form->validate();
 
         if(!$form->isValid()) {
-          throw new Exception(l('pages.add.error.template'));
+          throw new Exception(l('fields.modules.add.error.template'));
         }
 
         $data = $form->serialize();
@@ -43,7 +43,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         // $this->redirect($page, 'edit');
 
       } catch(Exception $e) {
-        $self->alert($e->getMessage());
+        $form->alert($e->getMessage());
       }
 
     });
@@ -242,21 +242,26 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     $form = $this->form('copy', array($page, $modules, $this->model()), function($form) use($page, $self) {
 
-      $form->validate();
+      try {
 
-      $data = $form->serialize();
+        $form->validate();
 
-      if(!$form->isValid()) {
-        if(!$data['uri']) {
-          $form->alert(l('fields.modules.copy.validate.uri.empty'));
+        if(!$form->isValid()) {
+          throw new Exception(l('fields.modules.copy.error.uri'));
         }
-        return false;
+
+        $data = $form->serialize();
+
+        site()->user()->update(array(
+          'clipboard' => str::split($data['uri']),
+        ));
+
+        $self->notify(':)');
+        $self->redirect($this->model());
+
+      } catch(Exception $e) {
+        $form->alert($e->getMessage());
       }
-
-      cookie::set('kirby_modules', $data['uri'], 120);
-
-      $self->notify(':)');
-      $self->redirect($this->model());
 
     });
 
@@ -274,29 +279,29 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
 
     $self    = $this;
     $page    = $this->field()->origin();
-    $modules = [];
+    $modules = site()->user()->clipboard();
+
+    if(empty($modules)) {
+      $modules = array();
+    }
+
+    $modules = pages($modules);
 
     if($page->ui()->create() === false) {
       throw new PermissionsException();
     }
 
-    $modules = cookie::get('kirby_modules');
-    $modules = pages(str::split($modules, ','));
-
     $form = $this->form('paste', array($page, $modules, $this->model()), function($form) use($page, $self) {
+
+      try {
 
       $form->validate();
 
-      $data = $form->serialize();
-
-      if(!$form->isValid()) {
-        if(!$data['uri']) {
-          $form->alert(l('fields.modules.paste.validate.uri.empty'));
+        if(!$form->isValid()) {
+          throw new Exception(l('fields.modules.paste.error.uri'));
         }
-        return false;
-      }
 
-      try {
+        $data = $form->serialize();
 
         $templates = $page->blueprint()->pages()->template()->pluck('name');
         $modules   = $self->field()->modules();
@@ -317,7 +322,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         $self->redirect($self->model());
 
       } catch(Exception $e) {
-        $self->alert($e->getMessage());
+        $form->alert($e->getMessage());
       }
 
     });
