@@ -41,13 +41,15 @@ If you are familiar with Git, you can clone this repository from Github into you
 After installing the plugin, you can use the new field type `modules`.  
 This blueprint shows all available options and their defaults.
 
+Bare in mind that you should not use `modules` for the field key. This might be tempting, given the purpose, but will produce an error in the panel. Use something like `modules_field` or any other key you feel comfortable with.
+
 ```yml
 fields:
   title:
     label: Title
     type: text
 
-  modules:
+  modules_field:
     label: Modules
     type: modules
 
@@ -94,7 +96,7 @@ site/modules/
         gallery.html.php
         gallery.yml
 
-        #The preview file
+        # The preview file
         gallery.preview.php
         ...
 ```
@@ -118,7 +120,7 @@ It is also possible to change the position in the module.
 ### Limit the number of visible modules
 
 ```yml
-  modules:
+  modules_field:
     label: Modules
     type: modules
 
