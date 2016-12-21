@@ -34,7 +34,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
         $template = $data['template'];
 
         $page = $parent->children()->create($self->uid($template), $template, array(
-          'title' => $parent->blueprint()->pages()->template()->findBy('name', $template)->title()
+          'title' => i18n($parent->blueprint()->pages()->template()->findBy('name', $template)->title())
         ));
 
         $self->update($self->field()->modules()->pluck('uid'));
