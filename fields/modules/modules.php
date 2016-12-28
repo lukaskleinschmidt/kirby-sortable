@@ -130,7 +130,7 @@ class ModulesField extends InputField {
       return;
     }
 
-    $module = Kirby\Modules\Modules::module($page);
+    $module   = Kirby\Modules\Modules::instance()->get($page);
     $template = $module->path() . DS . $module->name() . '.preview.php';
 
     if(!is_file($template)) {
@@ -226,12 +226,7 @@ class ModulesField extends InputField {
 
     // Filter the modules by valid module
     $modules = $this->origin()->children()->filter(function($page) {
-      try {
-        $module = Kirby\Modules\Modules::module($page);
-        return $module && $module->validate();
-      } catch(Error $e) {
-        return false;
-      }
+      return Kirby\Modules\Modules::instance()->get($page);
     });
 
     // Sort modules
@@ -266,7 +261,7 @@ class ModulesField extends InputField {
     }
 
     // Get parent uid
-    $parentUid = Kirby\Modules\Modules::parentUid();
+    $parentUid = Kirby\Modules\Settings::parentUid();
 
     // Determine the modules root
     if(!$origin = $this->page()->find($parentUid)) {

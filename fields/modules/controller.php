@@ -358,7 +358,7 @@ class ModulesFieldController extends Kirby\Panel\Controllers\Field {
       $template = $template->intendedTemplate();
     }
 
-    $templatePrefix = Kirby\Modules\Modules::templatePrefix();
+    $templatePrefix = Kirby\Modules\Settings::templatePrefix();
     $length = str::length($templatePrefix);
     $name = str::substr($template, $length);
 
