@@ -1,6 +1,6 @@
 <?php
 
-class ModulesField extends InputField {
+class SubpagesField extends InputField {
 
   protected $translation;
   protected $defaults;
@@ -29,6 +29,54 @@ class ModulesField extends InputField {
     ),
   );
 
+  // public function __construct() {
+  //   $this->registry = Kirby\Elements\Registry::instance();
+  //   $this->register();
+  // }
+  //
+  // public function registry() {
+  //   return $this->registry;
+  // }
+  //
+  // public function register() {
+  //
+  //   $registry = $this->registry();
+  //
+  //   $registry->set('template', 'default', __DIR__ . DS . 'template.php');
+  //   $registry->set('action', [
+  //     'duplicate' => __DIR__ . DS . 'actions' . DS . 'duplicate.php',
+  //     'delete' => __DIR__ . DS . 'actions' . DS . 'delete.php',
+  //     'toggle' => __DIR__ . DS . 'actions' . DS . 'toggle.php',
+  //     'edit' => __DIR__ . DS . 'actions' . DS . 'edit.php',
+  //   ]);
+  //
+  //   // dump($registry->get('translation'));
+  //   // dump($registry->get('template'));
+  //   dump($registry->get('action'));
+  //
+  // }
+
+
+  public function action($type) {
+
+    $actionFile = $this->root() . DS . '..' . DS . '..' . DS . 'actions' . DS . $type . DS . $type . '.php';
+    $actionName = $type . 'Action';
+
+    if(!file_exists($actionFile)) {
+      throw new Exception(l('fields.error.missing.controller'));
+    }
+
+    require_once($actionFile);
+
+    if(!class_exists($actionName)) {
+      throw new Exception(l('fields.error.missing.class'));
+    }
+
+    $action = new $actionName();
+
+    return $action;
+  }
+
   public function translation() {
 
     // Return from cache if possible
@@ -54,56 +102,74 @@ class ModulesField extends InputField {
 
   }
 
-  public function routes() {
+  public function routes($type = null) {
+
+    if(!is_null($type)) {
+      return array(
+        array(
+          'pattern' => '(:all)',
+          'method'  => 'POST|GET',
+          'action'  => 'delete',
+          'filter'  => 'auth',
+        ),
+      );
+    }
+
     return array(
       array(
-        'pattern' => 'add',
+        'pattern' => 'action/(:any)/(:all)',
         'method'  => 'POST|GET',
-        'action'  => 'add',
+        'action'  => 'forAction',
         'filter'  => 'auth',
       ),
-      array(
-        'pattern' => '(:all)/delete',
-        'method'  => 'POST|GET',
-        'action'  => 'delete',
-        'filter'  => 'auth',
-      ),
-      array(
-        'pattern' => '(:all)/(:all)/duplicate',
-        'method'  => 'POST|GET',
-        'action'  => 'duplicate',
-        'filter'  => 'auth',
-      ),
-      array(
-        'pattern' => '(:all)/(:all)/sort',
-        'method'  => 'POST|GET',
-        'action'  => 'sort',
-        'filter'  => 'auth',
-      ),
-      array(
-        'pattern' => '(:all)/(:all)/show',
-        'method'  => 'POST|GET',
-        'action'  => 'show',
-        'filter'  => 'auth',
-      ),
-      array(
-        'pattern' => '(:all)/hide',
-        'method'  => 'POST|GET',
-        'action'  => 'hide',
-        'filter'  => 'auth',
-      ),
-      array(
-        'pattern' => 'copy',
-        'method'  => 'POST|GET',
-        'action'  => 'copy',
-        'filter'  => 'auth',
-      ),
-      array(
-        'pattern' => 'paste',
-        'method'  => 'POST|GET',
-        'action'  => 'paste',
-        'filter'  => 'auth',
-      ),
+      // array(
+      //   'pattern' => 'add',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'add',
+      //   'filter'  => 'auth',
+      // ),
+      // array(
+      //   'pattern' => '(:all)/delete',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'delete',
+      //   'filter'  => 'auth',
+      // ),
+      // array(
+      //   'pattern' => '(:all)/(:all)/duplicate',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'duplicate',
+      //   'filter'  => 'auth',
+      // ),
+      // array(
+      //   'pattern' => '(:all)/(:all)/sort',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'sort',
+      //   'filter'  => 'auth',
+      // ),
+      // array(
+      //   'pattern' => '(:all)/(:all)/show',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'show',
+      //   'filter'  => 'auth',
+      // ),
+      // array(
+      //   'pattern' => '(:all)/hide',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'hide',
+      //   'filter'  => 'auth',
+      // ),
+      // array(
+      //   'pattern' => 'copy',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'copy',
+      //   'filter'  => 'auth',
+      // ),
+      // array(
+      //   'pattern' => 'paste',
+      //   'method'  => 'POST|GET',
+      //   'action'  => 'paste',
+      //   'filter'  => 'auth',
+      // ),
     );
   }
 
@@ -146,6 +212,10 @@ class ModulesField extends InputField {
 
     return $preview;
 
+  }
+
+  public function actions($data) {
+    // return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
   }
 
   public function counter($page) {
@@ -326,13 +396,14 @@ class ModulesField extends InputField {
   public function url($action, $params = array()) {
 
     if($params) {
-      $action = implode('/', $params) . '/' . $action;
+      $action = $action . '/' . implode('/', $params);
     }
 
     return purl($this->model(), implode('/', array(
       'field',
       $this->name(),
-      'modules',
+      $this->type(),
+      'action',
       $action
     )));
 

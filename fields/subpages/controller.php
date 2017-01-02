@@ -3,7 +3,51 @@
 use Kirby\Panel\Event;
 use Kirby\Panel\Exceptions\PermissionsException;
 
-class ModulesFieldController extends Kirby\Panel\Controllers\Field {
+class SubpagesFieldController extends Kirby\Panel\Controllers\Field {
+
+  public function forAction($type, $path) {
+
+    $model = $this->model();
+    $field = $this->field();
+
+    $action = $field->action($type);
+    $routes = $action->routes();
+    $router = new Router($routes);
+
+    if($route = $router->run($path)) {
+
+      if(is_callable($route->action()) and is_a($route->action(), 'Closure')) {
+        return call($route->action(), $route->arguments());
+      } else {
+
+        $controllerFile = $field->root() . DS . '..' . DS . '..' . DS . 'actions' . DS . $type . DS . 'controller.php';
+        $controllerName = $type . 'ActionController';
+
+        if(!file_exists($controllerFile)) {
+          throw new Exception(l('fields.error.missing.controller'));
+        }
+
+        require_once($controllerFile);
+
+        if(!class_exists($controllerName)) {
+          throw new Exception(l('fields.error.missing.class'));
+        }
+
+        $controller = new $controllerName($model, $field);
+
+        return call(array($controller, $route->action()), $route->arguments());
+
+      }
+
+    } else {
+      throw new Exception(l('fields.error.route.invalid'));
+    }
+
+  }
+
+  public function route() {
+
+  }
 
   /**
    * Add a module

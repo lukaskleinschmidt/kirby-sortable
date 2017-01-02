@@ -21,7 +21,16 @@
             <?php echo $module->title(); ?>
             <?php echo $field->counter($module); ?>
           </div>
-          <?php foreach($field->actions() as $action) { tpl::load(__DIR__ . DS . 'actions' . DS . $action . '.php', compact('field', 'module', 'options', 'i', 'n'), false); }; ?>
+          <?php
+
+            echo $field->actions(compact('field', 'module', 'options', 'i', 'n'));
+
+            // $registry = Kirby\Elements\Registry::instance();
+            foreach($field->actions as $action) {
+              // $field->action($action, compact('field', 'module', 'options', 'i', 'n'), false);
+              tpl::load(__DIR__ . DS . 'actions' . DS . $action . '.php', compact('field', 'module', 'options', 'i', 'n'), false);
+            };
+          ?>
         </nav>
 
         <?php if($options->preview() === 'bottom') echo $field->preview($module); ?>
