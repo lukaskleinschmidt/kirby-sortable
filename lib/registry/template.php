@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Subpages\Registry;
+namespace Kirby\Entities\Registry;
 
 use Exception;
 use Kirby;

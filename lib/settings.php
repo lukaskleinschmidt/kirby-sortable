@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Subpages;
+namespace Kirby\Entities;
 
 use C;
 

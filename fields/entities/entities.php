@@ -1,6 +1,6 @@
 <?php
 
-class SubpagesField extends InputField {
+class EntitiesField extends InputField {
 
   protected $translation;
   protected $defaults;

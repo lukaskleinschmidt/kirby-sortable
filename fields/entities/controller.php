@@ -3,7 +3,7 @@
 use Kirby\Panel\Event;
 use Kirby\Panel\Exceptions\PermissionsException;
 
-class SubpagesFieldController extends Kirby\Panel\Controllers\Field {
+class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
 
   public function forAction($type, $path) {
 

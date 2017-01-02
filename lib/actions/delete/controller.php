@@ -1,6 +1,6 @@
 <?php
 
-class DeleteActionController extends SubpagesFieldController {
+class DeleteActionController extends EntitiesFieldController {
 
   public function delete($uid) {
 
