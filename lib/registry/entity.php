@@ -7,42 +7,42 @@ use Kirby;
 use Obj;
 use A;
 
-class Action extends Kirby\Registry\Entry {
+class Entity extends Kirby\Registry\Entry {
 
-  // Store of registered actions
-	protected static $actions = [];
+  // Store of registered entities
+	protected static $entities = [];
 
 	/**
-	 * Adds a new action to the registry
+	 * Adds a new entity to the registry
 	 *
 	 * @param mixed $name
 	 * @param string $root
 	 */
-	public function set($name, $root) {
+	public function set($name, $root = null) {
 
     // if(!$this->kirby->option('debug') || is_dir($path)) {
-    //   return static::$actions[$name] = $path;
+    //   return static::$entities[$name] = $path;
     // }
 
     $name = strtolower($name);
     $file = $root . DS . $name . '.php';
 
     if(!$this->kirby->option('debug') || (is_dir($root) && is_file($file))) {
-      return static::$actions[$name] = new Obj([
+      return static::$entities[$name] = new Obj([
         'root'  => $root,
         'file'  => $file,
         'name'  => $name,
-        'class' => $name . 'action',
+        'class' => $name . 'entity',
       ]);
     }
 
-    throw new Exception('The action does not exist at the specified path: ' . $root);
+    throw new Exception('The entity does not exist at the specified path: ' . $path);
 
 	}
 
   /**
-	 * Retreives a registered action file
-	 * If called without params, retrieves a list of action names
+	 * Retreives a registered entity file
+	 * If called without params, retrieves a list of entity names
 	 *
 	 * @param  string $name
 	 * @return mixed
@@ -50,10 +50,10 @@ class Action extends Kirby\Registry\Entry {
   public function get($name = null) {
 
     if(is_null($name)) {
-      return static::$actions;
+      return static::$entities;
     }
 
-    return a::get(static::$actions, $name);
+    return a::get(static::$entities, $name);
 
   }
 

@@ -2,8 +2,6 @@
 
 class DeleteAction extends BaseAction {
 
-  public $icon = 'trash-o';
-
   public function routes() {
     return array(
       array(
@@ -13,6 +11,11 @@ class DeleteAction extends BaseAction {
         'filter'  => 'auth',
       ),
     );
+  }
+
+  public function isDisabled() {
+    $page = $this->page();
+    return $page->blueprint()->options()->delete() === false || $page->ui()->delete() === false;
   }
 
 }

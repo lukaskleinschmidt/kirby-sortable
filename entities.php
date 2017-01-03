@@ -10,16 +10,21 @@ load([
 $kirby->set('field', 'entities', __DIR__ . DS . 'fields' . DS . 'entities');
 $kirby->set('field', 'options' , __DIR__ . DS . 'fields' . DS . 'options');
 
-/**
- * Returns the Entities class singleton
- *
- * @return Entities
- */
-function entities() {
-  return Kirby\Entities\Entities::instance();
-}
+// /**
+//  * Returns the Entities class singleton
+//  *
+//  * @return Entities
+//  */
+// function entities() {
+//   return Kirby\Entities\Entities::instance();
+// }
 
-// $entities = entities();
+$entities = Kirby\Entities\Entities::instance();
+$entities->register();
+
 // $entities->set('action', 'test', __DIR__ . DS . 'lib' . DS . 'actions' . DS . 'delete' );
 
-// dump($entities->roots);
+// $entities->load();
+
+// dump($entities->get('action'));
+// dump($entities->get('entity'));

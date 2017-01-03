@@ -13,8 +13,8 @@ class Roots extends Obj {
     $this->index = $root;
     $this->lib   = $root . DS . 'lib';
 
-    $this->styles  = $this->lib . DS . 'styles';
     $this->actions = $this->lib . DS . 'actions';
+    $this->entities  = $this->lib . DS . 'entities';
 
   }
 

@@ -15,20 +15,21 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
     $router = new Router($routes);
 
     if($route = $router->run($path)) {
-
-      if(is_callable($route->action()) and is_a($route->action(), 'Closure')) {
+      if(is_callable($route->action()) && is_a($route->action(), 'Closure')) {
         return call($route->action(), $route->arguments());
       } else {
 
-        $controllerFile = $field->root() . DS . '..' . DS . '..' . DS . 'actions' . DS . $type . DS . 'controller.php';
+        $controllerFile = $action->root() . DS . 'controller.php';
         $controllerName = $type . 'ActionController';
 
+        // TODO: proper error message
         if(!file_exists($controllerFile)) {
           throw new Exception(l('fields.error.missing.controller'));
         }
 
         require_once($controllerFile);
 
+        // TODO: proper error message
         if(!class_exists($controllerName)) {
           throw new Exception(l('fields.error.missing.class'));
         }
@@ -40,6 +41,7 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
       }
 
     } else {
+      // TODO: proper error message
       throw new Exception(l('fields.error.route.invalid'));
     }
 

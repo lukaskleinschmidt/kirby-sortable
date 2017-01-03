@@ -6,7 +6,14 @@
 
   <?php if($field->modules()->count()): ?>
     <div class="modules__container">
+
+      <?php $field->entities(); ?>
+      <?php /*
       <?php $i = 0; $n = 0; foreach($field->modules() as $module): $i++; if($module->isVisible()) $n++; $options = $field->options($module); ?>
+
+
+      <?php echo $field->entity($field, $module, $i, $n); ?>
+
       <div class="module"
         data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>"
         data-uid="<?php echo $module->uid(); ?>">
@@ -23,12 +30,13 @@
           </div>
           <?php
 
-            echo $field->actions(compact('field', 'module', 'options', 'i', 'n'));
+            // echo $field->actions(compact('field', 'module', 'options', 'i', 'n'));
 
             // $registry = Kirby\Elements\Registry::instance();
             foreach($field->actions as $action) {
+              echo $field->action($action, ['num' => $i, 'numVisible' => $n, 'field' => $field, 'page' => $module]);
               // $field->action($action, compact('field', 'module', 'options', 'i', 'n'), false);
-              tpl::load(__DIR__ . DS . 'actions' . DS . $action . '.php', compact('field', 'module', 'options', 'i', 'n'), false);
+              // tpl::load(__DIR__ . DS . 'actions' . DS . $action . '.php', compact('field', 'module', 'options', 'i', 'n'), false);
             };
           ?>
         </nav>
@@ -38,8 +46,10 @@
 
       </div>
       <?php endforeach; ?>
+      */ ?>
     </div>
   <?php else: ?>
+
     <div class="modules__empty">
       <?php echo l('fields.modules.empty'); ?>
       <?php if($field->add()): ?>
@@ -50,6 +60,7 @@
         <a href="<?php echo $field->url('paste'); ?>" data-modal data-shortcut="meta+v"><?php echo l('fields.modules.empty.paste'); ?></a>
       <?php endif; ?>
     </div>
+
   <?php endif; ?>
 
   <nav class="modules__navigation">

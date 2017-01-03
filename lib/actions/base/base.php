@@ -2,13 +2,10 @@
 
 class BaseAction {
 
-  public $name;
-  public $icon;
-  public $type;
-  public $title;
-  public $disabled;
+  public $num;
+  public $numVisible;
   public $page;
-  public $model;
+  public $field;
 
   public function root() {
     $obj = new ReflectionClass($this);
@@ -19,45 +16,12 @@ class BaseAction {
     return isset($this->{$name}) ? $this->{$name} : null;
   }
 
-  public function icon() {
-
-    if(empty($this->icon)) {
-      return null;
-    }
-
-    $icon = new Brick('i');
-    $icon->addClass('icon fa fa-' . $this->icon);
-
-    return $icon;
-
-  }
-
-  public function element() {
-
-    $element = new Brick('a');
-    $element->addClass('module__action');
-
-    if($this->title)
-      $element->attr('title', $this->title);
-    }
-
-    if($this->type)
-      $element->attr($this->type, true);
-    }
-
-    if($this->disabled)
-      $element->addClass('is-disabled');
-    }
-
-    return $element;
-
+  public function url($action, $params = []) {
+    return $this->field()->url($action, $params);
   }
 
   public function template() {
-
-    return $this->element()
-      ->append($this->icon());
-
+    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
   }
 
   public function __toString() {

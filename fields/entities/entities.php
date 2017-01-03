@@ -2,6 +2,8 @@
 
 class EntitiesField extends InputField {
 
+  static protected $entities;
+
   protected $translation;
   protected $defaults;
   protected $modules;
@@ -20,6 +22,60 @@ class EntitiesField extends InputField {
   public $copy = true;
   public $add = true;
 
+  public static function setup() {
+
+    static::$entities = Kirby\Entities\Entities::instance();
+
+    // load all actions
+    static::$entities->actions();
+
+    // load all entities
+    static::$entities->entities();
+
+  }
+
+  public function entities() {
+
+    $pages = $this->modules();
+    $name = 'base';
+
+    $field = $this;
+    $num = 0;
+    $numVisible = 0;
+
+    foreach($pages as $page) {
+      $num++;
+      if($page->isVisible()) $numVisible++;
+      echo static::$entities->entity($name, compact('field', 'page', 'num', 'numVisible'));
+    }
+
+  }
+
+
+
+
+
+
+
+
+  // public function action($name, $options = array()) {
+  //
+  //   $action = static::$entities->action($name);
+  //
+  //   foreach($options as $key => $value) {
+  //     $action->$key = $value;
+  //   }
+  //
+  //   return $action;
+  //
+  // }
+
+
+
+
+
+
+
   static public $assets = array(
     'js' => array(
       'modules.js',
@@ -29,11 +85,8 @@ class EntitiesField extends InputField {
     ),
   );
 
-  // public function __construct() {
-  //   $this->registry = Kirby\Elements\Registry::instance();
-  //   $this->register();
-  // }
-  //
+
+
   // public function registry() {
   //   return $this->registry;
   // }
@@ -56,26 +109,27 @@ class EntitiesField extends InputField {
   //
   // }
 
-
-  public function action($type) {
-
-    $actionFile = $this->root() . DS . '..' . DS . '..' . DS . 'actions' . DS . $type . DS . $type . '.php';
-    $actionName = $type . 'Action';
-
-    if(!file_exists($actionFile)) {
-      throw new Exception(l('fields.error.missing.controller'));
-    }
-
-    require_once($actionFile);
-
-    if(!class_exists($actionName)) {
-      throw new Exception(l('fields.error.missing.class'));
-    }
-
-    $action = new $actionName();
-
-    return $action;
-  }
+  // public function action($type) {
+  //
+  //   $entities = Kirby\Entities\Entities::instance();
+  //
+  //   $actionFile = $entities->get('action', $type) . DS . $type . '.php';
+  //   $actionName = $type . 'Action';
+  //
+  //   if(!file_exists($actionFile)) {
+  //     throw new Exception(l('fields.error.missing.controller'));
+  //   }
+  //
+  //   require_once($actionFile);
+  //
+  //   if(!class_exists($actionName)) {
+  //     throw new Exception(l('fields.error.missing.class'));
+  //   }
+  //
+  //   $action = new $actionName();
+  //
+  //   return $action;
+  // }
 
   public function translation() {
 
@@ -296,6 +350,7 @@ class EntitiesField extends InputField {
 
     // Filter the modules by valid module
     $modules = $this->origin()->children()->filter(function($page) {
+      // return $page;
       return Kirby\Modules\Modules::instance()->get($page);
     });
 

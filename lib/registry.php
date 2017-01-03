@@ -17,9 +17,8 @@ class Registry extends Kirby\Registry {
 
     // start the registry entry autoloader
     load([
-      'kirby\\entities\\registry\\translation' => __DIR__ . DS . 'registry' . DS . 'translation.php',
-      'kirby\\entities\\registry\\template'    => __DIR__ . DS . 'registry' . DS . 'template.php',
       'kirby\\entities\\registry\\action'      => __DIR__ . DS . 'registry' . DS . 'action.php',
+      'kirby\\entities\\registry\\entity'      => __DIR__ . DS . 'registry' . DS . 'entity.php',
     ]);
 
   }
