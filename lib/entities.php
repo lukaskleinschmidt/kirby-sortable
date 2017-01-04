@@ -89,6 +89,19 @@ class Entities {
 
   }
 
+  public static function variant($type, $field, $data = array()) {
+
+    $class = $type . 'variant';
+
+    // TODO: check exception
+    if(!class_exists($class)) {
+      throw new Exception('The ' . $type . ' variant is missing.');
+    }
+
+    return new $class($field, $data);
+
+  }
+
   public static function action($type, $data = array()) {
 
     $class = $type . 'action';
@@ -106,19 +119,6 @@ class Entities {
     }
 
     return $action;
-
-  }
-
-  public static function variant($type, $field, $data = array()) {
-
-    $class = $type . 'variant';
-
-    // TODO: check exception
-    if(!class_exists($class)) {
-      throw new Exception('The ' . $type . ' variant is missing.');
-    }
-
-    return new $class($field, $data);
 
   }
 
