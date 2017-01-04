@@ -6,8 +6,9 @@
         <?php echo $entity->page()->icon('left'); ?>
       </div>
       <?php echo $entity->page()->title(); ?>
-      <?php echo $entity->field()->counter($entity->page()); ?>
+      <?php echo $entity->counter(); ?>
 
+      <?php // echo $entity->field()->counter($entity->page()); ?>
       <?php // echo $entity->action('delte'); ?>
     </div>
   </nav>

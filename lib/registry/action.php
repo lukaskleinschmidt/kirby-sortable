@@ -20,10 +20,6 @@ class Action extends Kirby\Registry\Entry {
 	 */
 	public function set($name, $root) {
 
-    // if(!$this->kirby->option('debug') || is_dir($path)) {
-    //   return static::$actions[$name] = $path;
-    // }
-
     $name = strtolower($name);
     $file = $root . DS . $name . '.php';
 
@@ -42,7 +38,7 @@ class Action extends Kirby\Registry\Entry {
 
   /**
 	 * Retreives a registered action file
-	 * If called without params, retrieves a list of action names
+	 * If called without params, retrieves all registered actions
 	 *
 	 * @param  string $name
 	 * @return mixed

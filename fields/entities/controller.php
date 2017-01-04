@@ -10,7 +10,7 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
     $model = $this->model();
     $field = $this->field();
 
-    $action = $field->action($type);
+    $action = Kirby\Entities\Entities::action($type);
     $routes = $action->routes();
     $router = new Router($routes);
 

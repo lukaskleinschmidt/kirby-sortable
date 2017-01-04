@@ -2,22 +2,29 @@
 
 class BaseAction {
 
-  public $num;
-  public $numVisible;
-  public $page;
-  public $field;
-
   public function root() {
     $obj = new ReflectionClass($this);
     return dirname($obj->getFileName());
   }
 
-  public function __call($name, $args) {
-    return isset($this->{$name}) ? $this->{$name} : null;
+  public function __call($method, $arguments) {
+    return isset($this->$method) ? $this->$method : null;
   }
 
   public function url($action, $params = []) {
     return $this->field()->url($action, $params);
+  }
+
+  public function label() {
+
+  }
+
+  public function title() {
+
+  }
+
+  public function icon() {
+    
   }
 
   public function template() {

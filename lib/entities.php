@@ -2,6 +2,7 @@
 
 namespace Kirby\Entities;
 
+use F;
 use Dir;
 use Exception;
 
@@ -43,15 +44,24 @@ class Entities {
 
     });
 
+    // set default templates
+    foreach(dir::read($this->roots()->templates()) as $name) {
+      $this->set('template', f::name($name), $this->roots()->templates() . DS . $name);
+    }
+
+    // set default variants
+    foreach(dir::read($this->roots()->variants()) as $name) {
+      $this->set('variant', f::name($name), $this->roots()->variants() . DS . $name);
+    }
+
     // set default actions
     foreach(dir::read($this->roots()->actions()) as $name) {
       $this->set('action', $name, $this->roots()->actions() . DS . $name);
     }
 
-    // set default enteties
-    foreach(dir::read($this->roots()->entities()) as $name) {
-      $this->set('entity', $name, $this->roots()->entities() . DS . $name);
-    }
+    // dump($this->get('template'));
+    // dump($this->get('snippet'));
+    // dump($this->get('action'));
 
   }
 
@@ -63,26 +73,16 @@ class Entities {
     return $this->roots;
   }
 
-  public function actions() {
+  public function load() {
 
-    $actions = $this->get('action');
     $classes = [];
 
-    foreach($actions as $name => $action) {
+    foreach($this->get('action') as $name => $action) {
       $classes[$action->class()] = $action->file();
     }
 
-    load($classes);
-
-  }
-
-  public function entities() {
-
-    $entities = $this->get('entity');
-    $classes = [];
-
-    foreach($entities as $name => $entity) {
-      $classes[$entity->class()] = $entity->file();
+    foreach($this->get('variant') as $name => $variant) {
+      $classes[$variant->class()] = $variant->file();
     }
 
     load($classes);
@@ -93,25 +93,32 @@ class Entities {
 
     $class = $type . 'action';
 
-    // TODO: add proper exception
+    // TODO: check exception
     if(!class_exists($class)) {
       throw new Exception('The ' . $type . ' action is missing.');
     }
 
-    return new $class($data);
+    $action = new $class;
+
+    foreach($data as $key => $val) {
+      if(!is_string($key) || str::length($key) === 0) continue;
+      $action->{$key} = $val;
+    }
+
+    return $action;
 
   }
 
-  public static function entity($type, $data = array()) {
+  public static function variant($type, $field, $data = array()) {
 
-    $class = $type . 'entity';
+    $class = $type . 'variant';
 
-    // TODO: add proper exception
+    // TODO: check exception
     if(!class_exists($class)) {
-      throw new Exception('The ' . $type . ' entity is missing.');
+      throw new Exception('The ' . $type . ' variant is missing.');
     }
 
-    return new $class($data);
+    return new $class($field, $data);
 
   }
 

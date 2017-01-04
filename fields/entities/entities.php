@@ -3,6 +3,7 @@
 class EntitiesField extends InputField {
 
   static protected $entities;
+  public $template = 'default';
 
   protected $translation;
   protected $defaults;
@@ -25,36 +26,30 @@ class EntitiesField extends InputField {
   public static function setup() {
 
     static::$entities = Kirby\Entities\Entities::instance();
-
-    // load all actions
-    static::$entities->actions();
-
-    // load all entities
-    static::$entities->entities();
+    static::$entities->load();
 
   }
 
-  public function entities() {
+  public function hasEntities() {
+    return $this->modules()->count();
+  }
 
-    $pages = $this->modules();
-    $name = 'base';
+  public function entities($type = null) {
 
-    $field = $this;
-    $num = 0;
+    if(is_null($type)) {
+      $type = $this->variant();
+    }
+
     $numVisible = 0;
+    $num        = 0;
 
-    foreach($pages as $page) {
+    foreach($this->modules() as $page) {
       $num++;
       if($page->isVisible()) $numVisible++;
-      echo static::$entities->entity($name, compact('field', 'page', 'num', 'numVisible'));
+      echo Kirby\Entities\Entities::variant($type, $this, compact('page', 'num', 'numVisible'));
     }
 
   }
-
-
-
-
-
 
 
 
@@ -72,10 +67,6 @@ class EntitiesField extends InputField {
 
 
 
-
-
-
-
   static public $assets = array(
     'js' => array(
       'modules.js',
@@ -84,52 +75,6 @@ class EntitiesField extends InputField {
       'modules.css',
     ),
   );
-
-
-
-  // public function registry() {
-  //   return $this->registry;
-  // }
-  //
-  // public function register() {
-  //
-  //   $registry = $this->registry();
-  //
-  //   $registry->set('template', 'default', __DIR__ . DS . 'template.php');
-  //   $registry->set('action', [
-  //     'duplicate' => __DIR__ . DS . 'actions' . DS . 'duplicate.php',
-  //     'delete' => __DIR__ . DS . 'actions' . DS . 'delete.php',
-  //     'toggle' => __DIR__ . DS . 'actions' . DS . 'toggle.php',
-  //     'edit' => __DIR__ . DS . 'actions' . DS . 'edit.php',
-  //   ]);
-  //
-  //   // dump($registry->get('translation'));
-  //   // dump($registry->get('template'));
-  //   dump($registry->get('action'));
-  //
-  // }
-
-  // public function action($type) {
-  //
-  //   $entities = Kirby\Entities\Entities::instance();
-  //
-  //   $actionFile = $entities->get('action', $type) . DS . $type . '.php';
-  //   $actionName = $type . 'Action';
-  //
-  //   if(!file_exists($actionFile)) {
-  //     throw new Exception(l('fields.error.missing.controller'));
-  //   }
-  //
-  //   require_once($actionFile);
-  //
-  //   if(!class_exists($actionName)) {
-  //     throw new Exception(l('fields.error.missing.class'));
-  //   }
-  //
-  //   $action = new $actionName();
-  //
-  //   return $action;
-  // }
 
   public function translation() {
 
@@ -338,7 +283,17 @@ class EntitiesField extends InputField {
   }
 
   public function content() {
-    return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
+
+    $template = static::$entities->get('template', $this->template);
+    $content  = new Brick('div');
+
+    $content->addClass('enteties');
+    $content->attr('data-field', 'entities');
+    $content->attr('data-api', purl($this->model(), 'field/' . $this->name() . '/entities'));
+    $content->append(tpl::load($template, array('field' => $this)));
+
+    return $content;
+
   }
 
   public function modules() {

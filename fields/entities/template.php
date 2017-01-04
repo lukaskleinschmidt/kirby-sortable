@@ -7,7 +7,7 @@
   <?php if($field->modules()->count()): ?>
     <div class="modules__container">
 
-      <?php $field->entities(); ?>
+      <?php //$field->entities(); ?>
       <?php /*
       <?php $i = 0; $n = 0; foreach($field->modules() as $module): $i++; if($module->isVisible()) $n++; $options = $field->options($module); ?>
 
@@ -51,24 +51,35 @@
   <?php else: ?>
 
     <div class="modules__empty">
-      <?php echo l('fields.modules.empty'); ?>
-      <?php if($field->add()): ?>
+
+      <?php //echo l('fields.modules.empty'); ?>
+      <?php //$field->action('add', ['label' => l('fields.modules.empty.add')]); ?>
+      <?php //echo l('fields.modules.empty.or'); ?>
+      <?php //$field->action('paste', ['label' => l('fields.modules.empty.paste')]); ?>
+
+      <?php /*if($field->add()): ?>
         <a href="<?php echo $field->url('add'); ?>" data-modal><?php echo l('fields.modules.empty.add'); ?></a>
-      <?php endif; ?>
-      <?php if($field->add() && $field->paste()): ?>
+      <?php endif;*/ ?>
+      <?php /*if($field->add() && $field->paste()): ?>
         <?php echo l('fields.modules.empty.or'); ?>
         <a href="<?php echo $field->url('paste'); ?>" data-modal data-shortcut="meta+v"><?php echo l('fields.modules.empty.paste'); ?></a>
-      <?php endif; ?>
+      <?php endif; */?>
     </div>
 
   <?php endif; ?>
 
   <nav class="modules__navigation">
+    <?php //$field->action('copy'); ?>
+    <?php //$field->action('paste'); ?>
+    <?php //$field->action('add'); ?>
+
+    <?php /*
     <?php $disabled = $field->copy() === false; ?>
     <a class="modules__action modules__action--copy<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('copy'); ?>" data-modal><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
     <?php $disabled = $field->add() === false || $field->paste() === false || $field->origin()->ui()->create() === false; ?>
     <a class="modules__action modules__action--paste<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?><?php echo l('fields.modules.paste'); ?></a>
     <?php $disabled = $field->add() === false || $field->origin()->ui()->create() === false; ?>
     <a class="modules__action modules__action--add<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?><?php echo l('fields.modules.add'); ?></a>
+    */ ?>
   </nav>
 </div>

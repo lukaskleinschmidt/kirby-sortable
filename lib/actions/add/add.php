@@ -7,15 +7,14 @@ class DeleteAction extends BaseAction {
       array(
         'pattern' => '(:all)',
         'method'  => 'POST|GET',
-        'action'  => 'delete',
+        'action'  => 'add',
         'filter'  => 'auth',
       ),
     );
   }
 
   public function isDisabled() {
-    $page = $this->entity()->page();
-    return $page->blueprint()->options()->delete() === false || $page->ui()->delete() === false;
+    return $page->ui()->create() === false;
   }
 
 }
