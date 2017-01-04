@@ -1,6 +1,6 @@
 {
   "name": "modules-field",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Kirby Modules Field",
   "license": "MIT",
   "type": "kirby-plugin",
