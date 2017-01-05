@@ -101,22 +101,10 @@ class EntitiesField extends InputField {
 
   }
 
-  public function routes($type = null) {
-
-    if(!is_null($type)) {
-      return array(
-        array(
-          'pattern' => '(:all)',
-          'method'  => 'POST|GET',
-          'action'  => 'delete',
-          'filter'  => 'auth',
-        ),
-      );
-    }
-
+  public function routes() {
     return array(
       array(
-        'pattern' => 'action/(:any)/(:all)',
+        'pattern' => 'action/(:any)/(:all?)',
         'method'  => 'POST|GET',
         'action'  => 'forAction',
         'filter'  => 'auth',

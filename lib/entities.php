@@ -4,6 +4,7 @@ namespace Kirby\Entities;
 
 use F;
 use Dir;
+use Str;
 use Exception;
 
 class Entities {
@@ -77,12 +78,12 @@ class Entities {
 
     $classes = [];
 
-    foreach($this->get('action') as $name => $action) {
-      $classes[$action->class()] = $action->file();
-    }
-
     foreach($this->get('variant') as $name => $variant) {
       $classes[$variant->class()] = $variant->file();
+    }
+
+    foreach($this->get('action') as $name => $action) {
+      $classes[$action->class()] = $action->file();
     }
 
     load($classes);

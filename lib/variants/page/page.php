@@ -4,14 +4,23 @@ class PageVariant extends Obj {
 
   public $field;
 
-  public function root() {
-    $obj = new ReflectionClass($this);
-    return dirname($obj->getFileName());
-  }
+  static public $assets = array(
+    'js' => array(
+      'page.js',
+    ),
+    'css' => array(
+      'page.css',
+    ),
+  );
 
   public function __construct($field, $data = array()) {
     $this->field = $field;
     parent::__construct($data);
+  }
+
+  public function root() {
+    $obj = new ReflectionClass($this);
+    return dirname($obj->getFileName());
   }
 
   public function field() {

@@ -1,6 +1,6 @@
 <?php
 
-class DeleteAction extends BaseAction {
+class AddAction extends BaseAction {
 
   public function routes() {
     return array(

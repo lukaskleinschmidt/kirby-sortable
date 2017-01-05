@@ -12,7 +12,7 @@ class BaseAction {
   }
 
   public function url($action, $params = []) {
-    return $this->field()->url($action, $params);
+    return $this->entity()->field()->url($action, $params);
   }
 
   public function label() {
@@ -24,7 +24,7 @@ class BaseAction {
   }
 
   public function icon() {
-    
+
   }
 
   public function template() {

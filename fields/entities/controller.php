@@ -5,7 +5,7 @@ use Kirby\Panel\Exceptions\PermissionsException;
 
 class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
 
-  public function forAction($type, $path) {
+  public function forAction($type, $path = null) {
 
     $model = $this->model();
     $field = $this->field();

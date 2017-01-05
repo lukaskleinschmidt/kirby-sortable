@@ -8,8 +8,7 @@
       <?php echo $entity->page()->title(); ?>
       <?php echo $entity->counter(); ?>
 
-      <?php // echo $entity->field()->counter($entity->page()); ?>
-      <?php // echo $entity->action('delte'); ?>
+      <?php echo $entity->action('delete'); ?>
     </div>
   </nav>
 
