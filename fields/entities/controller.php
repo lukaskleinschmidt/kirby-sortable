@@ -5,7 +5,14 @@ use Kirby\Panel\Exceptions\PermissionsException;
 
 class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
 
-  public function forAction($type, $path = null) {
+  /**
+   * Initiates a action controller
+   *
+   * @param  string $type
+   * @param  string $path
+   * @return mixed
+   */
+  public function forAction($type, $path = '') {
 
     $model = $this->model();
     $field = $this->field();
@@ -34,7 +41,7 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
           throw new Exception(l('fields.error.missing.class'));
         }
 
-        $controller = new $controllerName($model, $field);
+        $controller = new $controllerName($model, $field, $action);
 
         return call(array($controller, $route->action()), $route->arguments());
 
@@ -47,119 +54,9 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
 
   }
 
-  public function route() {
-
-  }
-
-  /**
-   * Add a module
-   */
-  public function add() {
-
-    // Load translation
-    $this->field()->translation();
-
-    $self   = $this;
-    $parent = $this->field()->origin();
-
-    if($parent->ui()->create() === false) {
-      throw new PermissionsException();
-    }
-
-    $form = $this->form('add', array($parent, $this->model()), function($form) use($parent, $self) {
-
-      try {
-
-        $form->validate();
-
-        if(!$form->isValid()) {
-          throw new Exception(l('fields.modules.add.error.template'));
-        }
-
-        $data = $form->serialize();
-        $template = $data['template'];
-
-        $page = $parent->children()->create($self->uid($template), $template, array(
-          'title' => i18n($parent->blueprint()->pages()->template()->findBy('name', $template)->title())
-        ));
-
-        $self->update($self->field()->modules()->pluck('uid'));
-        $self->notify(':)');
-        $self->redirect($self->model());
-        // $this->redirect($page, 'edit');
-
-      } catch(Exception $e) {
-        $form->alert($e->getMessage());
-      }
-
-    });
-
-    return $this->modal('add', compact('form'));
-
-  }
-
-  /**
-   * Delete a module
-   * @param string $uid
-   */
-  public function delete($uid) {
-
-    // Load translation
-    $this->field()->translation();
-
-    $self = $this;
-    $page = $this->field()->modules()->find($uid);
-
-    if($page->ui()->delete() === false) {
-      throw new PermissionsException();
-    }
-
-    $form = $this->form('delete', array($page, $this->model()), function($form) use($page, $self) {
-
-      try {
-
-        $page->delete();
-        $self->update($self->field()->modules()->not($page)->pluck('uid'));
-        $self->notify(':)');
-        $self->redirect($self->model());
-
-      } catch(Exception $e) {
-        $form->alert($e->getMessage());
-      }
-
-    });
-
-    return $this->modal('delete', compact('form'));
-
-  }
-
-  /**
-   * Duplicate a module
-   * @param string $uid
-   * @param int $to
-   */
-  public function duplicate($uid, $to) {
-
-    $modules = $this->field()->modules();
-    $parent  = $this->field()->origin();
-    $page    = $modules->find($uid);
-    $uid     = $this->uid($page);
-
-    if($parent->ui()->create() === false) {
-      throw new PermissionsException();
-    }
-
-    dir::copy($page->root(), $parent->root() . DS . $uid);
-
-    $modules->add($uid);
-    $this->sort($uid, $to);
-    $this->notify(':)');
-    $this->redirect($this->model());
-
-  }
-
   /**
    * Update field value and sort number
+   *
    * @param string $uid
    * @param int $to
    */
@@ -206,179 +103,8 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
   }
 
   /**
-   * Show page
-   * @param string $uid
-   * @param int $to
-   */
-  public function show($uid, $to) {
-
-    // Load translation
-    $this->field()->translation();
-
-    $modules = $this->field()->modules();
-    $page    = $modules->find($uid);
-
-    if($page->ui()->visibility() === false) {
-      throw new PermissionsException();
-    }
-
-    try {
-
-      // Check module specific limit
-      $count = $modules->filterBy('template', $page->intendedTemplate())->visible()->count();
-      $limit = $this->field()->options($page)->limit();
-
-      if($limit && $count >= $limit) {
-        throw new Exception(l('fields.modules.module.limit'));
-      }
-
-      // Check limit
-      $count = $modules->visible()->count();
-      $limit = $this->field()->limit();
-
-      if($limit && $count >= $limit) {
-        throw new Exception(l('fields.modules.limit'));
-      }
-
-      $page->sort($to);
-      $this->notify(':)');
-
-    } catch(Exception $e) {
-      $this->alert($e->getMessage());
-    }
-
-    $this->redirect($this->model());
-
-  }
-
-  /**
-   * Hide page
-   * @param string $uid
-   */
-  public function hide($uid) {
-
-    $page = $this->field()->modules()->find($uid);
-
-    if($page->ui()->visibility() === false) {
-      throw new PermissionsException();
-    }
-
-    try {
-      $page->hide();
-      $this->notify(':)');
-    } catch(Exception $e) {
-      $this->alert($e->getMessage());
-    }
-
-    $this->redirect($this->model());
-
-  }
-
-  /**
-   * Copy to clipboard
-   */
-  public function copy() {
-
-    // Load translation
-    $this->field()->translation();
-
-    $self    = $this;
-    $page    = $this->field()->origin();
-    $modules = $this->field()->modules();
-
-    $form = $this->form('copy', array($page, $modules, $this->model()), function($form) use($page, $self) {
-
-      try {
-
-        $form->validate();
-
-        if(!$form->isValid()) {
-          throw new Exception(l('fields.modules.copy.error.uri'));
-        }
-
-        $data = $form->serialize();
-
-        site()->user()->update(array(
-          'clipboard' => str::split($data['uri']),
-        ));
-
-        $self->notify(':)');
-        $self->redirect($this->model());
-
-      } catch(Exception $e) {
-        $form->alert($e->getMessage());
-      }
-
-    });
-
-    return $this->modal('copy', compact('form'));
-
-  }
-
-  /**
-   * Add from clipboard
-   */
-  public function paste() {
-
-    // Load translation
-    $this->field()->translation();
-
-    $self    = $this;
-    $page    = $this->field()->origin();
-    $modules = site()->user()->clipboard();
-
-    if(empty($modules)) {
-      $modules = array();
-    }
-
-    $modules = pages($modules);
-
-    if($page->ui()->create() === false) {
-      throw new PermissionsException();
-    }
-
-    $form = $this->form('paste', array($page, $modules, $this->model()), function($form) use($page, $self) {
-
-      try {
-
-      $form->validate();
-
-        if(!$form->isValid()) {
-          throw new Exception(l('fields.modules.paste.error.uri'));
-        }
-
-        $data = $form->serialize();
-
-        $templates = $page->blueprint()->pages()->template()->pluck('name');
-        $modules   = $self->field()->modules();
-        $to        = $modules->count();
-
-        foreach(pages(str::split($data['uri'], ',')) as $module) {
-
-          $uid = $self->uid($module);
-
-          if(v::in($module->intendedTemplate(), $templates)) {
-            dir::copy($module->root(), $page->root() . DS . $uid);
-            $modules->add($uid);
-            $self->sort($uid, ++$to);
-          }
-        }
-
-        $self->notify(':)');
-        $self->redirect($self->model());
-
-      } catch(Exception $e) {
-        $form->alert($e->getMessage());
-      }
-
-    });
-
-    return $this->modal('paste', compact('form'));
-
-  }
-
-  /**
    * Update the field value
+   *
    * @param array $value
    */
   public function update($value) {
@@ -394,7 +120,8 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
   }
 
   /**
-   * Create uid
+   * Create unique uid
+   *
    * @param  string $template
    * @return string
    */

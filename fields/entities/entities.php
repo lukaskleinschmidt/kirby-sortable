@@ -4,30 +4,27 @@ class EntitiesField extends InputField {
 
   static protected $entities;
   public $template = 'default';
+  public $variant = 'default';
+  public $options = array();
+  public $limit = false;
 
   protected $translation;
   protected $defaults;
   protected $modules;
   protected $origin;
 
-  public $variant = 'modules';
-  public $options = array();
-  public $actions = array(
-    'edit',
-    'duplicate',
-    'delete',
-    'toggle',
+  static public $assets = array(
+    'js' => array(
+      'modules.js',
+    ),
+    'css' => array(
+      'modules.css',
+    ),
   );
-  public $limit = false;
-  public $paste = true;
-  public $copy = true;
-  public $add = true;
 
   public static function setup() {
-
     static::$entities = Kirby\Entities\Entities::instance();
     static::$entities->load();
-
   }
 
   public function hasEntities() {
@@ -40,41 +37,34 @@ class EntitiesField extends InputField {
       $type = $this->variant();
     }
 
+    $entities = new Brick('div');
+    $entities->addClass('entities__container');
+
+    $field      = $this;
     $numVisible = 0;
     $num        = 0;
 
     foreach($this->modules() as $page) {
+
+      if($page->isVisible()) {
+        $numVisible++;
+      }
+
       $num++;
-      if($page->isVisible()) $numVisible++;
-      echo Kirby\Entities\Entities::variant($type, $this, compact('page', 'num', 'numVisible'));
+
+      $layout = Kirby\Entities\Entities::layout($type, compact('field', 'page', 'num', 'numVisible'));
+      $entities->append($layout);
+
     }
+
+    return $entities;
 
   }
 
-
-
-  // public function action($name, $options = array()) {
-  //
-  //   $action = static::$entities->action($name);
-  //
-  //   foreach($options as $key => $value) {
-  //     $action->$key = $value;
-  //   }
-  //
-  //   return $action;
-  //
-  // }
-
-
-
-  static public $assets = array(
-    'js' => array(
-      'modules.js',
-    ),
-    'css' => array(
-      'modules.css',
-    ),
-  );
+  public function action($type, $data = array()) {
+    $data = a::update($data, ['field' => $this, 'type' => $type]);
+    return Kirby\Entities\Entities::action($type, $data);
+  }
 
   public function translation() {
 
@@ -109,54 +99,12 @@ class EntitiesField extends InputField {
         'action'  => 'forAction',
         'filter'  => 'auth',
       ),
-      // array(
-      //   'pattern' => 'add',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'add',
-      //   'filter'  => 'auth',
-      // ),
-      // array(
-      //   'pattern' => '(:all)/delete',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'delete',
-      //   'filter'  => 'auth',
-      // ),
-      // array(
-      //   'pattern' => '(:all)/(:all)/duplicate',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'duplicate',
-      //   'filter'  => 'auth',
-      // ),
-      // array(
-      //   'pattern' => '(:all)/(:all)/sort',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'sort',
-      //   'filter'  => 'auth',
-      // ),
-      // array(
-      //   'pattern' => '(:all)/(:all)/show',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'show',
-      //   'filter'  => 'auth',
-      // ),
-      // array(
-      //   'pattern' => '(:all)/hide',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'hide',
-      //   'filter'  => 'auth',
-      // ),
-      // array(
-      //   'pattern' => 'copy',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'copy',
-      //   'filter'  => 'auth',
-      // ),
-      // array(
-      //   'pattern' => 'paste',
-      //   'method'  => 'POST|GET',
-      //   'action'  => 'paste',
-      //   'filter'  => 'auth',
-      // ),
+      array(
+        'pattern' => '(:all)/(:all)/sort',
+        'method'  => 'POST|GET',
+        'action'  => 'sort',
+        'filter'  => 'auth',
+      ),
     );
   }
 
@@ -199,10 +147,6 @@ class EntitiesField extends InputField {
 
     return $preview;
 
-  }
-
-  public function actions($data) {
-    // return tpl::load(__DIR__ . DS . 'template.php', array('field' => $this));
   }
 
   public function counter($page) {
@@ -353,18 +297,6 @@ class EntitiesField extends InputField {
       $label->append(' <span class="modules__counter">( ' . $this->modules()->visible()->count() . ' / ' . $this->limit() . ' )</span>');
     }
 
-    $add = new Brick('a');
-    $add->addClass('modules__action modules__action--add');
-    $add->html('<i class="icon icon-left fa fa-plus-circle"></i>' . l('fields.modules.add'));
-    $add->data('modal', true);
-    $add->attr('href', $this->url('add'));
-
-    if($this->add() === false || $this->origin()->ui()->create() === false) {
-      $add->addClasS('is-disabled');
-    }
-
-    $label->append($add);
-
     return $label;
 
   }
@@ -404,6 +336,14 @@ class EntitiesField extends InputField {
       'action',
       $action
     )));
+
+  }
+
+  public function template() {
+
+    return $this->element()
+      ->append($this->content())
+      ->append($this->help());
 
   }
 
