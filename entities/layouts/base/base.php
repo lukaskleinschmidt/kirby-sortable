@@ -39,6 +39,8 @@ class BaseLayout {
     $template = new Brick('div');
 
     $template->addClass('entity');
+    $template->attr('data-uid', $this->page()->uid());
+    $template->attr('data-visible', $this->page()->isVisible() ? 'true' : 'false');
     $template->append($this->content());
     $template->append($this->field()->input($this->page()->uid()));
 

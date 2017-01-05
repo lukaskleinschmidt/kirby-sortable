@@ -4,7 +4,8 @@ class EntitiesField extends InputField {
 
   static protected $entities;
   public $template = 'default';
-  public $variant = 'default';
+  public $layout = 'default';
+
   public $options = array();
   public $limit = false;
 
@@ -34,7 +35,7 @@ class EntitiesField extends InputField {
   public function entities($type = null) {
 
     if(is_null($type)) {
-      $type = $this->variant();
+      $type = $this->layout();
     }
 
     $entities = new Brick('div');

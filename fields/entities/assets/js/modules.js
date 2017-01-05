@@ -1,1 +1,210 @@
-!function(t){function e(i){if(s[i])return s[i].exports;var r=s[i]={exports:{},id:i,loaded:!1};return t[i].call(r.exports,r,r.exports,e),r.loaded=!0,r.exports}var s={};return e.m=t,e.c=s,e.p="",e(0)}([function(t,e){"use strict";function s(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();!function(t){var e=function(){function e(i){var r=this;s(this,e),this.element=t(i),this.modules=t(".module",i),this.container=t(".modules__container",i),this.options={},this.options.api=this.element.data("api"),this.options.copy=this.element.data("copy"),this.options.paste=this.element.data("paste"),this.options.sortable=this.element.data("sortable"),this.container._sortable({handle:".module__preview, .module__title",start:function(t,e){r.container._sortable("refreshPositions"),r.blur()}}),this.events()}return i(e,[{key:"blur",value:function(){t(".form input:focus, .form select:focus, .form textarea:focus").blur(),app.content.focus.forget()}},{key:"events",value:function(){var e=this,s=this;this.container.on("_sortableupdate",function(t,s){var i=e.container.children().index(s.item),r=s.item.data("uid");e.disable(),e.action([r,i+1,"sort"].join("/"))}),this.element.on("click","[data-action]",function(e){var i=t(this),r=i.data("action")||i.attr("href");return t.post(r,s.reload.bind(s)),!1})}},{key:"action",value:function(e){var s=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};t.post(this.options.api+"/"+e,s,this.reload.bind(this))}},{key:"disable",value:function(){this.container._sortable("disable")}},{key:"reload",value:function(){this.disable(),app.content.reload()}}]),e}();t.widget("ui._sortable",t.ui.sortable,{_mouseStart:function(e,s,i){var r,o,n=this.options;if(this.currentContainer=this,this.refreshPositions(),this.helper=this._createHelper(e),this._cacheHelperProportions(),this._cacheMargins(),this.scrollParent=this.helper.scrollParent(),this.offset=this.currentItem.offset(),this.offset={top:this.offset.top-this.margins.top,left:this.offset.left-this.margins.left},t.extend(this.offset,{click:{left:e.pageX-this.offset.left,top:e.pageY-this.offset.top},parent:this._getParentOffset(),relative:this._getRelativeOffset()}),this._createPlaceholder(),this.helper.css("position","absolute"),this.cssPosition=this.helper.css("position"),this.originalPosition=this._generatePosition(e),this.originalPageX=e.pageX,this.originalPageY=e.pageY,n.cursorAt&&this._adjustOffsetFromHelper(n.cursorAt),this.domPosition={prev:this.currentItem.prev()[0],parent:this.currentItem.parent()[0]},this.helper[0]!==this.currentItem[0]&&this.currentItem.hide(),n.containment&&this._setContainment(),n.cursor&&"auto"!==n.cursor&&(o=this.document.find("body"),this.storedCursor=o.css("cursor"),o.css("cursor",n.cursor),this.storedStylesheet=t("<style>*{ cursor: "+n.cursor+" !important; }</style>").appendTo(o)),n.opacity&&(this.helper.css("opacity")&&(this._storedOpacity=this.helper.css("opacity")),this.helper.css("opacity",n.opacity)),n.zIndex&&(this.helper.css("zIndex")&&(this._storedZIndex=this.helper.css("zIndex")),this.helper.css("zIndex",n.zIndex)),this.scrollParent[0]!==document&&"HTML"!==this.scrollParent[0].tagName&&(this.overflowOffset=this.scrollParent.offset()),this._trigger("start",e,this._uiHash()),this._preserveHelperProportions||this._cacheHelperProportions(),!i)for(r=this.containers.length-1;r>=0;r--)this.containers[r]._trigger("activate",e,this._uiHash(this));return t.ui.ddmanager&&(t.ui.ddmanager.current=this),t.ui.ddmanager&&!n.dropBehaviour&&t.ui.ddmanager.prepareOffsets(this,e),this.dragging=!0,this.helper.addClass("ui-sortable-helper"),this._mouseDrag(e),!0}}),t.fn.modules=function(){return this.each(function(){if(t(this).data("modules"))return t(this);var s=new e(this);return t(this).data("modules",s),t(this)})}}(jQuery)}]);
+(function($) {
+
+  class Entities {
+    constructor(element) {
+      var self = this;
+
+      this.element = $(element);
+      this.modules = $('.entity', element);
+      this.container = $('.entities__container', element);
+
+      this.options = {};
+      this.options.api = this.element.data('api');
+
+      this.container._sortable({
+        handle: '.entity__title, .module__title',
+        start: function(event, ui) {
+          self.container._sortable('refreshPositions');
+          self.blur();
+        },
+      });
+
+      this.events();
+    }
+
+    blur() {
+      $('.form input:focus, .form select:focus, .form textarea:focus').blur();
+      app.content.focus.forget();
+    }
+
+    events() {
+      var self = this;
+
+      this.container.on('sortupdate', function(event, ui) {
+        var to = self.container.children().index(ui.item);
+        var uid = ui.item.data('uid');
+        self.disable();
+        self.action([uid, to + 1, 'sort'].join('/'));
+      });
+
+      this.element.on('click', '[data-action]', function(event) {
+        var element = $(this);
+        var action = element.data('action') || element.attr('href');
+        $.post(action, self.reload.bind(self))
+        return false;
+      });
+    }
+
+    action(action, data = {}) {
+      $.post(this.options.api + '/' + action, data, this.reload.bind(this));
+    }
+
+    disable() {
+      this.container._sortable('disable');
+    }
+
+    reload() {
+      this.disable();
+      app.content.reload();
+    }
+  }
+
+  // Fixing scrollbar jumping issue
+  // http://stackoverflow.com/questions/1735372/jquery-sortable-list-scroll-bar-jumps-up-when-sorting
+  $.widget('ui._sortable', $.ui.sortable, {
+    _mouseStart: function(event, overrideHandle, noActivation) {
+      var i, body,
+        o = this.options;
+
+      this.currentContainer = this;
+
+      //We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
+      this.refreshPositions();
+
+      //Create and append the visible helper
+      this.helper = this._createHelper(event);
+
+      //Cache the helper size
+      this._cacheHelperProportions();
+
+      /*
+       * - Position generation -
+       * This block generates everything position related - it's the core of draggables.
+       */
+
+      //Cache the margins of the original element
+      this._cacheMargins();
+
+      //Get the next scrolling parent
+      this.scrollParent = this.helper.scrollParent();
+
+      //The element's absolute position on the page minus margins
+      this.offset = this.currentItem.offset();
+      this.offset = {
+        top: this.offset.top - this.margins.top,
+        left: this.offset.left - this.margins.left
+      };
+
+      $.extend(this.offset, {
+        click: { //Where the click happened, relative to the element
+          left: event.pageX - this.offset.left,
+          top: event.pageY - this.offset.top
+        },
+        parent: this._getParentOffset(),
+        relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
+      });
+
+      //Create the placeholder
+      this._createPlaceholder();
+
+      // Only after we got the offset, we can change the helper's position to absolute
+      // TODO: Still need to figure out a way to make relative sorting possible
+      this.helper.css("position", "absolute");
+      this.cssPosition = this.helper.css("position");
+
+      //Generate the original position
+      this.originalPosition = this._generatePosition(event);
+      this.originalPageX = event.pageX;
+      this.originalPageY = event.pageY;
+
+      //Adjust the mouse offset relative to the helper if "cursorAt" is supplied
+      (o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
+
+      //Cache the former DOM position
+      this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };
+
+      //If the helper is not the original, hide the original so it's not playing any role during the drag, won't cause anything bad this way
+      if(this.helper[0] !== this.currentItem[0]) {
+        this.currentItem.hide();
+      }
+
+      //Set a containment if given in the options
+      if(o.containment) {
+        this._setContainment();
+      }
+
+      if( o.cursor && o.cursor !== "auto" ) { // cursor option
+        body = this.document.find( "body" );
+
+        // support: IE
+        this.storedCursor = body.css( "cursor" );
+        body.css( "cursor", o.cursor );
+
+        this.storedStylesheet = $( "<style>*{ cursor: "+o.cursor+" !important; }</style>" ).appendTo( body );
+      }
+
+      if(o.opacity) { // opacity option
+        if (this.helper.css("opacity")) {
+          this._storedOpacity = this.helper.css("opacity");
+        }
+        this.helper.css("opacity", o.opacity);
+      }
+
+      if(o.zIndex) { // zIndex option
+        if (this.helper.css("zIndex")) {
+          this._storedZIndex = this.helper.css("zIndex");
+        }
+        this.helper.css("zIndex", o.zIndex);
+      }
+
+      //Prepare scrolling
+      if(this.scrollParent[0] !== document && this.scrollParent[0].tagName !== "HTML") {
+        this.overflowOffset = this.scrollParent.offset();
+      }
+
+      //Call callbacks
+      this._trigger("start", event, this._uiHash());
+
+      //Recache the helper size
+      if(!this._preserveHelperProportions) {
+        this._cacheHelperProportions();
+      }
+
+
+      //Post "activate" events to possible containers
+      if( !noActivation ) {
+        for ( i = this.containers.length - 1; i >= 0; i-- ) {
+          this.containers[ i ]._trigger( "activate", event, this._uiHash( this ) );
+        }
+      }
+
+      //Prepare possible droppables
+      if($.ui.ddmanager) {
+        $.ui.ddmanager.current = this;
+      }
+
+      if ($.ui.ddmanager && !o.dropBehaviour) {
+        $.ui.ddmanager.prepareOffsets(this, event);
+      }
+
+      this.dragging = true;
+
+      this.helper.addClass("ui-sortable-helper");
+      this._mouseDrag(event); //Execute the drag once - this causes the helper not to be visible before getting its correct position
+      return true;
+    }
+  });
+
+  $.fn.entities = function() {
+    return this.each(function() {
+      if ($(this).data('entities')) {
+        return $(this);
+      } else {
+        var entities = new Entities(this);
+        $(this).data('entities', entities);
+        return $(this);
+      }
+    });
+  }
+
+})(jQuery);

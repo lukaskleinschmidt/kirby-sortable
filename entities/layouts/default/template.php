@@ -1,7 +1,7 @@
-<div class="module">
-  <nav class="module__navigation">
-    <div class="module__title">
-      <div class="module__icon">
+<div class="entity__default">
+  <nav class="entity__navigation">
+    <div class="entity__title">
+      <div class="entity__icon">
         <?= $entity->page()->icon('left'); ?>
       </div>
       <?= $entity->page()->title(); ?>
