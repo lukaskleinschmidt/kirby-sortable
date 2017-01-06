@@ -10,7 +10,7 @@ class DuplicateActionController extends Kirby\Entities\Controllers\Action {
    */
   public function duplicate($uid, $to) {
 
-    $modules = $this->field()->modules();
+    $modules = $this->field()->children();
     $parent  = $this->field()->origin();
     $page    = $modules->find($uid);
     $uid     = $this->uid($page);

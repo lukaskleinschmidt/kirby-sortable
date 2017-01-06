@@ -1,6 +1,6 @@
 <div class="entity__default">
   <nav class="entity__navigation">
-    <div class="entity__title">
+    <div class="entity__title" data-handle>
       <div class="entity__icon">
         <?= $entity->page()->icon('left'); ?>
       </div>

@@ -2,41 +2,55 @@
 
 class EntitiesField extends InputField {
 
-  static protected $entities;
   public $template = 'default';
-  public $layout = 'default';
-
   public $options = array();
+  public $layout = 'default';
+  public $prefix = '';
+  public $parent = '';
   public $limit = false;
 
-  protected $translation;
+  // Caches
+  protected $children;
   protected $defaults;
-  protected $modules;
   protected $origin;
+
+  protected $translation;
 
   static public $assets = array(
     'js' => array(
-      'modules.js',
+      'entities.js',
     ),
     'css' => array(
-      'modules.css',
+      'entities.css',
     ),
   );
 
   public static function setup() {
-    static::$entities = Kirby\Entities\Entities::instance();
-    static::$entities->load();
+    Kirby\Entities\Entities::instance()->load();
   }
 
-  public function hasEntities() {
-    return $this->modules()->count();
+  public function routes() {
+    return array(
+      array(
+        'pattern' => 'action/(:any)/(:all?)',
+        'method'  => 'POST|GET',
+        'action'  => 'forAction',
+        'filter'  => 'auth',
+      ),
+      array(
+        'pattern' => '(:all)/(:all)/sort',
+        'method'  => 'POST|GET',
+        'action'  => 'sort',
+        'filter'  => 'auth',
+      ),
+    );
   }
 
-  public function entities($type = null) {
+  public function parent() {
+    return $this->i18n($this->parent);
+  }
 
-    if(is_null($type)) {
-      $type = $this->layout();
-    }
+  public function entities() {
 
     $entities = new Brick('div');
     $entities->addClass('entities__container');
@@ -45,16 +59,16 @@ class EntitiesField extends InputField {
     $numVisible = 0;
     $num        = 0;
 
-    foreach($this->modules() as $page) {
+    foreach($this->children() as $page) {
 
-      if($page->isVisible()) {
-        $numVisible++;
-      }
-
+      if($page->isVisible()) $numVisible++;
       $num++;
 
-      $layout = Kirby\Entities\Entities::layout($type, compact('field', 'page', 'num', 'numVisible'));
-      $entities->append($layout);
+      $data = compact('field', 'page', 'num', 'numVisible');
+      $data = a::update($this->options($page)->toArray(), $data);
+
+      $entity = Kirby\Entities\Entities::layout($this->layout(), $data);
+      $entities->append($entity);
 
     }
 
@@ -62,11 +76,17 @@ class EntitiesField extends InputField {
 
   }
 
+  public function hasEntities() {
+    return $this->children()->count();
+  }
+
   public function action($type, $data = array()) {
     $data = a::update($data, ['field' => $this, 'type' => $type]);
     return Kirby\Entities\Entities::action($type, $data);
   }
 
+
+  // Needs refactoring
   public function translation() {
 
     // Return from cache if possible
@@ -92,22 +112,6 @@ class EntitiesField extends InputField {
 
   }
 
-  public function routes() {
-    return array(
-      array(
-        'pattern' => 'action/(:any)/(:all?)',
-        'method'  => 'POST|GET',
-        'action'  => 'forAction',
-        'filter'  => 'auth',
-      ),
-      array(
-        'pattern' => '(:all)/(:all)/sort',
-        'method'  => 'POST|GET',
-        'action'  => 'sort',
-        'filter'  => 'auth',
-      ),
-    );
-  }
 
   public function input() {
 
@@ -126,75 +130,26 @@ class EntitiesField extends InputField {
 
   }
 
-  public function preview($page) {
-
-    if(!$preview = $this->options($page)->preview()) {
-      return;
-    }
-
-    $module   = Kirby\Modules\Modules::instance()->get($page);
-    $template = $module->path() . DS . $module->name() . '.preview.php';
-
-    if(!is_file($template)) {
-      return;
-    }
-
-    $position = $preview === true ? 'top' : $preview;
-
-    $preview = new Brick('div');
-    $preview->addClass('module__preview module__preview--' . $position);
-    $preview->data('module', $module->name());
-    $preview->html(tpl::load($template, array('page' => $this->orign(), 'module' => $page, 'moduleName' => $module->name())));
-
-    return $preview;
-
-  }
-
-  public function counter($page) {
-
-    if(!$page->isVisible() || !$this->options($page)->limit()) {
-      return null;
-    }
-
-    $modules = $this->modules()->filterBy('template', $page->intendedTemplate());
-    $index   = $modules->visible()->indexOf($page) + 1;
-    $limit   = $this->options($page)->limit();
-
-    $counter = new Brick('span');
-    $counter->addClass('module__counter');
-    $counter->html('( ' . $index . ' / ' . $limit . ' )');
-
-    return $counter;
-
-  }
-
   public function defaults() {
 
     // Return from cache if possible
-    if($this->defaults) {
+    if(!is_null($this->defaults)) {
       return $this->defaults;
     }
 
-    // Default values
-    $defaults = array(
-      'duplicate' => true,
-      'preview' => true,
-      'delete' => true,
-      'toggle' => true,
-      'limit' => false,
-      'edit' => true,
-    );
-
     if(!$this->options) {
-      return $defaults;
+      return $this->defaults = array();
     }
 
-    // Filter options for default values
-    $options = array_filter($this->options, function($value) {
-      return !is_array($value);
-    });
+    // Available templates
+    $templates = $this->origin()->blueprint()->pages()->template()->pluck('name');
 
-    return $this->defaults = a::update($defaults, $options);
+    // Remove template specific options from the defaults
+    $defaults = array_filter($this->options, function($key) use($templates) {
+      return !in_array($key, $templates);
+    }, ARRAY_FILTER_USE_KEY);
+
+    return $this->defaults = $defaults;
 
   }
 
@@ -207,62 +162,22 @@ class EntitiesField extends InputField {
     // Get module specific options
     $options = a::get($this->options, $template, array());
 
-    if(!$options) {
-      return new Obj($this->defaults());
-    }
-
     return new Obj(a::update($this->defaults(), $options));
 
   }
 
   public function content() {
 
-    $template = static::$entities->get('template', $this->template);
+    $template = Kirby\Entities\Entities::instance()->get('template', $this->template);
+
     $content  = new Brick('div');
 
-    $content->addClass('enteties');
+    $content->addClass('entities');
     $content->attr('data-field', 'entities');
     $content->attr('data-api', purl($this->model(), 'field/' . $this->name() . '/entities'));
     $content->append(tpl::load($template, array('field' => $this)));
 
     return $content;
-
-  }
-
-  public function modules() {
-
-		// Return from cache if possible
-		if($this->modules) {
-      return $this->modules;
-    }
-
-    // Filter the modules by valid module
-    $modules = $this->origin()->children()->filter(function($page) {
-      // return $page;
-      return Kirby\Modules\Modules::instance()->get($page);
-    });
-
-    // Sort modules
-    if($modules->count() && $this->value()) {
-      $i = 0;
-
-      $order = a::merge(array_flip($this->value()), array_flip($modules->pluck('uid')));
-      $order = array_map(function($value) use(&$i) {
-        return $i++;
-      }, $order);
-
-      $modules = $modules->find(array_flip($order));
-    }
-
-    // Always return a collection
-    if(is_a($modules, 'Page')) {
-      $module  = $modules;
-      $modules = new Children($this->origin());
-
-      $modules->data[$module->id()] = $module;
-    }
-
-    return $this->modules = $modules;
 
   }
 
@@ -273,15 +188,49 @@ class EntitiesField extends InputField {
       return $this->origin;
     }
 
-    // Get parent uid
-    $parentUid = Kirby\Modules\Settings::parentUid();
+    $origin = $this->page();
 
-    // Determine the modules root
-    if(!$origin = $this->page()->find($parentUid)) {
-      $origin = $this->page();
+    if($this->parent()) {
+      $origin = $origin->find($this->parent());
     }
 
     return $this->origin = $origin;
+
+  }
+
+  public function children() {
+
+		// Return from cache if possible
+		if(!is_null($this->children)) {
+      return $this->children;
+    }
+
+    // Filter the modules by valid module
+    $children = $this->origin()->children()->filter(function($page) {
+      return str::startsWith($page->intendedTemplate(), $this->prefix());
+    });
+
+    // Sort modules
+    if($children->count() && $this->value()) {
+      $i = 0;
+
+      $order = a::merge(array_flip($this->value()), array_flip($children->pluck('uid')));
+      $order = array_map(function($value) use(&$i) {
+        return $i++;
+      }, $order);
+
+      $children = $children->find(array_flip($order));
+    }
+
+    // Always return a collection
+    if(is_a($children, 'Page')) {
+      $page     = $children;
+      $children = new Children($this->origin());
+
+      $children->data[$page->id()] = $page;
+    }
+
+    return $this->children = $children;
 
   }
 
@@ -295,7 +244,7 @@ class EntitiesField extends InputField {
     $label->html($this->i18n($this->label));
 
     if($this->limit()) {
-      $label->append(' <span class="modules__counter">( ' . $this->modules()->visible()->count() . ' / ' . $this->limit() . ' )</span>');
+      $label->append(' <span class="modules__counter">( ' . $this->children()->visible()->count() . ' / ' . $this->limit() . ' )</span>');
     }
 
     return $label;
@@ -341,6 +290,11 @@ class EntitiesField extends InputField {
   }
 
   public function template() {
+
+    if(!$this->origin()) {
+      // TODO: Add proper error
+      return $this->element();
+    }
 
     return $this->element()
       ->append($this->content())

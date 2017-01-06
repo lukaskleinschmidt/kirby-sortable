@@ -1,22 +1,18 @@
 (function($) {
 
-  class Modules {
+  class Entities {
     constructor(element) {
-      this.element = $(element);
-      this.modules = $('.module', element);
-      this.container = $('.modules__container', element);
+      var self = this;
 
-      this.options = {};
-      this.options.api = this.element.data('api');
-      this.options.copy = this.element.data('copy');
-      this.options.paste = this.element.data('paste');
-      this.options.sortable = this.element.data('sortable');
+      this.element = $(element);
+      this.container = $('.entities__container', element);
+      this.api = this.element.data('api');
 
       this.container._sortable({
-        handle: '.module__preview, .module__title',
-        start: (event, ui) => {
-          this.container._sortable('refreshPositions');
-          this.blur();
+        handle: '[data-handle]',
+        start: function(event, ui) {
+          self.container._sortable('refreshPositions');
+          self.blur();
         },
       });
 
@@ -31,23 +27,29 @@
     events() {
       var self = this;
 
-      this.container.on('_sortableupdate', (event, ui) => {
-        var to = this.container.children().index(ui.item);
+      this.container.on('sortupdate', function(event, ui) {
+        var to = self.container.children().index(ui.item) + 1;
         var uid = ui.item.data('uid');
-        this.disable();
-        this.action([uid, to + 1, 'sort'].join('/'));
+        var action = [self.api, uid, to, 'sort'].join('/');
+
+        // Disable sorting when expecting a reload
+        self.disable();
+
+        console.log('update');
+
+        $.post(action, self.reload.bind(self));
       });
 
       this.element.on('click', '[data-action]', function(event) {
         var element = $(this);
         var action = element.data('action') || element.attr('href');
-        $.post(action, self.reload.bind(self))
+
+        console.log('click');
+
+        $.post(action, self.reload.bind(self));
+
         return false;
       });
-    }
-
-    action(action, data = {}) {
-      $.post(this.options.api + '/' + action, data, this.reload.bind(this));
     }
 
     disable() {
@@ -196,13 +198,13 @@
     }
   });
 
-  $.fn.modules = function() {
+  $.fn.entities = function() {
     return this.each(function() {
-      if ($(this).data('modules')) {
+      if ($(this).data('entities')) {
         return $(this);
       } else {
-        var modules = new Modules(this);
-        $(this).data('modules', modules);
+        var entities = new Entities(this);
+        $(this).data('entities', entities);
         return $(this);
       }
     });

@@ -4,7 +4,7 @@ class DeleteActionController extends Kirby\Entities\Controllers\Action {
 
   /**
    * Delete a module
-   * 
+   *
    * @param string $uid
    */
   public function delete($uid) {
@@ -13,7 +13,7 @@ class DeleteActionController extends Kirby\Entities\Controllers\Action {
     $this->field()->translation();
 
     $self = $this;
-    $page = $this->field()->modules()->find($uid);
+    $page = $this->field()->children()->find($uid);
 
     if($page->ui()->delete() === false) {
       throw new PermissionsException();
@@ -24,7 +24,7 @@ class DeleteActionController extends Kirby\Entities\Controllers\Action {
       try {
 
         $page->delete();
-        $self->update($self->field()->modules()->not($page)->pluck('uid'));
+        $self->update($self->field()->children()->not($page)->pluck('uid'));
         $self->notify(':)');
         $self->redirect($self->model());
 

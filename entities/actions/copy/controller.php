@@ -12,7 +12,7 @@ class CopyActionController extends Kirby\Entities\Controllers\Action {
 
     $self    = $this;
     $page    = $this->field()->origin();
-    $modules = $this->field()->modules();
+    $modules = $this->field()->children();
 
     $form = $this->form('copy', array($page, $modules, $this->model()), function($form) use($page, $self) {
 

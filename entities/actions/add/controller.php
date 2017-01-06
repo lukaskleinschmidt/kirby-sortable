@@ -1,7 +1,7 @@
 <?php
 
 class AddActionController extends Kirby\Entities\Controllers\Action {
-  
+
   /**
    * Add a module
    */
@@ -34,7 +34,7 @@ class AddActionController extends Kirby\Entities\Controllers\Action {
           'title' => i18n($parent->blueprint()->pages()->template()->findBy('name', $template)->title())
         ));
 
-        $self->update($self->field()->modules()->pluck('uid'));
+        $self->update($self->field()->children()->pluck('uid'));
         $self->notify(':)');
         $self->redirect($self->model());
         // $this->redirect($page, 'edit');

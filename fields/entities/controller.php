@@ -63,7 +63,7 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
   public function sort($uid, $to) {
 
     try {
-      $modules = $this->field()->modules();
+      $modules = $this->field()->children();
       $value = $modules->not($uid)->pluck('uid');
 
       // Order modules value

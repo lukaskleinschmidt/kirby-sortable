@@ -37,7 +37,7 @@ class PasteActionController extends Kirby\Entities\Controllers\Action {
         $data = $form->serialize();
 
         $templates = $page->blueprint()->pages()->template()->pluck('name');
-        $modules   = $self->field()->modules();
+        $modules   = $self->field()->children();
         $to        = $modules->count();
 
         foreach(pages(str::split($data['uri'], ',')) as $module) {

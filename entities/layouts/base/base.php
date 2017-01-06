@@ -9,8 +9,8 @@ class BaseLayout {
     return dirname($obj->getFileName());
   }
 
-  public function __construct($field) {
-    $this->field = $field;
+  public function __construct($type) {
+    $this->type = $type;
   }
 
   public function __call($method, $arguments) {
@@ -22,7 +22,23 @@ class BaseLayout {
   }
 
   public function counter() {
-    return $this->field()->counter($this->page());
+
+    $page = $this->page();
+
+    if(!$page->isVisible() || !$this->limit()) {
+      return null;
+    }
+
+    $children = $this->field()->children()->filterBy('template', $page->intendedTemplate());
+    $index    = $children->visible()->indexOf($page) + 1;
+    $limit    = $this->limit();
+
+    $counter = new Brick('span');
+    $counter->addClass('module__counter');
+    $counter->html('( ' . $index . ' / ' . $limit . ' )');
+
+    return $counter;
+
   }
 
   public function action($type, $data = array()) {

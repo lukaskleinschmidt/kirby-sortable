@@ -13,7 +13,7 @@ class ToggleActionController extends Kirby\Entities\Controllers\Action {
     // Load translation
     $this->field()->translation();
 
-    $modules = $this->field()->modules();
+    $modules = $this->field()->children();
     $page    = $modules->find($uid);
 
     if($page->ui()->visibility() === false) {
@@ -56,7 +56,7 @@ class ToggleActionController extends Kirby\Entities\Controllers\Action {
    */
   public function hide($uid) {
 
-    $page = $this->field()->modules()->find($uid);
+    $page = $this->field()->children()->find($uid);
 
     if($page->ui()->visibility() === false) {
       throw new PermissionsException();
