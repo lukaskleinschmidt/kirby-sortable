@@ -7,7 +7,7 @@ load([
 
   // global stuff
   'kirby\\entities\\registry'            => 'registry.php',
-  'kirby\\entities\\plugins'             => 'plugins.php',
+  // 'kirby\\entities\\plugins'             => 'plugins.php',
   'kirby\\entities\\roots'               => 'roots.php',
 
   // controllers

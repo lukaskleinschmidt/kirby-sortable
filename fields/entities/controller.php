@@ -131,8 +131,8 @@ class EntitiesFieldController extends Kirby\Panel\Controllers\Field {
       $template = $template->intendedTemplate();
     }
 
-    $templatePrefix = Kirby\Modules\Settings::templatePrefix();
-    $length = str::length($templatePrefix);
+    $prefix = $this->field()->prefix();
+    $length = str::length($prefix);
     $name = str::substr($template, $length);
 
     // add a unique hash
