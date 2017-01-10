@@ -138,7 +138,7 @@ $red: #b3000a;
   &__title {
     flex: 1 1 auto;
     cursor: move;
-    padding-left: 0.6em 0.9em 0.6em 2.1em;
+    padding-left: 2.1em;
 
     .module[data-visible="false"] & {
       color: mix($white, $gray-light, 20%);
