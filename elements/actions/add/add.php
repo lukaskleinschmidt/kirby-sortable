@@ -3,6 +3,7 @@
 class AddAction extends BaseAction {
 
   public $icon  = 'plus-circle';
+  public $class = 'elements__action elements__action--add';
   public $label = [
     'en' => 'Add',
     'de' => 'Hinzufügen',

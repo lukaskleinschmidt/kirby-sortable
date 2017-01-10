@@ -2,7 +2,8 @@
 
 class PasteAction extends BaseAction {
 
-  public $icon = 'paste';
+  public $icon  = 'paste';
+  public $class = 'elements__action elements__action--paste';
   public $label = [
     'en' => 'Paste',
     'de' => 'Einfügen',

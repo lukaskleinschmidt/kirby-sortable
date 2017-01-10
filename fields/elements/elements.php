@@ -237,7 +237,7 @@ class ElementsField extends InputField {
   public function counter() {
 
     if($this->limit()) {
-      
+
       $counter = new Brick('span');
       $counter->addClass('elements__counter');
       $counter->append('( ' . $this->children()->visible()->count() . ' / ' . $this->limit() . ' )');
@@ -290,11 +290,6 @@ class ElementsField extends InputField {
   }
 
   public function template() {
-
-    if(!$this->origin()) {
-      // TODO: Add proper error
-      return $this->element();
-    }
 
     return $this->element()
       ->append($this->content())

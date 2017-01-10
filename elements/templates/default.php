@@ -8,14 +8,10 @@
   <?= $field->elements(); ?>
 <?php else: ?>
   <div class="elements__empty">
-    <?php echo l('fields.modules.empty'); ?>
-    <?php if($field->add()): ?>
-      <a href="<?php echo $field->url('add'); ?>" data-modal><?php echo l('fields.modules.empty.add'); ?></a>
-    <?php endif; ?>
-    <?php if($field->add() && $field->paste()): ?>
-      <?php echo l('fields.modules.empty.or'); ?>
-      <a href="<?php echo $field->url('paste'); ?>" data-modal data-shortcut="meta+v"><?php echo l('fields.modules.empty.paste'); ?></a>
-    <?php endif; ?>
+    <?= l('fields.modules.empty'); ?>
+    <?= $field->action('add', ['label' => l('fields.modules.empty.add'), 'icon' => '', 'class' => '']); ?>
+    <?= l('fields.modules.empty.or'); ?>
+    <?= $field->action('paste', ['label' => l('fields.modules.empty.paste'), 'icon' => '', 'class' => '']); ?>
   </div>
 <?php endif; ?>
 
