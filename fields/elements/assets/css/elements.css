@@ -1,0 +1,155 @@
+.elements__counter {
+  padding-left: 0.25em;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #bbb;
+  line-height: 1;
+}
+
+.elements__empty {
+  background: #ddd;
+  padding: 1.5em;
+}
+
+.elements__empty a {
+  border-bottom: 2px solid #bbb;
+  margin: 0 0.25em;
+}
+
+.elements__empty a:hover {
+  border-color: #000;
+}
+
+.elements__empty a:first-child {
+  margin-left: 0.5em;
+}
+
+.elements__navigation {
+  padding-top: 0.5em;
+  position: relative;
+}
+
+.elements__action {
+  color: #777;
+  font-weight: 400;
+  line-height: 1.5em;
+}
+
+.elements__action .icon,
+.elements__action:hover {
+  color: #000;
+}
+
+.elements__action--add {
+  position: absolute;
+  right: 0;
+}
+
+.elements__action:nth-child(n+2) {
+  margin-left: 1em;
+}
+
+.elements__action.is-disabled {
+  pointer-events: none;
+  color: #c9c9c9;
+}
+
+.element {
+}
+
+.element a,
+.element button,
+.elements__action.is-disabled .icon {
+  color: inherit;
+}
+
+.element {
+  margin-bottom: 0.25em;
+}
+
+.element__default {
+  background: #fff;
+  border: 2px solid #ddd;
+  position: relative;
+}
+
+.element .icon {
+  vertical-align: -10%;
+}
+
+button .element .icon {
+  vertical-align: -5%;
+}
+
+.element .icon:not(.icon-left) {
+  width: 1.28571em;
+}
+
+.element__icon {
+  display: inline;
+}
+
+.element__counter {
+  padding-left: 0.25em;
+  font-size: 0.8em;
+  color: #bbb;
+  line-height: 1;
+}
+
+.element__preview {
+  border-bottom: 1px solid #efefef;
+  cursor: move;
+}
+
+.element__preview:empty {
+  display: none;
+}
+
+.element__preview--bottom {
+  border-bottom: none;
+  border-top: 1px solid #efefef;
+}
+
+.element__navigation {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+}
+
+.element__action,
+.element__title {
+  padding: 0.6em 0.9em;
+  white-space: nowrap;
+  line-height: 1.5em;
+  font-size: 1em;
+}
+
+.element__title {
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+  cursor: move;
+}
+
+.element[data-visible=false] .element__title {
+  color: #c9c9c9;
+}
+
+.element__action {
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  border: none;
+  border-left: 1px solid #efefef;
+  background: 0 0;
+  cursor: pointer;
+  outline: 0;
+}
+
+.element__action.is-disabled {
+  pointer-events: none;
+  color: #c9c9c9;
+}
