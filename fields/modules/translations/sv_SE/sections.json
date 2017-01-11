@@ -1,8 +1,8 @@
 {
-  "fields.modules.empty": "Inga sektioner är skpade ännu.",
+  "fields.modules.empty": "Inga sektioner är skapade ännu.",
   "fields.modules.empty.or": "eller",
   "fields.modules.empty.add": "Lägg till första sektionen",
-  "fields.modules.empty.paste": "Lägg till från urklipp",
+  "fields.modules.empty.paste": "lägg till från urklipp",
   "fields.modules.add": "Lägg till",
   "fields.modules.add.template.label": "Lägg till en ny sektion",
   "fields.modules.add.error.template": "Mallen saknas",
