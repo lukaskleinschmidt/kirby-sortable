@@ -1,6 +1,6 @@
 (function($) {
 
-  class Entities {
+  class Elements {
     constructor(element) {
       var self = this;
 
@@ -27,15 +27,13 @@
     events() {
       var self = this;
 
-      this.container.on('_sortableupdate', function(event, ui) {
+      this.container.on('sortupdate', function(event, ui) {
         var to = self.container.children().index(ui.item) + 1;
         var uid = ui.item.data('uid');
         var action = [self.api, uid, to, 'sort'].join('/');
 
-        // Disable sorting when expecting a reload
+        // Disable sorting when a reload is expected
         self.disable();
-
-        console.log('update');
 
         $.post(action, self.reload.bind(self));
       });
@@ -43,8 +41,6 @@
       this.element.on('click', '[data-action]', function(event) {
         var element = $(this);
         var action = element.data('action') || element.attr('href');
-
-        console.log('click');
 
         $.post(action, self.reload.bind(self));
 
@@ -205,7 +201,7 @@
       if ($(this).data('elements')) {
         return $(this);
       } else {
-        var elements = new Entities(this);
+        var elements = new Elements(this);
         $(this).data('elements', elements);
         return $(this);
       }

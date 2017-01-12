@@ -1,3 +1,13 @@
+fieldset {
+  min-width: 0;
+}
+
+@-moz-document url-prefix() {
+  fieldset {
+   display: table-cell;
+  }
+}
+
 .elements__counter {
   padding-left: 0.25em;
   font-size: 0.8em;
@@ -96,7 +106,7 @@ button .element .icon {
   line-height: 1;
 }
 
-.element__preview {
+.element [data-handle] {
   border-bottom: 1px solid #efefef;
   cursor: move;
 }
@@ -119,6 +129,7 @@ button .element .icon {
   flex-flow: row nowrap;
 }
 
+.element__icon,
 .element__action,
 .element__title {
   padding: 0.6em 0.9em;
@@ -127,11 +138,18 @@ button .element .icon {
   font-size: 1em;
 }
 
+.element__icon {
+  padding-right: 0.35em;
+}
+
 .element__title {
-  -webkit-flex: 1 0 auto;
-  -ms-flex: 1 0 auto;
-  flex: 1 0 auto;
+  -webkit-flex: 1 0 0%;
+  -ms-flex: 1 0 0%;
+  flex: 1 0 0%;
   cursor: move;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 0.35em;
 }
 
 .element[data-visible=false] .element__title {

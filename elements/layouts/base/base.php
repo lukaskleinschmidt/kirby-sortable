@@ -45,11 +45,22 @@ class BaseLayout {
 
   }
 
+  public function icon($position = '') {
+    return $this->page()->icon($position);
+  }
+
+  public function blueprint() {
+    return $this->page()->blueprint();
+  }
+
+  public function title() {
+    return $this->page()->title();
+  }
+
   public function action($type, $data = array()) {
     $data = a::update($data, ['element' => $this]);
     return $this->field()->action($type, $data);
   }
-
 
   public function template() {
 

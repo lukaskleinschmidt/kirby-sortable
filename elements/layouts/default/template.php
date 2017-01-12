@@ -1,10 +1,10 @@
 <div class="element__default">
   <nav class="element__navigation">
-    <div class="element__title" data-handle>
-      <div class="element__icon">
-        <?= $element->page()->icon('left'); ?>
-      </div>
-      <?= $element->page()->title(); ?>
+    <div class="element__icon" title="<?= l('pages.show.template') . ': ' . i18n($element->blueprint()->title()); ?>" data-handle>
+      <?= $element->icon(); ?>
+    </div>
+    <div class="element__title" title="<?= $element->title(); ?>" data-handle>
+      <?= $element->title(); ?>
       <?= $element->counter(); ?>
     </div>
     <?= $element->action('edit'); ?>
