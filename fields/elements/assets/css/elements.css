@@ -75,6 +75,7 @@ fieldset {
 
 .element {
   margin-bottom: 0.25em;
+  min-height: 48px;
 }
 
 .element__default {
@@ -107,17 +108,7 @@ button .element .icon {
 }
 
 .element [data-handle] {
-  border-bottom: 1px solid #efefef;
   cursor: move;
-}
-
-.element__preview:empty {
-  display: none;
-}
-
-.element__preview--bottom {
-  border-bottom: none;
-  border-top: 1px solid #efefef;
 }
 
 .element__navigation {
@@ -152,6 +143,7 @@ button .element .icon {
   padding-left: 0.35em;
 }
 
+.element[data-visible=false] .element__icon,
 .element[data-visible=false] .element__title {
   color: #c9c9c9;
 }
