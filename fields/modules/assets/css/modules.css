@@ -1,0 +1,12 @@
+.module__preview {
+  border-bottom: 1px solid #ddd;
+}
+
+.module__preview:empty {
+  display: none;
+}
+
+.module__preview--bottom {
+  border-bottom: none;
+  border-top: 1px solid #ddd;
+}
