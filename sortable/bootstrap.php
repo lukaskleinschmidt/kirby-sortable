@@ -6,11 +6,11 @@ load([
   'kirby\\sortable\\sortable'            => 'sortable.php',
 
   // global stuff
-  'kirby\\sortable\\registry'            => 'registry.php',
-  'kirby\\sortable\\roots'               => 'roots.php',
+  'kirby\\sortable\\registry'            => 'sortable' . DS . 'registry.php',
+  'kirby\\sortable\\roots'               => 'sortable' . DS . 'roots.php',
 
   // controllers
-  'kirby\\sortable\\controllers\\field'  => 'controllers' . DS . 'field.php',
-  'kirby\\sortable\\controllers\\action' => 'controllers' . DS . 'action.php',
+  'kirby\\sortable\\controllers\\field'  => 'sortable' . DS . 'controllers' . DS . 'field.php',
+  'kirby\\sortable\\controllers\\action' => 'sortable' . DS . 'controllers' . DS . 'action.php',
 
 ], __DIR__ . DS . 'src' );
