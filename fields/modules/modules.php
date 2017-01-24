@@ -2,7 +2,6 @@
 
 class ModulesField extends SortableField {
 
-  public $template = 'modules';
   public $variant = 'modules';
   public $actions = array(
     'edit',
@@ -27,10 +26,6 @@ class ModulesField extends SortableField {
 
   public function prefix() {
     return Kirby\Modules\Settings::templatePrefix();
-  }
-
-  public function translation() {
-    return $this->variant();
   }
 
 }

@@ -2,9 +2,10 @@
 
 class SortableField extends InputField {
 
-  public $template = 'default';
+  // public $template = 'default';
+  public $varaint = '';
   public $options = array();
-  public $layout = 'default';
+  public $element = 'base';
   public $prefix = '';
   public $parent = '';
   public $limit = false;
@@ -50,10 +51,14 @@ class SortableField extends InputField {
     return $this->i18n($this->parent);
   }
 
-  public function layouts() {
+  public function element($data) {
+    return Kirby\Sortable\Sortable::layout($this->layout(), $data);
+  }
 
-    $layouts = new Brick('div');
-    $layouts->addClass('elements__container');
+  public function elements() {
+
+    $elements = new Brick('div');
+    $elements->addClass('elements__container');
 
     $field      = $this;
     $numVisible = 0;
@@ -67,12 +72,12 @@ class SortableField extends InputField {
       $data = compact('field', 'page', 'num', 'numVisible');
       $data = a::update($this->options($page)->toArray(), $data);
 
-      $layout = Kirby\Sortable\Sortable::layout($this->layout(), $data);
-      $layouts->append($layout);
+      $element = $this->element($data);
+      $elements->append($element);
 
     }
 
-    return $layouts;
+    return $elements;
 
   }
 
@@ -164,7 +169,12 @@ class SortableField extends InputField {
 
   public function content() {
 
-    $template = Kirby\Sortable\Sortable::instance()->get('template', $this->template);
+    // $template = Kirby\Sortable\Sortable::instance()->get('template', $this->template);
+    $template = $this->root() . DS . 'template.php';
+
+    if(!is_file($template)) {
+      $template = __DIR__ . DS . 'template.php'
+    }
 
     $content  = new Brick('div');
 
