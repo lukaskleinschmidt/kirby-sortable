@@ -38,16 +38,12 @@ class ModuleLayout extends BaseLayout {
 
   public function action($type, $data = array()) {
 
-    if(isset($this->$type)) {
+    if(property_exists($this, $type)) {
       $data = a::update($data, ['disabled' => $this->$type === false]);
     }
 
-    return parent::action($type, $data);
+    return parent::action($type, $this->page(), $data);
 
-  }
-
-  public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['layout' => $this], true);
   }
 
 }

@@ -1,11 +1,15 @@
-/*fieldset {
+.form-blueprint-home > fieldset {
   min-width: 0;
 }
 
 @-moz-document url-prefix() {
-  fieldset {
+  .form-blueprint-home > fieldset {
    display: table-cell;
   }
+}
+/*
+.element__title {
+  max-width: 100px;
 }*/
 
 .elements__counter {

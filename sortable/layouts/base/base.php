@@ -3,14 +3,18 @@
 class BaseLayout {
 
   public $type;
+  public $field;
+  public $page;
 
   public function root() {
     $obj = new ReflectionClass($this);
     return dirname($obj->getFileName());
   }
 
-  public function __construct($type) {
+  public function __construct($type, $field, $page) {
     $this->type = $type;
+    $this->field = $field;
+    $this->page = $page;
   }
 
   public function __call($method, $arguments) {
@@ -58,8 +62,19 @@ class BaseLayout {
   }
 
   public function action($type, $data = array()) {
-    $data = a::update($data, ['layout' => $this]);
-    return $this->field()->action($type, $data);
+    return $this->field()->action($type, $this->page(), $this, $data);
+  }
+
+  public function content() {
+
+    $template = $this->root() . DS . 'template.php';
+
+    if(!is_file($template)) {
+      $template = __DIR__ . DS . 'template.php';
+    }
+
+    return tpl::load($template, ['layout' => $this], true);
+
   }
 
   public function template() {

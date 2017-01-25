@@ -28,4 +28,8 @@ class ModulesField extends SortableField {
     return Kirby\Modules\Settings::templatePrefix();
   }
 
+  // public function translation() {
+  //   return $this->variant();
+  // }
+
 }

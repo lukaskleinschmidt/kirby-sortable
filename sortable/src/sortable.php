@@ -17,11 +17,6 @@ class Sortable {
 
   protected $loaded = false;
 
-  public static function instance() {
-    if(!is_null(static::$instance)) return static::$instance;
-    return static::$instance = new static();
-  }
-
   public function __construct() {
 
     $this->kirby = kirby();
@@ -31,21 +26,58 @@ class Sortable {
 
   }
 
+  public static function instance() {
+    if(!is_null(static::$instance)) return static::$instance;
+    return static::$instance = new static();
+  }
+
+  public static function translation() {
+    return;
+  }
+
+  public static function layout($type, $field, $page, $data = array()) {
+
+    $class = $type . 'layout';
+
+    // TODO: check exception
+    if(!class_exists($class)) {
+      throw new Exception('The ' . $type . ' layout is missing.');
+    }
+
+    $layout = new $class($type, $field, $page);
+
+    foreach($data as $key => $val) {
+      if(!is_string($key) || str::length($key) === 0) continue;
+      $layout->{$key} = $val;
+    }
+
+    return $layout;
+
+  }
+
+  public static function action($type, $field = null, $page = null, $layout = null, $data = array()) {
+
+    $class = $type . 'action';
+
+    // TODO: check exception
+    if(!class_exists($class)) {
+      throw new Exception('The ' . $type . ' action is missing.');
+    }
+
+    $action = new $class($type, $field, $page, $layout);
+
+    foreach($data as $key => $val) {
+      if(!is_string($key) || str::length($key) === 0) continue;
+      $action->{$key} = $val;
+    }
+
+    return $action;
+
+  }
+
   public function register() {
 
     $kirby = $this->kirby();
-
-    // $kirby->set('page::method', 'elements', function($name = null) {
-    //
-    // });
-    //
-    // $kirby->set('page::method', 'hasElements', function($name = null) {
-    //
-    // });
-    //
-    // $kirby->set('page::method', 'isElement', function($name = null) {
-    //
-    // });
 
     // set default templates
     foreach(dir::read($this->roots()->templates()) as $name) {
@@ -64,17 +96,7 @@ class Sortable {
 
   }
 
-  public function kirby() {
-    return $this->kirby;
-  }
-
-  public function roots() {
-    return $this->roots;
-  }
-
   public function load() {
-
-    if($this->loaded) return;
 
     $classes = [];
 
@@ -92,56 +114,18 @@ class Sortable {
 
   }
 
-  public static function layout($type, $data = array()) {
-
-    $class = $type . 'layout';
-
-    // TODO: check exception
-    if(!class_exists($class)) {
-      throw new Exception('The ' . $type . ' layout is missing.');
-    }
-
-    $layout = new $class($type);
-
-    foreach($data as $key => $val) {
-      if(!is_string($key) || str::length($key) === 0) continue;
-      $layout->{$key} = $val;
-    }
-
-    return $layout;
-
+  public function kirby() {
+    return $this->kirby;
   }
 
-  public static function action($type, $data = array()) {
-
-    $class = $type . 'action';
-
-    // TODO: check exception
-    if(!class_exists($class)) {
-      throw new Exception('The ' . $type . ' action is missing.');
-    }
-
-    $action = new $class($type);
-
-    foreach($data as $key => $val) {
-      if(!is_string($key) || str::length($key) === 0) continue;
-      $action->{$key} = $val;
-    }
-
-    return $action;
-
+  public function roots() {
+    return $this->roots;
   }
 
-  /**
-   * Install a new entry in the registry
-   */
   public function set() {
     return call_user_func_array([$this->registry, 'set'], func_get_args());
   }
 
-  /**
-   * Retrieve an entry from the registry
-   */
   public function get() {
     return call_user_func_array([$this->registry, 'get'], func_get_args());
   }

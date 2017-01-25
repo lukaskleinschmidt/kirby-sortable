@@ -18,7 +18,6 @@ class Registry extends Kirby\Registry {
     // start the registry entry autoloader
     load([
       'kirby\\sortable\\registry\\translation' => __DIR__ . DS . 'registry' . DS . 'translation.php',
-      'kirby\\sortable\\registry\\template'    => __DIR__ . DS . 'registry' . DS . 'template.php',
       'kirby\\sortable\\registry\\layout'      => __DIR__ . DS . 'registry' . DS . 'layout.php',
       'kirby\\sortable\\registry\\action'      => __DIR__ . DS . 'registry' . DS . 'action.php',
     ]);

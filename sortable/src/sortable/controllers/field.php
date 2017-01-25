@@ -22,7 +22,7 @@ class Field extends \Kirby\Panel\Controllers\Field {
 
     $model = $this->model();
     $field = $this->field();
-
+    
     $action = Sortable::action($type);
     $routes = $action->routes();
     $router = new Router($routes);

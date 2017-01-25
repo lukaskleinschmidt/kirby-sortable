@@ -1,11 +1,13 @@
 <?php
 
+// Load all registerd classes
+$sortable = Kirby\Sortable\Sortable::instance();
+$sortable->load();
+
 class SortableField extends InputField {
 
-  // public $template = 'default';
-  public $varaint = '';
   public $options = array();
-  public $element = 'base';
+  public $layout = 'base';
   public $prefix = '';
   public $parent = '';
   public $limit = false;
@@ -26,9 +28,9 @@ class SortableField extends InputField {
     ),
   );
 
-  public static function setup() {
-    Kirby\Sortable\Sortable::instance()->load();
-  }
+  // public static function setup() {
+  //   Kirby\Sortable\Sortable::instance()->load();
+  // }
 
   public function routes() {
     return array(
@@ -51,40 +53,43 @@ class SortableField extends InputField {
     return $this->i18n($this->parent);
   }
 
-  public function element($data) {
-    return Kirby\Sortable\Sortable::layout($this->layout(), $data);
+  public function action($type, $page = null, $layout = null, $data = array()) {
+    if(is_null($page)) $page = $this->origin();
+    return Kirby\Sortable\Sortable::action($type, $this, $page, $layout, $data);
   }
 
-  public function elements() {
+  public function layout($type, $page, $data = array()) {
+    return Kirby\Sortable\Sortable::layout($type, $this, $page, $data);
+  }
 
-    $elements = new Brick('div');
-    $elements->addClass('elements__container');
+  public function layouts() {
 
-    $field      = $this;
+    $layouts = new Brick('div');
+    $layouts->addClass('elements__container');
+
     $numVisible = 0;
-    $num        = 0;
+    $num = 0;
 
     foreach($this->entries() as $page) {
 
       if($page->isVisible()) $numVisible++;
       $num++;
 
-      $data = compact('field', 'page', 'num', 'numVisible');
-      $data = a::update($this->options($page)->toArray(), $data);
+      $data = a::update($this->options($page)->toArray(), array(
+        'numVisible' => $numVisible,
+        'num' => $num,
+      ));
 
-      $element = $this->element($data);
-      $elements->append($element);
+      $layout = $this->layout($this->layout, $page, $data);
+      $layouts->append($layout);
 
     }
 
-    return $elements;
+    return $layouts;
 
   }
 
-  public function action($type, $data = array()) {
-    $data = a::update($data, ['field' => $this, 'type' => $type]);
-    return Kirby\Sortable\Sortable::action($type, $data);
-  }
+
 
 
   // Needs refactoring
@@ -112,6 +117,9 @@ class SortableField extends InputField {
     return $this->translation;
 
   }
+  // Needs refactoring
+
+
 
 
   public function input() {
@@ -173,7 +181,7 @@ class SortableField extends InputField {
     $template = $this->root() . DS . 'template.php';
 
     if(!is_file($template)) {
-      $template = __DIR__ . DS . 'template.php'
+      $template = __DIR__ . DS . 'template.php';
     }
 
     $content  = new Brick('div');
