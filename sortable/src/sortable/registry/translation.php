@@ -4,9 +4,11 @@ namespace Kirby\Sortable\Registry;
 
 use Exception;
 use Kirby;
+use Dir;
+use Obj;
 use A;
 
-class Template extends Kirby\Registry\Entry {
+class Translation extends Kirby\Registry\Entry {
 
   // Store of registered translations
 	protected static $translations = [];
@@ -15,15 +17,21 @@ class Template extends Kirby\Registry\Entry {
 	 * Adds a new translation to the registry
 	 *
 	 * @param mixed $name
-	 * @param string $path
+	 * @param string $root
 	 */
-	public function set($name, $path = null) {
+	public function set($name, $root = null) {
 
-    if(!$this->kirby->option('debug') || is_file($path)) {
-      return static::$translations[$name] = $path;
+    $name = strtolower($name);
+
+    if(!$this->kirby->option('debug') || is_dir($root)) {
+      return static::$translations[$name] = new Obj([
+        'root'  => $root,
+        'files' => dir::read($root),
+        'name'  => $name,
+      ]);
     }
 
-    throw new Exception('The translation does not exist at the specified path: ' . $path);
+    throw new Exception('The translation does not exist at the specified path: ' . $root);
 
 	}
 

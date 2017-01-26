@@ -7,9 +7,6 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
    */
   public function paste() {
 
-    // Load translation
-    $this->field()->translation();
-
     $self    = $this;
     $page    = $this->field()->origin();
     $modules = site()->user()->clipboard();

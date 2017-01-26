@@ -5,6 +5,7 @@ namespace Kirby\Sortable;
 use F;
 use Dir;
 use Str;
+use Data;
 use Exception;
 
 class Sortable {
@@ -21,18 +22,15 @@ class Sortable {
 
     $this->kirby = kirby();
 
-    $this->roots    = new Roots(dirname(__DIR__));
-    $this->registry = new Registry($this->kirby());
+    $this->roots       = new Roots(dirname(__DIR__));
+    $this->registry    = new Registry($this->kirby());
+    // $this->translation = new Translation($this->roots()->translations());
 
   }
 
   public static function instance() {
     if(!is_null(static::$instance)) return static::$instance;
     return static::$instance = new static();
-  }
-
-  public static function translation() {
-    return;
   }
 
   public static function layout($type, $field, $page, $data = array()) {
@@ -75,21 +73,22 @@ class Sortable {
 
   }
 
+  public static function translation($key, $variant = null) {
+    return;
+  }
+
   public function register() {
 
-    $kirby = $this->kirby();
-
-    // set default templates
-    foreach(dir::read($this->roots()->templates()) as $name) {
-      $this->set('template', f::name($name), $this->roots()->templates() . DS . $name);
+    foreach(dir::read($this->roots()->translations()) as $name) {
+      if(is_dir($root = $this->roots()->translations() . DS . $name)) {
+        $this->set('translation', $name, $root);
+      }
     }
 
-    // set default layouts
     foreach(dir::read($this->roots()->layouts()) as $name) {
-      $this->set('layout', f::name($name), $this->roots()->layouts() . DS . $name);
+      $this->set('layout', $name, $this->roots()->layouts() . DS . $name);
     }
 
-    // set default actions
     foreach(dir::read($this->roots()->actions()) as $name) {
       $this->set('action', $name, $this->roots()->actions() . DS . $name);
     }
@@ -97,6 +96,24 @@ class Sortable {
   }
 
   public function load() {
+
+    dump($this->get('translation'));
+
+    dump(dir::read($this->roots()->translations()));
+
+    $translation = $this->roots()->translations() . DS . 'en.php';
+    dump(data::read($translation));
+
+    // if(is_file($root . DS . $code . DS . $variant . '.json')) {
+    //   $this->translation = a::update($this->translation, data::read($root . DS . $code . DS . $variant . '.json'));
+    // }
+    //
+    //   // Load translation
+    //   l::set($this->translation);
+
+    // foreach($this->get('translation') as $name => $translation) {
+    //   dump($translation);
+    // }
 
     $classes = [];
 
@@ -109,8 +126,6 @@ class Sortable {
     }
 
     load($classes);
-
-    $this->loaded = true;
 
   }
 

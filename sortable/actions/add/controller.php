@@ -7,9 +7,6 @@ class AddActionController extends Kirby\Sortable\Controllers\Action {
    */
   public function add() {
 
-    // Load translation
-    $this->field()->translation();
-
     $self   = $this;
     $parent = $this->field()->origin();
 

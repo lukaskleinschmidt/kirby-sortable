@@ -7,6 +7,7 @@ $sortable->load();
 class SortableField extends InputField {
 
   public $options = array();
+  public $variant = '';
   public $layout = 'base';
   public $prefix = '';
   public $parent = '';
@@ -17,8 +18,6 @@ class SortableField extends InputField {
   protected $defaults;
   protected $origin;
 
-  protected $translation;
-
   static public $assets = array(
     'js' => array(
       'sortable.js',
@@ -27,10 +26,6 @@ class SortableField extends InputField {
       'sortable.css',
     ),
   );
-
-  // public static function setup() {
-  //   Kirby\Sortable\Sortable::instance()->load();
-  // }
 
   public function routes() {
     return array(
@@ -89,36 +84,50 @@ class SortableField extends InputField {
 
   }
 
+  /**
+   * Get translation
+   *
+   * @param  string $key
+   * @param  string $variant
+   * @return string
+   */
+  public function l($key, $variant = null) {
 
-
-
-  // Needs refactoring
-  public function translation() {
-
-    // Return from cache if possible
-    if($this->translation) {
-      return $this->translation;
+    if(is_null($variant)) {
+      $variant = $this->variant();
     }
 
-    $root = __DIR__ . DS . 'translations';
-    $code = panel()->translation()->code();
-    $variant = $this->variant();
-
-    // Base translation
-    $this->translation = data::read($root . DS . 'en' . DS . 'modules' . '.json');
-
-    if(is_file($root . DS . $code . DS . $variant . '.json')) {
-      $this->translation = a::update($this->translation, data::read($root . DS . $code . DS . $variant . '.json'));
-    }
-
-    // Load translation
-    l::set($this->translation);
-
-    return $this->translation;
+    return Kirby\Sortable\Sortable::translation($key, $variant);
 
   }
-  // Needs refactoring
 
+
+  // Needs refactoring
+  // public function translation() {
+  //
+  //   // Return from cache if possible
+  //   if($this->translation) {
+  //     return $this->translation;
+  //   }
+  //
+  //   $root = __DIR__ . DS . 'translations';
+  //   $code = panel()->translation()->code();
+  //   $variant = $this->variant();
+  //
+  //   // Base translation
+  //   $this->translation = data::read($root . DS . 'en' . DS . 'modules' . '.json');
+  //
+  //   if(is_file($root . DS . $code . DS . $variant . '.json')) {
+  //     $this->translation = a::update($this->translation, data::read($root . DS . $code . DS . $variant . '.json'));
+  //   }
+  //
+  //   // Load translation
+  //   l::set($this->translation);
+  //
+  //   return $this->translation;
+  //
+  // }
+  // Needs refactoring
 
 
 

@@ -1,14 +1,11 @@
 <?php
 
 class CopyActionController extends Kirby\Sortable\Controllers\Action {
-  
+
   /**
    * Copy to clipboard
    */
   public function copy() {
-
-    // Load translation
-    $this->field()->translation();
 
     $self    = $this;
     $page    = $this->field()->origin();

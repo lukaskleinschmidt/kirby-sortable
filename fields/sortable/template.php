@@ -9,9 +9,9 @@
 <?php else: ?>
   <div class="elements__empty">
     <?= l('fields.modules.empty'); ?>
-    <?= $field->action('add', ['label' => l('fields.modules.empty.add'), 'icon' => '', 'class' => '']); ?>
+    <?= $field->action('add', ['label' => $field->l('fields.modules.empty.add'), 'icon' => '', 'class' => '']); ?>
     <?= l('fields.modules.empty.or'); ?>
-    <?= $field->action('paste', ['label' => l('fields.modules.empty.paste'), 'icon' => '', 'class' => '']); ?>
+    <?= $field->action('paste', ['label' => $field->l('fields.modules.empty.paste'), 'icon' => '', 'class' => '']); ?>
   </div>
 <?php endif; ?>
 

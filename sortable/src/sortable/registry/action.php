@@ -18,7 +18,7 @@ class Action extends Kirby\Registry\Entry {
 	 * @param mixed $name
 	 * @param string $root
 	 */
-	public function set($name, $root) {
+	public function set($name, $root = null) {
 
     $name = strtolower($name);
     $file = $root . DS . $name . '.php';

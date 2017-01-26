@@ -10,9 +10,6 @@ class ToggleActionController extends Kirby\Sortable\Controllers\Action {
    */
   public function show($uid, $to) {
 
-    // Load translation
-    $this->field()->translation();
-
     $modules = $this->field()->entries();
     $page    = $modules->find($uid);
 
@@ -51,7 +48,7 @@ class ToggleActionController extends Kirby\Sortable\Controllers\Action {
 
   /**
    * Hide page
-   * 
+   *
    * @param string $uid
    */
   public function hide($uid) {
