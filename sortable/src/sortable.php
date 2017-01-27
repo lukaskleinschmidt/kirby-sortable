@@ -2,6 +2,7 @@
 
 namespace Kirby\Sortable;
 
+use A;
 use F;
 use Dir;
 use Str;
@@ -14,6 +15,7 @@ class Sortable {
 
   public $kirby;
   public $roots;
+  public $variants;
   public $registry;
 
   protected $loaded = false;
@@ -22,9 +24,8 @@ class Sortable {
 
     $this->kirby = kirby();
 
-    $this->roots       = new Roots(dirname(__DIR__));
-    $this->registry    = new Registry($this->kirby());
-    // $this->translation = new Translation($this->roots()->translations());
+    $this->roots    = new Roots(dirname(__DIR__));
+    $this->registry = new Registry($this->kirby());
 
   }
 
@@ -80,9 +81,11 @@ class Sortable {
   public function register() {
 
     foreach(dir::read($this->roots()->translations()) as $name) {
-      if(is_dir($root = $this->roots()->translations() . DS . $name)) {
-        $this->set('translation', $name, $root);
-      }
+      $this->set('translation', f::name($name), $this->roots()->translations() . DS . $name);
+    }
+
+    foreach(dir::read($this->roots()->variants()) as $name) {
+      $this->set('variant', $name, $this->roots()->variants() . DS . $name);
     }
 
     foreach(dir::read($this->roots()->layouts()) as $name) {
@@ -97,12 +100,19 @@ class Sortable {
 
   public function load() {
 
-    dump($this->get('translation'));
+    // dump($this->get('translation'));
+    // dump($this->get('variant'));
 
-    dump(dir::read($this->roots()->translations()));
+    // $this->variants = new Variants($this->get('variant'));
 
-    $translation = $this->roots()->translations() . DS . 'en.php';
-    dump(data::read($translation));
+    $code = panel()->translation()->code();
+
+    // dump(dir::read($this->roots()->translations()));
+
+    // $translation = $this->roots()->translations() . DS . 'en.php';
+    // dump(data::read($translation));
+
+    // $this->get('variant', 'modules');
 
     // if(is_file($root . DS . $code . DS . $variant . '.json')) {
     //   $this->translation = a::update($this->translation, data::read($root . DS . $code . DS . $variant . '.json'));
@@ -114,6 +124,18 @@ class Sortable {
     // foreach($this->get('translation') as $name => $translation) {
     //   dump($translation);
     // }
+    //
+
+    foreach($this->get('variant') as $name => $variant) {
+      if($file = a::get($variant->files(), $code)) {
+        $data = data::read($variant->root() . DS . $file);
+        if(is_array($data)) {
+          $this->variants[$name] = $data;
+        }
+      }
+    }
+
+    // dump($this->variants);
 
     $classes = [];
 

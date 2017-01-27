@@ -13,7 +13,7 @@ class Roots extends Obj {
     $this->index = $root;
 
     $this->translations = $this->index . DS . 'translations';
-    $this->templates    = $this->index . DS . 'templates';
+    $this->variants     = $this->index . DS . 'variants';
     $this->layouts      = $this->index . DS . 'layouts';
     $this->actions      = $this->index . DS . 'actions';
 
