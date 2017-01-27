@@ -17,7 +17,7 @@ class ModuleLayout extends BaseLayout {
       return;
     }
 
-    $module   = Kirby\Modules\Modules::instance()->get($page);
+    $module = Kirby\Modules\Modules::instance()->get($page);
     $template = $module->path() . DS . $module->name() . '.preview.php';
 
     if(!is_file($template)) {
@@ -30,7 +30,7 @@ class ModuleLayout extends BaseLayout {
     $preview->addClass('module__preview module__preview--' . $position);
     $preview->data('module', $module->name());
     $preview->data('handle', true);
-    $preview->html(tpl::load($template, array('page' => $this->orign(), 'module' => $page, 'moduleName' => $module->name())));
+    $preview->html(tpl::load($template, array('page' => $this->origin(), 'module' => $page, 'moduleName' => $module->name())));
 
     return $preview;
 
@@ -38,11 +38,11 @@ class ModuleLayout extends BaseLayout {
 
   public function action($type, $data = array()) {
 
-    if(property_exists($this, $type)) {
-      $data = a::update($data, ['disabled' => $this->$type === false]);
-    }
+    $data = a::update($data, array(
+      'disabled' => $this->$type() === false
+    ));
 
-    return parent::action($type, $this->page(), $data);
+    return parent::action($type, $data);
 
   }
 
