@@ -15,10 +15,7 @@ class Sortable {
 
   public $kirby;
   public $roots;
-  public $variants;
   public $registry;
-
-  protected $loaded = false;
 
   public function __construct() {
 
@@ -34,7 +31,7 @@ class Sortable {
     return static::$instance = new static();
   }
 
-  public static function layout($type, $field, $page, $data = array()) {
+  public static function layout($type, $data = array()) {
 
     $class = $type . 'layout';
 
@@ -43,7 +40,7 @@ class Sortable {
       throw new Exception('The ' . $type . ' layout is missing.');
     }
 
-    $layout = new $class($type, $field, $page);
+    $layout = new $class($type);
 
     foreach($data as $key => $val) {
       if(!is_string($key) || str::length($key) === 0) continue;
@@ -54,7 +51,7 @@ class Sortable {
 
   }
 
-  public static function action($type, $field = null, $page = null, $layout = null, $data = array()) {
+  public static function action($type, $data = array()) {
 
     $class = $type . 'action';
 
@@ -63,7 +60,7 @@ class Sortable {
       throw new Exception('The ' . $type . ' action is missing.');
     }
 
-    $action = new $class($type, $field, $page, $layout);
+    $action = new $class($type);
 
     foreach($data as $key => $val) {
       if(!is_string($key) || str::length($key) === 0) continue;

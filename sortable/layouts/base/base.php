@@ -3,18 +3,14 @@
 class BaseLayout {
 
   public $type;
-  public $field;
-  public $page;
 
   public function root() {
     $obj = new ReflectionClass($this);
     return dirname($obj->getFileName());
   }
 
-  public function __construct($type, $field, $page) {
+  public function __construct($type) {
     $this->type = $type;
-    $this->field = $field;
-    $this->page = $page;
   }
 
   public function __call($method, $arguments) {
@@ -49,6 +45,10 @@ class BaseLayout {
 
   }
 
+  public function l($key, $variant = null) {
+    return $this->field()->l($key, $variant);
+  }
+
   public function icon($position = '') {
     return $this->page()->icon($position);
   }
@@ -62,7 +62,11 @@ class BaseLayout {
   }
 
   public function action($type, $data = array()) {
-    return $this->field()->action($type, $this->page(), $this, $data);
+    $data = a::update($data, array(
+      'layout' => $this,
+      'page' => $this->page(),
+    ));
+    return $this->field()->action($type, $data);
   }
 
   public function content() {

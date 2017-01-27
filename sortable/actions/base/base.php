@@ -2,13 +2,10 @@
 
 class BaseAction {
 
-  public $icon;
   public $type;
+  public $icon;
   public $label;
   public $title;
-  public $field;
-  public $layout;
-  public $page;
   public $disabled = false;
 
   public function root() {
@@ -16,11 +13,8 @@ class BaseAction {
     return dirname($obj->getFileName());
   }
 
-  public function __construct($type, $field = null, $page = null, $layout = null) {
+  public function __construct($type) {
     $this->type = $type;
-    $this->page = $page;
-    $this->field = $field;
-    $this->layout = $layout;
   }
 
   public function __call($method, $arguments) {
@@ -37,6 +31,10 @@ class BaseAction {
 
   public function i18n($value) {
     return i18n($value);
+  }
+
+  public function l($key, $variant = null) {
+    return $this->field()->l($key, $variant);
   }
 
   public function icon($position = null) {

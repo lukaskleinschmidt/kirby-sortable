@@ -14,3 +14,5 @@ load([
   'kirby\\sortable\\controllers\\action' => 'sortable' . DS . 'controllers' . DS . 'action.php',
 
 ], __DIR__ . DS . 'src' );
+
+include(__DIR__ . DS . 'helpers.php');

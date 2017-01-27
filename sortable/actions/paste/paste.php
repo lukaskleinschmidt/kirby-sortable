@@ -25,7 +25,7 @@ class PasteAction extends BaseAction {
   }
 
   public function disabled() {
-    return $this->disabled || $this->field()->origin()->ui()->create() === false;
+    return $this->disabled || $this->parent()->ui()->create() === false;
   }
 
 }

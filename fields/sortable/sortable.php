@@ -1,8 +1,9 @@
 <?php
 
+use Kirby\Sortable\Sortable;
+
 // Load all registerd classes
-$sortable = Kirby\Sortable\Sortable::instance();
-$sortable->load();
+sortable()->load();
 
 class SortableField extends InputField {
 
@@ -48,14 +49,20 @@ class SortableField extends InputField {
     return $this->i18n($this->parent);
   }
 
-  public function action($type, $page = null, $layout = null, $data = array()) {
-    if(is_null($page)) $page = $this->origin();
-    return Kirby\Sortable\Sortable::action($type, $this, $page, $layout, $data);
+  public function action($type, $data = array()) {
+    $data = a::update($data, array(
+      'field' => $this,
+      'parent' => $this->origin(),
+    ));
+    return sortable::action($type, $data);
   }
 
-  public function layout($type, $page, $data = array()) {
-    // return 'Lorem';
-    return Kirby\Sortable\Sortable::layout($type, $this, $page, $data);
+  public function layout($type, $data = array()) {
+    $data = a::update($data, array(
+      'field' => $this,
+      'parent' => $this->origin(),
+    ));
+    return sortable::layout($type, $data);
   }
 
   public function layouts() {
@@ -66,7 +73,6 @@ class SortableField extends InputField {
     $numVisible = 0;
     $num = 0;
 
-
     foreach($this->entries() as $page) {
 
       if($page->isVisible()) $numVisible++;
@@ -74,10 +80,11 @@ class SortableField extends InputField {
 
       $data = a::update($this->options($page)->toArray(), array(
         'numVisible' => $numVisible,
+        'page' => $page,
         'num' => $num,
       ));
 
-      $layout = $this->layout($this->layout, $page, $data);
+      $layout = $this->layout($this->layout, $data);
       $layouts->append($layout);
 
     }
@@ -99,7 +106,7 @@ class SortableField extends InputField {
       $variant = $this->variant();
     }
 
-    return Kirby\Sortable\Sortable::translation($key, $variant);
+    return sortable::translation($key, $variant);
 
   }
 
@@ -188,7 +195,6 @@ class SortableField extends InputField {
 
   public function content() {
 
-    // $template = Kirby\Sortable\Sortable::instance()->get('template', $this->template);
     $template = $this->root() . DS . 'template.php';
 
     if(!is_file($template)) {
@@ -317,11 +323,9 @@ class SortableField extends InputField {
   }
 
   public function template() {
-
     return $this->element()
       ->append($this->content())
       ->append($this->help());
-
   }
 
 }

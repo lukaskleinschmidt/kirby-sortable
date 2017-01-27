@@ -1,10 +1,11 @@
 <?php
 
+// if(!function_exists('panel')) return;
+
 // load the sortable bootstrapper
 require(__DIR__ . DS . 'sortable' . DS . 'bootstrap.php');
 
-$sortable = Kirby\Sortable\Sortable::instance();
-$sortable->register();
+sortable()->register();
 
 $kirby->set('field', 'sortable', __DIR__ . DS . 'fields' . DS . 'sortable');
 $kirby->set('field', 'options' , __DIR__ . DS . 'fields' . DS . 'options');
