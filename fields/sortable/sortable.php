@@ -76,11 +76,9 @@ class SortableField extends InputField {
         'numVisible' => $numVisible,
         'num' => $num,
       ));
-      timer::start();
 
       $layout = $this->layout($this->layout, $page, $data);
       $layouts->append($layout);
-      dump(timer::stop());
 
     }
 
@@ -189,7 +187,7 @@ class SortableField extends InputField {
   }
 
   public function content() {
-// timer::start();
+
     // $template = Kirby\Sortable\Sortable::instance()->get('template', $this->template);
     $template = $this->root() . DS . 'template.php';
 
@@ -205,7 +203,7 @@ class SortableField extends InputField {
     $content->attr('data-api', purl($this->model(), 'field/' . $this->name() . '/' . $this->type()));
     $content->addClass('elements');
     $content->append(tpl::load($template, array('field' => $this)));
-// dump(timer::stop());
+
     return $content;
 
   }
