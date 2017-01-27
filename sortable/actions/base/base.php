@@ -30,7 +30,13 @@ class BaseAction {
   }
 
   public function i18n($value) {
-    return i18n($value);
+
+    if(is_array($value)) {
+      return i18n($value);
+    }
+
+    return $this->field()->l($value);
+
   }
 
   public function l($key, $variant = null) {

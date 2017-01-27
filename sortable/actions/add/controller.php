@@ -14,7 +14,7 @@ class AddActionController extends Kirby\Sortable\Controllers\Action {
       throw new PermissionsException();
     }
 
-    $form = $this->form('add', array($parent, $this->model()), function($form) use($parent, $self) {
+    $form = $this->form('add', array($parent, $this->model(), $this->field()), function($form) use($parent, $self) {
 
       try {
 

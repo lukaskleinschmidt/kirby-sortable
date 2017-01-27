@@ -28,7 +28,7 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
       $form->validate();
 
         if(!$form->isValid()) {
-          throw new Exception(l('fields.modules.paste.error.uri'));
+          throw new Exception(l('pages.add.error.template'));
         }
 
         $data = $form->serialize();

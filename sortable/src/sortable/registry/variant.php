@@ -21,20 +21,21 @@ class Variant extends Kirby\Registry\Entry {
 	 * @param string $root
 	 */
 	public function set($name, $root = null) {
-
-    $name  = strtolower($name);
-    $files = array();
-
-    foreach(dir::read($root) as $file) {
-      $files[f::name($file)] = $file;
-    }
+    // 
+    // $name  = strtolower($name);
+    // $files = array();
 
     if(!$this->kirby->option('debug') || is_dir($root)) {
-      return static::$variants[$name] = new Obj([
-        'root'  => $root,
-        'name'  => $name,
-        'files' => $files,
-      ]);
+      foreach(dir::read($root) as $file) {
+        static::$variants[f::name($file)][$name] = $root . DS . $file;
+      }
+
+      return static::$variants;
+      // return static::$variants[$name] = new Obj([
+      //   'root'  => $root,
+      //   'name'  => $name,
+      //   'files' => $files,
+      // ]);
     }
 
     throw new Exception('The variant does not exist at the specified path: ' . $root);

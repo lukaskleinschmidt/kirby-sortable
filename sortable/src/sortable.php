@@ -4,6 +4,7 @@ namespace Kirby\Sortable;
 
 use A;
 use F;
+use L;
 use Dir;
 use Str;
 use Data;
@@ -16,6 +17,7 @@ class Sortable {
   public $kirby;
   public $roots;
   public $registry;
+  public $variants;
 
   public function __construct() {
 
@@ -71,8 +73,17 @@ class Sortable {
 
   }
 
-  public static function translation($key, $variant = null) {
-    return;
+  public function translation($key, $variant = null) {
+
+    // $variants = $this->variants();
+    // return $variants->get($key, $variant, l::get($key));
+
+    if(!is_null($variant) && $variant = a::get($this->variants, $variant)) {
+      return a::get($variant, $key, l::get($key, $key));
+    }
+
+    return l::get($key, $key);
+
   }
 
   public function register() {
@@ -97,42 +108,19 @@ class Sortable {
 
   public function load() {
 
-    // dump($this->get('translation'));
-    // dump($this->get('variant'));
-
-    // $this->variants = new Variants($this->get('variant'));
-
     $code = panel()->translation()->code();
 
-    // dump(dir::read($this->roots()->translations()));
-
-    // $translation = $this->roots()->translations() . DS . 'en.php';
-    // dump(data::read($translation));
-
-    // $this->get('variant', 'modules');
-
-    // if(is_file($root . DS . $code . DS . $variant . '.json')) {
-    //   $this->translation = a::update($this->translation, data::read($root . DS . $code . DS . $variant . '.json'));
-    // }
-    //
-    //   // Load translation
-    //   l::set($this->translation);
-
-    // foreach($this->get('translation') as $name => $translation) {
-    //   dump($translation);
-    // }
-    //
-
-    foreach($this->get('variant') as $name => $variant) {
-      if($file = a::get($variant->files(), $code)) {
-        $data = data::read($variant->root() . DS . $file);
-        if(is_array($data)) {
-          $this->variants[$name] = $data;
-        }
-      }
+    if(!$path = $this->get('translation', $code)) {
+      $path = $this->get('translation', 'en');
     }
 
-    // dump($this->variants);
+    l::set(data::read($path));
+
+    if($variants = $this->get('variant', $code)) {
+      foreach($variants as $name => $path) {
+        $this->variants[$name] = data::read($path);
+      }
+    }
 
     $classes = [];
 

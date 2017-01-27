@@ -50,19 +50,25 @@ class SortableField extends InputField {
   }
 
   public function action($type, $data = array()) {
+
     $data = a::update($data, array(
       'field' => $this,
       'parent' => $this->origin(),
     ));
+
     return sortable::action($type, $data);
+
   }
 
   public function layout($type, $data = array()) {
+
     $data = a::update($data, array(
       'field' => $this,
       'parent' => $this->origin(),
     ));
+
     return sortable::layout($type, $data);
+
   }
 
   public function layouts() {
@@ -106,39 +112,9 @@ class SortableField extends InputField {
       $variant = $this->variant();
     }
 
-    return sortable::translation($key, $variant);
+    return sortable()->translation($key, $variant);
 
   }
-
-
-  // Needs refactoring
-  // public function translation() {
-  //
-  //   // Return from cache if possible
-  //   if($this->translation) {
-  //     return $this->translation;
-  //   }
-  //
-  //   $root = __DIR__ . DS . 'translations';
-  //   $code = panel()->translation()->code();
-  //   $variant = $this->variant();
-  //
-  //   // Base translation
-  //   $this->translation = data::read($root . DS . 'en' . DS . 'modules' . '.json');
-  //
-  //   if(is_file($root . DS . $code . DS . $variant . '.json')) {
-  //     $this->translation = a::update($this->translation, data::read($root . DS . $code . DS . $variant . '.json'));
-  //   }
-  //
-  //   // Load translation
-  //   l::set($this->translation);
-  //
-  //   return $this->translation;
-  //
-  // }
-  // Needs refactoring
-
-
 
   public function input() {
 

@@ -1,6 +1,6 @@
 <?php
 
-return function($page, $model) {
+return function($page, $model, $field) {
 
   $options = [];
 
@@ -10,7 +10,7 @@ return function($page, $model) {
 
   $form = new Kirby\Panel\Form(array(
     'template' => array(
-      'label'    => 'fields.modules.add.template.label',
+      'label'    => $field->l('fields.sortable.add.template.label'),
       'type'     => 'select',
       'options'  => $options,
       'default'  => key($options),
