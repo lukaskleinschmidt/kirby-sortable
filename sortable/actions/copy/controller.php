@@ -9,16 +9,16 @@ class CopyActionController extends Kirby\Sortable\Controllers\Action {
 
     $self    = $this;
     $page    = $this->field()->origin();
-    $modules = $this->field()->entries();
+    $entries = $this->field()->entries();
 
-    $form = $this->form('copy', array($page, $modules, $this->model()), function($form) use($page, $self) {
+    $form = $this->form('copy', array($page, $entries, $this->model(), $this->field()), function($form) use($page, $self) {
 
       try {
 
         $form->validate();
 
         if(!$form->isValid()) {
-          throw new Exception(l('fields.modules.copy.error.uri'));
+          throw new Exception($self->field()->l('fields.sortable.copy.error.uri'));
         }
 
         $data = $form->serialize();

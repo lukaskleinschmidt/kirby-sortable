@@ -1,10 +1,10 @@
 <?php
 
-return function($page, $model) {
+return function($page, $model, $field) {
 
   $form = new Kirby\Panel\Form(array(
     'page' => array(
-      'label'    => 'fields.modules.delete.page.label',
+      'label'    => $field->l('fields.sortable.delete.page.label'),
       'type'     => 'text',
       'readonly' => true,
       'default'  => $page->title(),

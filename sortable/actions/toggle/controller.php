@@ -24,7 +24,7 @@ class ToggleActionController extends Kirby\Sortable\Controllers\Action {
       $limit = $this->field()->options($page)->limit();
 
       if($limit && $count >= $limit) {
-        throw new Exception(l('fields.modules.module.limit'));
+        throw new Exception($this->field()->l('fields.sortable.limit.template'));
       }
 
       // Check limit
@@ -32,7 +32,7 @@ class ToggleActionController extends Kirby\Sortable\Controllers\Action {
       $limit = $this->field()->limit();
 
       if($limit && $count >= $limit) {
-        throw new Exception(l('fields.modules.limit'));
+        throw new Exception($this->field()->l('fields.sortable.limit'));
       }
 
       $page->sort($to);

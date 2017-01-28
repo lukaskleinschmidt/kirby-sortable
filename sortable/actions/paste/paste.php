@@ -4,10 +4,7 @@ class PasteAction extends BaseAction {
 
   public $icon  = 'paste';
   public $class = 'elements__action elements__action--paste';
-  public $label = [
-    'en' => 'Paste',
-    'de' => 'Einfügen',
-  ];
+  public $label = 'fields.sortable.paste';
 
   public function routes() {
     return array(

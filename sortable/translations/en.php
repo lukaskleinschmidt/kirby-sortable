@@ -1,39 +1,37 @@
 <?php
 
 return array(
-  'fields.sortable.add' => 'Add',
-  'fields.sortable.copy' => 'Copy',
-  'fields.sortable.edit' => 'Edit',
-  'fields.sortable.hide' => 'Hide',
-  'fields.sortable.show' => 'Show',
-  'fields.sortable.paste' => 'Paste',
-  'fields.sortable.delete' => 'Delete',
-  'fields.sortable.duplicate' => 'Duplicate',
-
-  'fields.sortable.empty' => 'No modules yet.',
+  'fields.sortable.empty' => 'No pages yet.',
   'fields.sortable.or' => 'or',
-  'fields.sortable.add.first' => 'Add the first module',
+  'fields.sortable.add.first' => 'Add the first page',
   'fields.sortable.paste.first' => 'add from clipboard',
 
-  'fields.sortable.add.template.label' => 'Add a new module',
-  'fields.sortable.delete.page.label' => 'Do you really want to delete this module?',
-
-  'fields.sortable.copy.uri.label' => 'Copy to clipboard',
-  'fields.sortable.copy.info.label' => 'No modules yet',
-  'fields.sortable.copy.info.text' => 'There are no modules you can store in the clipboard yet.',
-  'fields.sortable.copy.error.uri' => 'Select at least one module',
-
   'fields.sortable.limit' => 'Limit reached',
+  'fields.sortable.limit.template' => 'Limit reached for this template',
+
+  'fields.sortable.add' => 'Add',
+  'fields.sortable.add.template.label' => 'Add a new page',
+  'fields.sortable.add.error.template' => 'The template is missing',
+
+  'fields.sortable.copy' => 'Copy',
+  'fields.sortable.copy.uri.label' => 'Copy to clipboard',
+  'fields.sortable.copy.info.label' => 'No pages yet',
+  'fields.sortable.copy.info.text' => 'There are no pages you can store in the clipboard yet.',
+  'fields.sortable.copy.error.uri' => 'Select at least one page',
+
+  'fields.sortable.delete' => 'Delete',
+  'fields.sortable.delete.page.label' => 'Do you really want to delete this page?',
+
+  'fields.sortable.duplicate' => 'Duplicate',
+  'fields.sortable.edit' => 'Edit',
+
+  'fields.sortable.paste' => 'Paste',
+  'fields.sortable.paste.uri.label' => 'Paste from clipboard',
+  'fields.sortable.paste.uri.help' => 'One or more templates are not available',
+  'fields.sortable.paste.info.label' => 'Clipboard is empty',
+  'fields.sortable.paste.info.text' => 'There are no pages stored in the clipboard at the moment.',
+  'fields.sortable.paste.error.uri' => 'Select at least one page',
+
+  'fields.sortable.hide' => 'Hide',
+  'fields.sortable.show' => 'Show',
 );
-
-
-// {
-//
-//   "fields.modules.paste.uri.label": "Paste from clipboard",
-//   "fields.modules.paste.uri.help": "One or more modules are not available in this page",
-//   "fields.modules.paste.info.label": "Clipboard is empty",
-//   "fields.modules.paste.info.text": "There are no modules stored in the clipboard at the moment.",
-//   "fields.modules.paste.error.uri": "Select at least one module",
-//
-//
-// }

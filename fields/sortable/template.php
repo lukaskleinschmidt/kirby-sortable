@@ -8,10 +8,10 @@
   <?= $field->layouts(); ?>
 <?php else: ?>
   <div class="elements__empty">
-    <?= l('fields.modules.empty'); ?>
-    <?= $field->action('add', ['label' => $field->l('fields.modules.empty.add', 'modules'), 'icon' => '', 'class' => '']); ?>
-    <?= l('fields.modules.empty.or'); ?>
-    <?= $field->action('paste', ['label' => $field->l('fields.modules.empty.paste'), 'icon' => '', 'class' => '']); ?>
+    <?= $field->l('fields.sortable.empty'); ?>
+    <?= $field->action('add', ['label' => $field->l('fields.sortable.add.first', 'modules'), 'icon' => '', 'class' => '']); ?>
+    <?= $field->l('fields.sortable.or'); ?>
+    <?= $field->action('paste', ['label' => $field->l('fields.sortable.paste.first'), 'icon' => '', 'class' => '']); ?>
   </div>
 <?php endif; ?>
 

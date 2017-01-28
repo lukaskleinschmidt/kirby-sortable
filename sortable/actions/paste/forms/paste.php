@@ -1,6 +1,6 @@
 <?php
 
-return function($page, $modules, $model) {
+return function($page, $modules, $model, $field) {
 
   if($modules->count()) {
 
@@ -29,12 +29,12 @@ return function($page, $modules, $model) {
 
     $form = new Kirby\Panel\Form(array(
       'uri' => array(
-        'label'    => 'fields.modules.paste.uri.label',
+        'label'    => $field->l('fields.sortable.paste.uri.label'),
         'type'     => 'options',
         'columns'  => 1,
         'required' => true,
         'options'  => $options,
-        'help'     => $help ? l('fields.modules.paste.uri.help') : '',
+        'help'     => $help ? $field->l('fields.sortable.paste.uri.help') : '',
       )
     ));
 
@@ -42,16 +42,16 @@ return function($page, $modules, $model) {
 
     $form = new Kirby\Panel\Form(array(
       'info' => array(
-        'label' =>  l('fields.modules.paste.info.label'),
+        'label' =>  $field->l('fields.sortable.paste.info.label'),
         'type'  => 'info',
-        'text'  => l('fields.modules.paste.info.text')
+        'text'  => $field->l('fields.sortable.paste.info.text')
       )
     ));
 
   }
 
   $form->cancel($model);
-  $form->buttons->submit->val(l('fields.modules.paste'));
+  $form->buttons->submit->val($field->l('fields.sortable.paste'));
 
   if(!$modules->count()) {
     $form->buttons->submit = $form->buttons->cancel;

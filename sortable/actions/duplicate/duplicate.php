@@ -3,10 +3,7 @@
 class DuplicateAction extends BaseAction {
 
   public $icon = 'clone';
-  public $title = [
-    'en' => 'Duplicate',
-    'de' => 'Duplizieren',
-  ];
+  public $title = 'fields.sortable.duplicate';
 
   public function routes() {
     return array(

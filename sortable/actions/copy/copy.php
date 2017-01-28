@@ -3,10 +3,7 @@
 class CopyAction extends BaseAction {
 
   public $icon  = 'copy';
-  public $label = [
-    'en' => 'Copy',
-    'de' => 'Kopieren',
-  ];
+  public $label = 'fields.sortable.copy';
 
   public function routes() {
     return array(

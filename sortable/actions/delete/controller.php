@@ -19,7 +19,7 @@ class DeleteActionController extends Kirby\Sortable\Controllers\Action {
       throw new PermissionsException();
     }
 
-    $form = $this->form('delete', array($page, $this->model()), function($form) use($page, $self) {
+    $form = $this->form('delete', array($page, $this->model(), $this->field()), function($form) use($page, $self) {
 
       try {
 

@@ -21,14 +21,14 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
       throw new PermissionsException();
     }
 
-    $form = $this->form('paste', array($page, $modules, $this->model()), function($form) use($page, $self) {
+    $form = $this->form('paste', array($page, $modules, $this->model(), $this->field()), function($form) use($page, $self) {
 
       try {
 
       $form->validate();
 
         if(!$form->isValid()) {
-          throw new Exception(l('pages.add.error.template'));
+          throw new Exception($self->field()->l('fields.sortable.paste.error.uri'));
         }
 
         $data = $form->serialize();

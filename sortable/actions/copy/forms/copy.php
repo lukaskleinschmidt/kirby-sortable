@@ -1,14 +1,14 @@
 <?php
 
-return function($page, $modules, $model) {
+return function($page, $entries, $model, $field) {
 
-  if($modules->count()) {
+  if($entries->count()) {
 
     $options = [];
 
-    foreach($modules as $module) {
-      $options[$module->uri()] = array(
-        'label'    => $module->title(),
+    foreach($entries as $entry) {
+      $options[$entry->uri()] = array(
+        'label'    => $entry->title(),
         'checked'  => true,
         'readonly' => false,
       );
@@ -16,7 +16,7 @@ return function($page, $modules, $model) {
 
     $form = new Kirby\Panel\Form(array(
       'uri' => array(
-        'label'    => 'fields.modules.copy.uri.label',
+        'label'    => $field->l('fields.sortable.copy.uri.label'),
         'type'     => 'options',
         'columns'  => 1,
         'required' => true,
@@ -28,18 +28,18 @@ return function($page, $modules, $model) {
 
     $form = new Kirby\Panel\Form(array(
       'info' => array(
-        'label' =>  l('fields.modules.copy.info.label'),
+        'label' =>  $field->l('fields.sortable.copy.info.label'),
         'type'  => 'info',
-        'text'  => l('fields.modules.copy.info.text')
+        'text'  => $field->l('fields.sortable.copy.info.text')
       )
     ));
 
   }
 
   $form->cancel($model);
-  $form->buttons->submit->val(l('fields.modules.copy'));
+  $form->buttons->submit->val($field->l('fields.sortable.copy'));
 
-  if(!$modules->count()) {
+  if(!$entries->count()) {
     $form->buttons->submit = $form->buttons->cancel;
     $form->style('centered');
   }

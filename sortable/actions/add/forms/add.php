@@ -21,7 +21,7 @@ return function($page, $model, $field) {
   ));
 
   $form->cancel($model);
-  $form->buttons->submit->val(l('add'));
+  $form->buttons->submit->val($field->l('fields.sortable.add'));
 
   return $form;
 

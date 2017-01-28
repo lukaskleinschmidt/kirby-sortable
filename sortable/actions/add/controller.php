@@ -21,7 +21,7 @@ class AddActionController extends Kirby\Sortable\Controllers\Action {
         $form->validate();
 
         if(!$form->isValid()) {
-          throw new Exception(l('pages.add.error.template'));
+          throw new Exception($self->field()->l('fields.sortable.add.error.template'));
         }
 
         $data = $form->serialize();

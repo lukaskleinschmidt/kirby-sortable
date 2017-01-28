@@ -8,14 +8,8 @@ class ToggleAction extends BaseAction {
     'show' => 'toggle-off',
   );
   public $title = array(
-    'hide' => array(
-      'en' => 'Hide',
-      'de' => 'Verstecken',
-    ),
-    'show' => array(
-      'en' => 'Show',
-      'de' => 'Anzeigen',
-    ),
+    'hide' => 'fields.sortable.hide',
+    'show' => 'fields.sortable.show',
   );
 
   public function status() {

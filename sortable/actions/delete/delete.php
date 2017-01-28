@@ -3,10 +3,7 @@
 class DeleteAction extends BaseAction {
 
   public $icon = 'trash-o';
-  public $title = [
-    'en' => 'Delete',
-    'de' => 'Löschen',
-  ];
+  public $title = 'fields.sortable.delete';
 
   public function routes() {
     return array(
