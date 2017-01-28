@@ -4,6 +4,7 @@ class DemoLayout extends BaseLayout {
 
   public $demo = array(
     'en' => 'demo layout',
+    'de' => 'demo layout',
   );
 
   public function demo() {

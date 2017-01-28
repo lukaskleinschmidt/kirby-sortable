@@ -5,6 +5,7 @@ class DemoAction extends BaseAction {
   public $icon  = 'star';
   public $title = array(
     'en' => 'Star',
+    'en' => 'Stern',
   );
 
   public function routes() {
