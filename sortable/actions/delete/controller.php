@@ -9,9 +9,6 @@ class DeleteActionController extends Kirby\Sortable\Controllers\Action {
    */
   public function delete($uid) {
 
-    // Load translation
-    $this->field()->translation();
-
     $self = $this;
     $page = $this->field()->entries()->find($uid);
 

@@ -8,10 +8,10 @@ sortable()->load();
 class SortableField extends InputField {
 
   public $options = array();
-  public $variant = '';
+  public $variant;
   public $layout = 'base';
-  public $prefix = '';
-  public $parent = '';
+  public $prefix;
+  public $parent;
   public $limit = false;
 
   // Caches
