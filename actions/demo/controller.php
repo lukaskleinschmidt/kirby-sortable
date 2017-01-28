@@ -16,10 +16,10 @@ class DemoActionController extends Kirby\Sortable\Controllers\Action {
       try {
 
         $page->update(array(
-          'title' => $page->title() . ' 🟊',
+          'title' => $page->title() . ' ★',
         ));
 
-        $self->notify('🟊');
+        $self->notify('★');
         $self->redirect($self->model());
 
       } catch(Exception $e) {
