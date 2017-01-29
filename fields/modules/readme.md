@@ -1,24 +1,13 @@
----
-
-### Update from v1 to v2
-
-With v2 this field is now a plugin and must be installed accordingly.  
-[See the installation instructions below](#installation).
-
----
-
 # Kirby Modules Field
 
-This field was extends the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) by providing a more user friendly interface to the plugin. You need to have the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) installed to use this field.
+This field extends the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) by providing a more user friendly interface to the plugin. You need to have the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) installed to use this field.
 
-![Preview](preview.gif)
+![Preview](//github.kleinschmidt.at/kirby-sortable/modules/preview.gif)
 
 ## Blueprint
 
 After installing the plugin, you can use the new field type `modules`.  
 This blueprint shows all available options and their defaults.
-
-Bare in mind that you should not use `modules` for the field key. This might be tempting, given the purpose, but will produce an error in the panel. Use something like `modules_field` or any other key you feel comfortable with.
 
 ```yml
 fields:
@@ -26,7 +15,7 @@ fields:
     label: Title
     type: text
 
-  modules_field:
+  modules:
     label: Modules
     type: modules
 
@@ -111,7 +100,7 @@ It is also possible to change the position in the module.
         limit: 1
 ```
 
-![Limit](limit.png)
+![Limit](//github.kleinschmidt.at/kirby-sortable/modules/limit.png)
 
 ### Is it a module or a section?
 
@@ -138,7 +127,7 @@ To change the actions or remove an action completely from the modules, you must 
       - toggle
 ```
 
-![Default actions](actions.png)
+![Default actions](//github.kleinschmidt.at/kirby-sortable/modules/actions.png)
 
 ```yml
     actions:
@@ -146,7 +135,7 @@ To change the actions or remove an action completely from the modules, you must 
       - toggle
 ```
 
-![Custom actions](actions-custom.png)
+![Custom actions](//github.kleinschmidt.at/kirby-sortable/modules/actions-custom.png)
 
 ### Disabling an action
 
@@ -163,9 +152,8 @@ To change the actions or remove an action completely from the modules, you must 
         duplicate: true
 ```
 
-![Disabled actions](actions-disabled.png)
+![Disabled actions](//github.kleinschmidt.at/kirby-sortable/modules/actions-disabled.png)
 
 ## Requirements
 
-- [Kirby](https://getkirby.com/) 2.3+
 - [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.3+
