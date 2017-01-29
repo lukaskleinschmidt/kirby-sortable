@@ -20,7 +20,12 @@ class DemoAction extends BaseAction {
   }
 
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
-  }
 
+    $content = parent::content();
+    $content->attr('href', $this->url() . '/' . $this->page()->uid());
+    $content->data('modal', true);
+
+    return $content;
+
+  }
 }

@@ -1,7 +1,9 @@
 <?php
 
 // Make sure that the Modules plugin is loaded
-$kirby->plugin('modules-field');
+$kirby->plugin('sortable');
+
+if(!function_exists('sortable')) return;
 
 $kirby->set('field', 'demo', __DIR__ . DS . 'fields' . DS . 'demo');
 

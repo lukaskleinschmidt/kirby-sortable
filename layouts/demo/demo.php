@@ -7,6 +7,11 @@ class DemoLayout extends BaseLayout {
     'de' => 'demo layout',
   );
 
+  // public function action($type, $data = array()) {
+  //   $action = parent::action($type, $data);
+  //   return $action->content()->html($action->icon('left') . $action->title());
+  // }
+
   public function demo() {
 
     $demo = new Brick('h3');

@@ -1,7 +1,7 @@
 <?php
 
 return array(
-  'fields.sortable.demo.label' => 'Ich habe ein paar Sterne!',
-  'fields.sortable.demo.text' => 'Willst du einen?',
-  'fields.sortable.demo.submit' => 'Unbedingt',
+  'field.sortable.demo.label' => 'Ich habe ein paar Sterne!',
+  'field.sortable.demo.text' => 'Willst du einen?',
+  'field.sortable.demo.submit' => 'Unbedingt',
 );
