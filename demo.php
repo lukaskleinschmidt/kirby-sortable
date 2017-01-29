@@ -1,6 +1,6 @@
 <?php
 
-// Make sure that the Modules plugin is loaded
+// Make sure that the sortable plugin is loaded
 $kirby->plugin('sortable');
 
 if(!function_exists('sortable')) return;
