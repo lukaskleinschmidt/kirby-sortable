@@ -1,13 +1,14 @@
 ---
 
 ### Update from v2.1 to v2.2
-You have to change the plugin folder form `modules-field` to `sortable`.
+You have to change the plugin folder form `modules-field` to `sortable`.  
 The `modules-field` is still in here. So everything should work as before.
 
 ---
 
 # Kirby Sortable Field
-This field gives you the tools to easily manage subpages in the content area. The following gif shows the field in combination with the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin).
+This field gives you the tools to easily manage subpages in the content area.  
+The following gif shows the field in combination with the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin).
 
 ![Preview](http://github.kleinschmidt.at/kirby-sortable/modules/preview.gif)
 
@@ -20,17 +21,15 @@ A quick overview of the fields.
 The `sortable` field is the core field which is easy to extend an modify.
 
 ### modules
-The `modules` field is a extended `sortable` field. Together with the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) it is a very powerful tool.  
-You can find further informations [here](fields/modules/readme.md).  
+The `modules` field is a extended `sortable` field. Together with the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) it is a very powerful tool. You can find further informations [here](fields/modules/readme.md).  
 To disable the field add `c::get('sortable.field.modules', false)` to your `config.php`.
 
 ### redirect
-The `redirect` field redirects a user to the parent of the currently visited panel page. Helpfull for pages that act like a container.  
-You can find further informations [here](fields/redirect/readme.md).  
+The `redirect` field redirects a user to the parent of the currently visited panel page. Helpfull for pages that act like a container. You can find further informations [here](fields/redirect/readme.md).  
 To disable the field add `c::get('sortable.field.redirect', false)` to your `config.php`.
 
 ### options
-The `options` field is just a helper that is used in some forms of the `sortable` field.
+The `options` field is just a helper that is used in some forms in the `sortable` field.
 
 
 
@@ -72,11 +71,13 @@ fields:
 
   sortable:
     label: Sortable
-    type: sortable
+    type:  sortable
 
     layout:  base
     variant: base
-    limit:  false
+
+    limit: false
+
     parent: null
     prefix: null
 
