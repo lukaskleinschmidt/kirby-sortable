@@ -100,7 +100,7 @@ It is also possible to change the position in the module.
         limit: 1
 ```
 
-![Limit](//github.kleinschmidt.at/kirby-sortable/modules/limit.png)
+![Limit](http://github.kleinschmidt.at/kirby-sortable/modules/limit.png)
 
 ### Is it a module or a section?
 
@@ -127,7 +127,7 @@ To change the actions or remove an action completely from the modules, you must 
       - toggle
 ```
 
-![Default actions](//github.kleinschmidt.at/kirby-sortable/modules/actions.png)
+![Default actions](http://github.kleinschmidt.at/kirby-sortable/modules/actions.png)
 
 ```yml
     actions:
@@ -135,7 +135,7 @@ To change the actions or remove an action completely from the modules, you must 
       - toggle
 ```
 
-![Custom actions](//github.kleinschmidt.at/kirby-sortable/modules/actions-custom.png)
+![Custom actions](http://github.kleinschmidt.at/kirby-sortable/modules/actions-custom.png)
 
 ### Disabling an action
 
@@ -152,7 +152,7 @@ To change the actions or remove an action completely from the modules, you must 
         duplicate: true
 ```
 
-![Disabled actions](//github.kleinschmidt.at/kirby-sortable/modules/actions-disabled.png)
+![Disabled actions](http://github.kleinschmidt.at/kirby-sortable/modules/actions-disabled.png)
 
 ## Requirements
 
