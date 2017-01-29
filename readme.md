@@ -144,19 +144,19 @@ These are all possible registry extensions you can register this way:
 #### layout
 ```php
 // The layout directory must exist and it must have a PHP file with the same name in it
-$kirby->set('layout', 'mylayout', __DIR__ . DS . 'mylayout');
+sortable()->set('layout', 'mylayout', __DIR__ . DS . 'mylayout');
 ```
 
 #### action
 ```php
 // The action directory must exist and it must have a PHP file with the same name in it
-$kirby->set('action', 'myaction', __DIR__ . DS . 'myaction');
+sortable()->set('action', 'myaction', __DIR__ . DS . 'myaction');
 ```
 
 #### variant
 ```php
 // The variant directory must exist and can have multiple tranlation files
-$kirby->set('variant', 'myvariant', __DIR__ . DS . 'myvariant');
+sortable()->set('variant', 'myvariant', __DIR__ . DS . 'myvariant');
 ```
 Example for a variant in english, german and swedish.
 ```
@@ -170,8 +170,8 @@ myvariant/
 #### translation
 ```php
 // The translation file must exist at the given location
-$kirby->set('translation', 'en', __DIR__ . DS . 'en.php');
-$kirby->set('translation', 'sv_SE', __DIR__ . DS . 'sv_SE.php');
+sortable()->set('translation', 'en', __DIR__ . DS . 'en.php');
+sortable()->set('translation', 'sv_SE', __DIR__ . DS . 'sv_SE.php');
 ```
 Please consider a PR if you add a language which is not yet in here.
 
