@@ -3,6 +3,7 @@
 class AddAction extends BaseAction {
 
   public $icon  = 'plus-circle';
+  public $class = 'sortable__action sortable__action--add';
   public $label = 'field.sortable.add';
 
   public function routes() {
@@ -19,7 +20,6 @@ class AddAction extends BaseAction {
   public function content() {
 
     $content = parent::content();
-    $content->addClass('elements__action elements__action--add');
     $content->data('modal', true);
 
     return $content;

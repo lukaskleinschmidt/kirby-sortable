@@ -3,6 +3,7 @@
 class PasteAction extends BaseAction {
 
   public $icon  = 'paste';
+  public $class = 'sortable__action sortable__action--paste';
   public $label = 'field.sortable.paste';
 
   public function routes() {
@@ -19,7 +20,6 @@ class PasteAction extends BaseAction {
   public function content() {
 
     $content = parent::content();
-    $content->addClass('elements__action elements__action--paste');
     $content->data('modal', true);
 
     return $content;

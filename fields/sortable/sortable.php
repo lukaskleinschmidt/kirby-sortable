@@ -74,7 +74,7 @@ class SortableField extends InputField {
   public function layouts() {
 
     $layouts = new Brick('div');
-    $layouts->addClass('elements__container');
+    $layouts->addClass('sortable__container');
 
     $numVisible = 0;
     $num = 0;
@@ -184,7 +184,7 @@ class SortableField extends InputField {
     $content->attr('data-field', 'sort');
     $content->attr('data-custom-field', $this->type());
     $content->attr('data-api', $this->url());
-    $content->addClass('elements');
+    $content->addClass('sortable');
     $content->append(tpl::load($template, array('field' => $this)));
 
     return $content;
@@ -249,7 +249,7 @@ class SortableField extends InputField {
     if($this->limit()) {
 
       $counter = new Brick('span');
-      $counter->addClass('elements__counter');
+      $counter->addClass('sortable__counter');
       $counter->append('( ' . $this->entries()->visible()->count() . ' / ' . $this->limit() . ' )');
 
       return $counter;

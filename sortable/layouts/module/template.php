@@ -1,10 +1,10 @@
-<div class="element__default">
+<div class="sortable-entry__default">
   <?php if($layout->preview === true || $layout->preview === 'top') echo $layout->preview(); ?>
-  <nav class="element__navigation">
-    <div class="element__icon" title="<?= l('pages.show.template') . ': ' . i18n($layout->blueprint()->title()); ?>" data-handle>
+  <nav class="sortable-entry__navigation">
+    <div class="sortable-entry__icon" title="<?= l('pages.show.template') . ': ' . i18n($layout->blueprint()->title()); ?>" data-handle>
       <?= $layout->icon(); ?>
     </div>
-    <div class="element__title" title="<?= $layout->title(); ?>" data-handle>
+    <div class="sortable-entry__title" title="<?= $layout->title(); ?>" data-handle>
       <?= $layout->title(); ?>
       <?= $layout->counter(); ?>
     </div>

@@ -19,7 +19,6 @@ class DeleteAction extends BaseAction {
   public function content() {
 
     $content = parent::content();
-    $content->addClass('element__action');
     $content->attr('href', $this->url() . '/' . $this->page()->uid());
     $content->data('modal', true);
 

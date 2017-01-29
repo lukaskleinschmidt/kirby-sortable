@@ -19,7 +19,6 @@ class DuplicateAction extends BaseAction {
   public function content() {
 
     $content = parent::content();
-    $content->addClass('element__action');
     $content->attr('href', $this->url() . '/' . $this->page()->uid() . '/' . ($this->layout()->num() + 1));
     $content->data('action', true);
 

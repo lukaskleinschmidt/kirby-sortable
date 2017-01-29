@@ -4,7 +4,7 @@
     var self = this;
 
     this.element = $(element);
-    this.container = $('.elements__container', element);
+    this.container = $('.sortable__container', element);
     this.api = this.element.data('api');
 
     this.container._sortable({
@@ -104,7 +104,6 @@
         this._createPlaceholder();
 
         // Only after we got the offset, we can change the helper's position to absolute
-        // TODO: Still need to figure out a way to make relative sorting possible
         this.helper.css("position", "absolute");
         this.cssPosition = this.helper.css("position");
 

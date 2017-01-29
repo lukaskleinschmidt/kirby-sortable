@@ -48,7 +48,6 @@ class ToggleAction extends BaseAction {
   public function content() {
 
     $content = parent::content();
-    $content->addClass('element__action');
     $content->data('action', true);
     $content->attr('href', $this->url() . '/' . $this->status() . '/' . $this->page()->uid());
 

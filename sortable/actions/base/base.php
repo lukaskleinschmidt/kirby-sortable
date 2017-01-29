@@ -2,10 +2,11 @@
 
 class BaseAction {
 
-  public $type;
-  public $icon;
-  public $label;
-  public $title;
+  public $type     = null;
+  public $icon     = null;
+  public $label    = null;
+  public $title    = null;
+  public $class    = 'sortable-entry__action';
   public $disabled = false;
 
   public function root() {
@@ -62,6 +63,7 @@ class BaseAction {
 
     $a = new Brick('a');
 
+    $a->addClass($this->class());
     $a->attr('title', $this->title());
     $a->attr('href', $this->url());
 

@@ -3,6 +3,7 @@
 class CopyAction extends BaseAction {
 
   public $icon  = 'copy';
+  public $class = 'sortable__action sortable__action--copy';
   public $label = 'field.sortable.copy';
 
   public function routes() {
@@ -19,7 +20,6 @@ class CopyAction extends BaseAction {
   public function content() {
 
     $content = parent::content();
-    $content->addClass('elements__action elements__action--copy');
     $content->data('modal', true);
 
     return $content;

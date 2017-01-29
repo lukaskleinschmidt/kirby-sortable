@@ -8,7 +8,6 @@ class EditAction extends BaseAction {
   public function content() {
 
     $content = parent::content();
-    $content->addClass('element__action');
     $content->attr('href', $this->page()->url('edit'));
 
     return $content;
