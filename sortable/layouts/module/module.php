@@ -27,7 +27,7 @@ class ModuleLayout extends BaseLayout {
     $position = $preview === true ? 'top' : $preview;
 
     $preview = new Brick('div');
-    $preview->addClass('module__preview module__preview--' . $position);
+    $preview->addClass('modules-layout__preview modules-layout__preview--' . $position);
     $preview->data('module', $module->name());
     $preview->data('handle', true);
     $preview->html(tpl::load($template, array('page' => $this->origin(), 'module' => $page, 'moduleName' => $module->name())));

@@ -135,12 +135,15 @@ class Field extends \Kirby\Panel\Controllers\Field {
     }
 
     $prefix = $this->field()->prefix();
-    $length = str::length($prefix);
-    $name = str::substr($template, $length);
+
+    if(strpos($template, $prefix) !== false) {
+      $length = str::length($prefix);
+      $template = str::substr($template, $length);
+    }
 
     // add a unique hash
-    $checksum = sprintf('%u', crc32($name . microtime()));
-    return $name . '-' . base_convert($checksum, 10, 36);
+    $checksum = sprintf('%u', crc32($template . microtime()));
+    return $template . '-' . base_convert($checksum, 10, 36);
 
   }
 
