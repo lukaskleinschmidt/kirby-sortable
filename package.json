@@ -1,0 +1,8 @@
+
+{
+  "name": "sortable",
+  "version": "2.2.0",
+  "description": "Kirby Sortable",
+  "license": "MIT",
+  "type": "kirby-plugin",
+}
