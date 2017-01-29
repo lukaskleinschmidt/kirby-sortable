@@ -109,6 +109,13 @@ Example from the `modules` field.
         # Allow only 1 visible gallery module
         limit: 1
 ```
+
+### parent
+Uid to use when looking for the container page. If left empty the field will look for pages to display in the current page.
+
+### prefix
+Template prefix to filter available pages.
+
 ## Registry
 With the new registry you are now able to customize the visual appearance and modify or add custom functionality.
 The registry makes it possible to register layouts, actions, variants and translations.
@@ -148,7 +155,7 @@ $kirby->set('action', 'myaction', __DIR__ . DS . 'myaction');
 
 #### variant
 ```php
-// The variant directory must exist and can have multiple tranlation file
+// The variant directory must exist and can have multiple tranlation files
 $kirby->set('variant', 'myvariant', __DIR__ . DS . 'myvariant');
 ```
 Example for a variant in english, german and swedish.
@@ -172,7 +179,7 @@ Please consider a PR if you add a language which is not yet in here.
 If you have som experience in custom form fields it should be a pretty steep learning curve. For references on how to do something please have a look at the [demo branch](https://github.com/lukaskleinschmidt/kirby-modules-field/tree/demo) or the way the `modules` field is build. The three components of the `modules` field:
 - [field](fields/modules)
 - [layout](sortable/layouts/module)
-- [variant](sortable/variant/modules)
+- [variant](sortable/variants/modules)
 
 
 ## Requirements
