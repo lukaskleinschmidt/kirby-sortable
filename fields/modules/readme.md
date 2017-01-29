@@ -2,7 +2,7 @@
 
 This field extends the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) by providing a more user friendly interface to the plugin. You need to have the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) installed to use this field.
 
-![Preview](//github.kleinschmidt.at/kirby-sortable/modules/preview.gif)
+![Preview](http://github.kleinschmidt.at/kirby-sortable/modules/preview.gif)
 
 ## Blueprint
 
