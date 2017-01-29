@@ -136,7 +136,7 @@ $sortable->set('layout', 'variant', __DIR__ . DS . 'layouts' . DS . 'variant');
 $sortable->set('variant', 'variants', __DIR__ . DS . 'variants' . DS . 'variants');
 ```
 
-As you can see in this example of a product variant plugin, the plugin can take care of registering all kinds of extensions, which will then be available in the `sortable` field or any extension of the field.
+As you can see in this example of a product variant field, the plugin can take care of registering all kinds of extensions, which will then be available in the `sortable` field or any extension of it.
 
 ### List of registry extensions
 These are all possible registry extensions you can register this way:
