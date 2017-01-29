@@ -170,7 +170,8 @@ myvariant/
 #### translation
 ```php
 // The translation file must exist at the given location
-$kirby->set('translation', 'mytranslation', __DIR__ . DS . 'mytranslation.php');
+$kirby->set('translation', 'en', __DIR__ . DS . 'en.php');
+$kirby->set('translation', 'sv_SE', __DIR__ . DS . 'sv_SE.php');
 ```
 Please consider a PR if you add a language which is not yet in here.
 
