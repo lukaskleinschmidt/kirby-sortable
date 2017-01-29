@@ -177,7 +177,8 @@ Please consider a PR if you add a language which is not yet in here.
 
 
 ## I want to extend the plugin but don't know how?
-If you have som experience in custom form fields it should be a pretty steep learning curve. For references on how to do something please have a look at the [demo branch](https://github.com/lukaskleinschmidt/kirby-modules-field/tree/demo) or the way the `modules` field is build. The three components of the `modules` field:
+If you have som experience in custom form fields it should be a pretty steep learning curve. For references on how to do something please have a look at the [demo branch](https://github.com/lukaskleinschmidt/kirby-modules-field/tree/demo) or the way the `modules` field is build.  
+The three components of the `modules` field:
 - [field](fields/modules)
 - [layout](sortable/layouts/module)
 - [variant](sortable/variants/modules)
