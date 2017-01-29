@@ -1,9 +1,10 @@
 # Kirby Modules Field
 
-This field extends the sortable field and adds some presets and gimmicks to help you manage your [modules](https://github.com/getkirby-plugins/modules-plugin). To use this field have to install the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin).
+This field extends the sortable field and adds some presets and features to help you manage your [modules](https://github.com/getkirby-plugins/modules-plugin).
+To use this field you have to install the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin).
 
-## Some of the gimmicks
-- Sets `parent` and `prefix` to match those set by the Modules Plugin
+### Some of the features
+- Preset `parent` and `prefix` to match those set by the Modules Plugin
 - Adds a [preview](#preview) if provided
 
 ![Preview](http://github.kleinschmidt.at/kirby-sortable/modules/preview.gif)
