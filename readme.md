@@ -21,7 +21,7 @@ A quick overview of the fields.
 The `sortable` field is the core field which is easy to extend an modify.
 
 ### modules
-The `modules` field is a extended `sortable` field. Together with the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) it is a very powerful tool. You can find further informations [here](fields/modules/readme.md).  
+The `modules` field is an extended `sortable` field. Together with the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) it is a very powerful tool. You can find further informations [here](fields/modules/readme.md).  
 To disable the field add `c::get('sortable.field.modules', false)` to your `config.php`.
 
 ### redirect
