@@ -3,16 +3,16 @@
 class DuplicateActionController extends Kirby\Sortable\Controllers\Action {
 
   /**
-   * Duplicate a module
-   * 
+   * Duplicate a entry
+   *
    * @param string $uid
    * @param int $to
    */
   public function duplicate($uid, $to) {
 
-    $modules = $this->field()->entries();
+    $entries = $this->field()->entries();
     $parent  = $this->field()->origin();
-    $page    = $modules->find($uid);
+    $page    = $entries->find($uid);
     $uid     = $this->uid($page);
 
     if($parent->ui()->create() === false) {
@@ -21,7 +21,7 @@ class DuplicateActionController extends Kirby\Sortable\Controllers\Action {
 
     dir::copy($page->root(), $parent->root() . DS . $uid);
 
-    $modules->add($uid);
+    $entries->add($uid);
     $this->sort($uid, $to);
     $this->notify(':)');
     $this->redirect($this->model());

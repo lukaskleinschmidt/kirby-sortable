@@ -10,8 +10,8 @@ class ToggleActionController extends Kirby\Sortable\Controllers\Action {
    */
   public function show($uid, $to) {
 
-    $modules = $this->field()->entries();
-    $page    = $modules->find($uid);
+    $entries = $this->field()->entries();
+    $page    = $entries->find($uid);
 
     if($page->ui()->visibility() === false) {
       throw new PermissionsException();
@@ -19,8 +19,8 @@ class ToggleActionController extends Kirby\Sortable\Controllers\Action {
 
     try {
 
-      // Check module specific limit
-      $count = $modules->filterBy('template', $page->intendedTemplate())->visible()->count();
+      // Check template specific limit
+      $count = $entries->filterBy('template', $page->intendedTemplate())->visible()->count();
       $limit = $this->field()->options($page)->limit();
 
       if($limit && $count >= $limit) {
@@ -28,7 +28,7 @@ class ToggleActionController extends Kirby\Sortable\Controllers\Action {
       }
 
       // Check limit
-      $count = $modules->visible()->count();
+      $count = $entries->visible()->count();
       $limit = $this->field()->limit();
 
       if($limit && $count >= $limit) {

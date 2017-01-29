@@ -66,13 +66,13 @@ class Field extends \Kirby\Panel\Controllers\Field {
   public function sort($uid, $to) {
 
     try {
-      $modules = $this->field()->entries();
-      $value = $modules->not($uid)->pluck('uid');
+      $entries = $this->field()->entries();
+      $value = $entries->not($uid)->pluck('uid');
 
-      // Order modules value
+      // Order entries value
       array_splice($value, $to - 1, 0, $uid);
 
-      if($modules->find($uid)->ui()->visibility() === false) {
+      if($entries->find($uid)->ui()->visibility() === false) {
         throw new PermissionsException();
       }
 
@@ -83,15 +83,15 @@ class Field extends \Kirby\Panel\Controllers\Field {
     }
 
     // Get current page
-    $page = $modules->find($uid);
+    $page = $entries->find($uid);
 
     // Figure out the correct sort num
     if($page && $page->isVisible()) {
       $collection = new Children($page->parent());
 
       foreach(array_slice($value, 0, $to - 1) as $id) {
-        if($module = $modules->find($id)) {
-          $collection->data[$module->id()] = $module;
+        if($entry = $entries->find($id)) {
+          $collection->data[$entry->id()] = $entry;
         }
       }
 

@@ -162,7 +162,7 @@ class SortableField extends InputField {
       $template = $template->intendedTemplate();
     }
 
-    // Get module specific options
+    // Get entry specific options
     $options = a::get($this->options, $template, array());
 
     return new Obj(a::update($this->defaults(), $options));
@@ -215,12 +215,12 @@ class SortableField extends InputField {
       return $this->entries;
     }
 
-    // Filter the modules by valid module
+    // Filter the entries by valid entry
     $entries = $this->origin()->children()->filter(function($page) {
       return str::startsWith($page->intendedTemplate(), $this->prefix());
     });
 
-    // Sort modules
+    // Sort entries
     if($entries->count() && $this->value()) {
       $i = 0;
 

@@ -1,20 +1,20 @@
 <?php
 
-return function($page, $modules, $model, $field) {
+return function($page, $entries, $model, $field) {
 
-  if($modules->count()) {
+  if($entries->count()) {
 
     $templates = $page->blueprint()->pages()->template();
     $options   = [];
     $help      = false;
 
-    foreach($modules as $module) {
-      $template = $module->intendedTemplate();
-      $value    = $module->uri();
+    foreach($entries as $entry) {
+      $template = $entry->intendedTemplate();
+      $value    = $entry->uri();
 
       $options[$value] = array(
-        // 'label'    => icon($templates->findBy('name', $template)->icon(), 'left') . ' ' . $module->title(),
-        'label'    => $module->title(),
+        // 'label'    => icon($templates->findBy('name', $template)->icon(), 'left') . ' ' . $entry->title(),
+        'label'    => $entry->title(),
         'checked'  => true,
         'readonly' => false,
       );
@@ -53,7 +53,7 @@ return function($page, $modules, $model, $field) {
   $form->cancel($model);
   $form->buttons->submit->val($field->l('field.sortable.paste'));
 
-  if(!$modules->count()) {
+  if(!$entries->count()) {
     $form->buttons->submit = $form->buttons->cancel;
     $form->style('centered');
   }

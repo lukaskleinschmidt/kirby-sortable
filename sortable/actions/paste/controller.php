@@ -9,19 +9,19 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
 
     $self    = $this;
     $page    = $this->field()->origin();
-    $modules = site()->user()->clipboard();
+    $entries = site()->user()->clipboard();
 
-    if(empty($modules)) {
-      $modules = array();
+    if(empty($entries)) {
+      $entries = array();
     }
 
-    $modules = pages($modules);
+    $entries = pages($entries);
 
     if($page->ui()->create() === false) {
       throw new PermissionsException();
     }
 
-    $form = $this->form('paste', array($page, $modules, $this->model(), $this->field()), function($form) use($page, $self) {
+    $form = $this->form('paste', array($page, $entries, $this->model(), $this->field()), function($form) use($page, $self) {
 
       try {
 
@@ -34,16 +34,16 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
         $data = $form->serialize();
 
         $templates = $page->blueprint()->pages()->template()->pluck('name');
-        $modules   = $self->field()->entries();
-        $to        = $modules->count();
+        $entries   = $self->field()->entries();
+        $to        = $entries->count();
 
-        foreach(pages(str::split($data['uri'], ',')) as $module) {
+        foreach(pages(str::split($data['uri'], ',')) as $entry) {
 
-          $uid = $self->uid($module);
+          $uid = $self->uid($entry);
 
-          if(v::in($module->intendedTemplate(), $templates)) {
-            dir::copy($module->root(), $page->root() . DS . $uid);
-            $modules->add($uid);
+          if(v::in($entry->intendedTemplate(), $templates)) {
+            dir::copy($entry->root(), $page->root() . DS . $uid);
+            $entries->add($uid);
             $self->sort($uid, ++$to);
           }
         }

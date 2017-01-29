@@ -3,7 +3,7 @@
 class AddActionController extends Kirby\Sortable\Controllers\Action {
 
   /**
-   * Add a module
+   * Add a entry
    */
   public function add() {
 

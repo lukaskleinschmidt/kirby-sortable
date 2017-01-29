@@ -2,12 +2,12 @@
 
 ### Update from v2.1 to v2.2
 You have to change the plugin folder form `modules-field` to `sortable`.  
-The `modules-field` is still in here. So everything should work as before.
+The `modules` field is still in here. Only the name of the core plugin changed. So everything should work as before.
 
 ---
 
 # Kirby Sortable Field
-This field gives you the tools to easily manage subpages in the content area.  
+With this field you can easily manage subpages in the content area.  
 The following gif shows the field in combination with the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin).
 
 ![Preview](http://github.kleinschmidt.at/kirby-sortable/modules/preview.gif)

@@ -3,7 +3,7 @@
 class DeleteActionController extends Kirby\Sortable\Controllers\Action {
 
   /**
-   * Delete a module
+   * Delete a entry
    *
    * @param string $uid
    */

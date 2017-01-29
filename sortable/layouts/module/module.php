@@ -17,8 +17,8 @@ class ModuleLayout extends BaseLayout {
       return;
     }
 
-    $module = Kirby\Modules\Modules::instance()->get($page);
-    $template = $module->path() . DS . $module->name() . '.preview.php';
+    $entry = Kirby\Modules\Modules::instance()->get($page);
+    $template = $entry->path() . DS . $entry->name() . '.preview.php';
 
     if(!is_file($template)) {
       return;
@@ -28,9 +28,9 @@ class ModuleLayout extends BaseLayout {
 
     $preview = new Brick('div');
     $preview->addClass('modules-layout__preview modules-layout__preview--' . $position);
-    $preview->data('module', $module->name());
+    $preview->data('module', $entry->name());
     $preview->data('handle', true);
-    $preview->html(tpl::load($template, array('page' => $this->origin(), 'module' => $page, 'moduleName' => $module->name())));
+    $preview->html(tpl::load($template, array('page' => $this->origin(), 'module' => $page, 'moduleName' => $entry->name())));
 
     return $preview;
 
