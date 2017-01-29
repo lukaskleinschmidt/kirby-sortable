@@ -6,7 +6,7 @@ class BaseAction {
   public $icon     = null;
   public $label    = null;
   public $title    = null;
-  public $class    = 'sortable-entry__action';
+  public $class    = 'sortable-layout__action';
   public $disabled = false;
 
   public function root() {

@@ -65,46 +65,46 @@
   color: #c9c9c9;
 }
 
-.sortable-entry a,
-.sortable-entry button,
+.sortable-layout a,
+.sortable-layout button,
 .sortable__action.is-disabled .icon {
   color: inherit;
 }
 
-.sortable-entry {
+.sortable-layout {
   margin-bottom: 0.25em;
 }
 
-.sortable-entry__default {
+.sortable-layout__default {
   background: #fff;
   border: 2px solid #ddd;
   position: relative;
 }
 
-.sortable-entry .icon {
+.sortable-layout .icon {
   vertical-align: -5%;
 }
 
-.sortable-entry .icon:not(.icon-left) {
+.sortable-layout .icon:not(.icon-left) {
   width: 1.28571em;
 }
 
-.sortable-entry__icon {
+.sortable-layout__icon {
   display: inline;
 }
 
-.sortable-entry__counter {
+.sortable-layout__counter {
   padding-left: 0.25em;
   font-size: 0.8em;
   color: #bbb;
   line-height: 1;
 }
 
-.sortable-entry [data-handle] {
+.sortable-layout [data-handle] {
   cursor: move;
 }
 
-.sortable-entry__navigation {
+.sortable-layout__navigation {
   min-height: 44px;
 
   display: -webkit-flex;
@@ -115,20 +115,20 @@
   flex-flow: row nowrap;
 }
 
-.sortable-entry__icon,
-.sortable-entry__action,
-.sortable-entry__title {
+.sortable-layout__icon,
+.sortable-layout__action,
+.sortable-layout__title {
   padding: 0.65em 0.9em 0.55em;
   white-space: nowrap;
   line-height: 1.5em;
   font-size: 1em;
 }
 
-.sortable-entry__icon {
+.sortable-layout__icon {
   padding-right: 0.35em;
 }
 
-.sortable-entry__title {
+.sortable-layout__title {
   -webkit-flex: 1 0 0%;
   -ms-flex: 1 0 0%;
   flex: 1 0 0%;
@@ -138,12 +138,12 @@
   padding-left: 0.35em;
 }
 
-.sortable-entry[data-visible=false] .sortable-entry__icon,
-.sortable-entry[data-visible=false] .sortable-entry__title {
+.sortable-layout[data-visible=false] .sortable-layout__icon,
+.sortable-layout[data-visible=false] .sortable-layout__title {
   color: #c9c9c9;
 }
 
-.sortable-entry__action {
+.sortable-layout__action {
   -webkit-flex: 0 0 auto;
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
@@ -154,7 +154,7 @@
   outline: 0;
 }
 
-.sortable-entry__action.is-disabled {
+.sortable-layout__action.is-disabled {
   pointer-events: none;
   color: #c9c9c9;
 }

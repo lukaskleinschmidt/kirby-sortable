@@ -38,7 +38,7 @@ class BaseLayout {
     $limit   = $this->limit();
 
     $counter = new Brick('span');
-    $counter->addClass('sortable-entry__counter');
+    $counter->addClass('sortable-layout__counter');
     $counter->html('( ' . $index . ' / ' . $limit . ' )');
 
     return $counter;
@@ -87,7 +87,7 @@ class BaseLayout {
   public function template() {
 
     $template = new Brick('div');
-    $template->addClass('sortable-entry');
+    $template->addClass('sortable-layout');
     $template->attr('data-uid', $this->page()->uid());
     $template->attr('data-visible', $this->page()->isVisible() ? 'true' : 'false');
     $template->append($this->content());
