@@ -36,7 +36,7 @@ return array(
   'field.sortable.show' => 'Show',
 
   // These are not overwritable by a variant
-  'field.sortable.error.missing.controller' => 'The field controller file is missing',
+  'field.sortable.error.missing.controller' => 'The action controller file is missing',
   'field.sortable.error.missing.class' => 'The action controller class is missing',
   'field.sortable.error.route.invalid' => 'Invalid action route',
 );

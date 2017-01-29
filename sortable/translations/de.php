@@ -34,4 +34,9 @@ return array(
 
   'field.sortable.hide' => 'Verstecken',
   'field.sortable.show' => 'Anzeigen',
+
+  // These are not overwritable by a variant
+  'field.sortable.error.missing.controller' => 'Die Aktionscontroller-Datei fehlt',
+  'field.sortable.error.missing.class' => 'Die Aktionscontroller-Klasse fehlt',
+  'field.sortable.error.route.invalid' => 'Ungültige Aktions-Route',
 );
