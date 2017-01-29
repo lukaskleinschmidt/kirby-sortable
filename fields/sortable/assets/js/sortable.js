@@ -1,57 +1,58 @@
 (function($) {
 
-  class Sort {
-    constructor(element) {
-      var self = this;
+  var Sort = function(element) {
+    var self = this;
 
-      this.element = $(element);
-      this.container = $('.elements__container', element);
-      this.api = this.element.data('api');
+    this.element = $(element);
+    this.container = $('.elements__container', element);
+    this.api = this.element.data('api');
 
-      this.container._sortable({
-        handle: '[data-handle]',
-        start: function(event, ui) {
-          self.container._sortable('refreshPositions');
-          self.blur();
-        },
-        update: function(event, ui) {
-          var to = self.container.children().index(ui.item) + 1;
-          var uid = ui.item.data('uid');
-          var action = [self.api, uid, to, 'sort'].join('/');
+    this.container._sortable({
+      handle: '[data-handle]',
+      start: function(event, ui) {
+        self.container._sortable('refreshPositions');
+        self.blur();
+      },
+      update: function(event, ui) {
+        var to = self.container.children().index(ui.item) + 1;
+        var uid = ui.item.data('uid');
+        var action = [self.api, uid, to, 'sort'].join('/');
 
-          console.log('update', action);
-
-          // Disable sorting when a reload is expected
-          self.disable();
-
-          $.post(action, self.reload.bind(self));
-        }
-      });
-
-      this.element.on('click', '[data-action]', function(event) {
-        var element = $(this);
-        var action = element.data('action') || element.attr('href');
+        // disable sorting because a reload is expected
+        self.disable();
 
         $.post(action, self.reload.bind(self));
+      }
+    });
 
-        return false;
-      });
-    }
+    this.element.on('click', '[data-action]', function(event) {
+      var element = $(this);
+      var action = element.data('action') || element.attr('href');
 
-    blur() {
-      $('.form input:focus, .form select:focus, .form textarea:focus').blur();
-      app.content.focus.forget();
-    }
+      $.post(action, self.reload.bind(self));
 
-    disable() {
-      this.container._sortable('disable');
-    }
+      return false;
+    });
 
-    reload() {
-      this.disable();
-      app.content.reload();
-    }
+    // setup custom field script
+    var key = this.element.data('custom-field');
+    if(this.element[key]) this.element[key]();
+  };
+
+  Sort.prototype.blur = function() {
+    $('.form input:focus, .form select:focus, .form textarea:focus').blur();
+    app.content.focus.forget();
   }
+
+  Sort.prototype.disable = function() {
+    this.container._sortable('disable');
+  }
+
+  Sort.prototype.reload = function() {
+    this.disable();
+    app.content.reload();
+  }
+
 
   // Fixing scrollbar jumping issue
   // http://stackoverflow.com/questions/1735372/jquery-sortable-list-scroll-bar-jumps-up-when-sorting

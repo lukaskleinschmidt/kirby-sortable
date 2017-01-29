@@ -2,6 +2,10 @@
 
 class ModulesField extends SortableField {
 
+  public $add     = true;
+  public $copy    = true;
+  public $paste   = true;
+  public $layout  = 'module';
   public $variant = 'modules';
   public $actions = array(
     'edit',
@@ -9,10 +13,6 @@ class ModulesField extends SortableField {
     'delete',
     'toggle',
   );
-  public $layout = 'module';
-  public $paste = true;
-  public $copy = true;
-  public $add = true;
 
   static public $assets = array(
     'css' => array(

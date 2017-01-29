@@ -37,7 +37,6 @@ class Sortable {
 
     $class = $type . 'layout';
 
-    // TODO: check exception
     if(!class_exists($class)) {
       throw new Exception('The ' . $type . ' layout is missing.');
     }
@@ -57,7 +56,6 @@ class Sortable {
 
     $class = $type . 'action';
 
-    // TODO: check exception
     if(!class_exists($class)) {
       throw new Exception('The ' . $type . ' action is missing.');
     }
@@ -75,6 +73,7 @@ class Sortable {
 
   public function translation($key, $variant = null) {
 
+    // IDEA: outsource into own class
     // $variants = $this->variants();
     // return $variants->get($key, $variant, l::get($key));
 

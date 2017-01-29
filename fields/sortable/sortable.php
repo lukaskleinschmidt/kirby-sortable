@@ -7,12 +7,12 @@ sortable()->load();
 
 class SortableField extends InputField {
 
+  public $limit   = false;
+  public $parent  = null;
+  public $prefix  = null;
+  public $layout  = 'base';
+  public $variant = null;
   public $options = array();
-  public $variant;
-  public $layout = 'base';
-  public $prefix;
-  public $parent;
-  public $limit = false;
 
   // Caches
   protected $entries;
@@ -182,7 +182,8 @@ class SortableField extends InputField {
     // Sort namespace is used because otherwise there
     // would be a collision with the jquery sortable plugin
     $content->attr('data-field', 'sort');
-    $content->attr('data-api', purl($this->model(), 'field/' . $this->name() . '/' . $this->type()));
+    $content->attr('data-custom-field', $this->type());
+    $content->attr('data-api', $this->url());
     $content->addClass('elements');
     $content->append(tpl::load($template, array('field' => $this)));
 
@@ -282,19 +283,15 @@ class SortableField extends InputField {
 
   }
 
-  public function url($action, $params = array()) {
+  public function url($action = null) {
 
-    if($params) {
-      $action = $action . '/' . implode('/', $params);
+    $url = purl($this->model(), 'field/' . $this->name() . '/' . $this->type());
+
+    if(is_null($action)) {
+      return $url;
     }
 
-    return purl($this->model(), implode('/', array(
-      'field',
-      $this->name(),
-      $this->type(),
-      'action',
-      $action
-    )));
+    return $url . '/action/' . $action;
 
   }
 

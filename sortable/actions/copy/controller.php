@@ -18,7 +18,7 @@ class CopyActionController extends Kirby\Sortable\Controllers\Action {
         $form->validate();
 
         if(!$form->isValid()) {
-          throw new Exception($self->field()->l('fields.sortable.copy.error.uri'));
+          throw new Exception($self->field()->l('field.sortable.copy.error.uri'));
         }
 
         $data = $form->serialize();

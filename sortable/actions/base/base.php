@@ -25,8 +25,8 @@ class BaseAction {
     return $this->type;
   }
 
-  public function url($params = []) {
-    return $this->field()->url($this->type, $params);
+  public function url() {
+    return $this->field()->url($this->type);
   }
 
   public function i18n($value) {
@@ -56,6 +56,27 @@ class BaseAction {
   public function title() {
     if(!$this->title) return null;
     return $this->i18n($this->title);
+  }
+
+  public function content() {
+
+    $a = new Brick('a');
+
+    $a->attr('title', $this->title());
+    $a->attr('href', $this->url());
+
+    if($this->disabled()) {
+      $a->addClass('is-disabled');
+    }
+
+    if($label = $this->label()) {
+      $a->append($this->icon('left') . $label);
+    } else {
+      $a->append($this->icon());
+    }
+
+    return $a;
+
   }
 
   public function __toString() {

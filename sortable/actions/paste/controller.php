@@ -28,7 +28,7 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
       $form->validate();
 
         if(!$form->isValid()) {
-          throw new Exception($self->field()->l('fields.sortable.paste.error.uri'));
+          throw new Exception($self->field()->l('field.sortable.paste.error.uri'));
         }
 
         $data = $form->serialize();

@@ -10,7 +10,7 @@ return function($page, $model, $field) {
 
   $form = new Kirby\Panel\Form(array(
     'template' => array(
-      'label'    => $field->l('fields.sortable.add.template.label'),
+      'label'    => $field->l('field.sortable.add.template.label'),
       'type'     => 'select',
       'options'  => $options,
       'default'  => key($options),
@@ -21,7 +21,7 @@ return function($page, $model, $field) {
   ));
 
   $form->cancel($model);
-  $form->buttons->submit->val($field->l('fields.sortable.add'));
+  $form->buttons->submit->val($field->l('field.sortable.add'));
 
   return $form;
 

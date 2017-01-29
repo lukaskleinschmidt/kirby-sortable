@@ -35,16 +35,14 @@ class Field extends \Kirby\Panel\Controllers\Field {
         $controllerFile = $action->root() . DS . 'controller.php';
         $controllerName = $type . 'ActionController';
 
-        // TODO: proper error message
         if(!file_exists($controllerFile)) {
-          throw new Exception(l('fields.error.missing.controller'));
+          throw new Exception(l('field.sortable.error.missing.controller'));
         }
 
         require_once($controllerFile);
 
-        // TODO: proper error message
         if(!class_exists($controllerName)) {
-          throw new Exception(l('fields.error.missing.class'));
+          throw new Exception(l('field.sortable.error.missing.class'));
         }
 
         $controller = new $controllerName($model, $field, $action);
@@ -54,8 +52,7 @@ class Field extends \Kirby\Panel\Controllers\Field {
       }
 
     } else {
-      // TODO: proper error message
-      throw new Exception(l('fields.error.route.invalid'));
+      throw new Exception(l('field.sortable.error.route.invalid'));
     }
 
   }

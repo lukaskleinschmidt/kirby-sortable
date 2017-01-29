@@ -3,7 +3,7 @@
 class DuplicateAction extends BaseAction {
 
   public $icon = 'clone';
-  public $title = 'fields.sortable.duplicate';
+  public $title = 'field.sortable.duplicate';
 
   public function routes() {
     return array(
@@ -17,7 +17,14 @@ class DuplicateAction extends BaseAction {
   }
 
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
+
+    $content = parent::content();
+    $content->addClass('element__action');
+    $content->attr('href', $this->url() . '/' . $this->page()->uid() . '/' . ($this->layout()->num() + 1));
+    $content->data('action', true);
+
+    return $content;
+
   }
 
   public function disabled() {

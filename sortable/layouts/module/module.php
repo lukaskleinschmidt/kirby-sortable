@@ -2,12 +2,12 @@
 
 class ModuleLayout extends BaseLayout {
 
+  public $edit      = true;
+  public $limit     = false;
+  public $toggle    = true;
+  public $delete    = true;
+  public $preview   = true;
   public $duplicate = true;
-  public $preview = true;
-  public $delete = true;
-  public $toggle = true;
-  public $limit = false;
-  public $edit = true;
 
   public function preview() {
 

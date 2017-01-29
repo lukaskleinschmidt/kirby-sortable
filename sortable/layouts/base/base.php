@@ -62,11 +62,14 @@ class BaseLayout {
   }
 
   public function action($type, $data = array()) {
+
     $data = a::update($data, array(
       'layout' => $this,
       'page' => $this->page(),
     ));
+
     return $this->field()->action($type, $data);
+
   }
 
   public function content() {
@@ -84,7 +87,6 @@ class BaseLayout {
   public function template() {
 
     $template = new Brick('div');
-
     $template->addClass('element');
     $template->attr('data-uid', $this->page()->uid());
     $template->attr('data-visible', $this->page()->isVisible() ? 'true' : 'false');

@@ -3,7 +3,7 @@
 class CopyAction extends BaseAction {
 
   public $icon  = 'copy';
-  public $label = 'fields.sortable.copy';
+  public $label = 'field.sortable.copy';
 
   public function routes() {
     return array(
@@ -17,7 +17,13 @@ class CopyAction extends BaseAction {
   }
 
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
+
+    $content = parent::content();
+    $content->addClass('elements__action elements__action--copy');
+    $content->data('modal', true);
+
+    return $content;
+
   }
 
 }

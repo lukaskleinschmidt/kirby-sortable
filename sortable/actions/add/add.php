@@ -3,8 +3,7 @@
 class AddAction extends BaseAction {
 
   public $icon  = 'plus-circle';
-  public $class = 'elements__action elements__action--add';
-  public $label = 'fields.sortable.add';
+  public $label = 'field.sortable.add';
 
   public function routes() {
     return array(
@@ -18,7 +17,13 @@ class AddAction extends BaseAction {
   }
 
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
+
+    $content = parent::content();
+    $content->addClass('elements__action elements__action--add');
+    $content->data('modal', true);
+
+    return $content;
+
   }
 
   public function disabled() {

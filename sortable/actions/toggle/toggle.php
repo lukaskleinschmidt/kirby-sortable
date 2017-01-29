@@ -8,40 +8,9 @@ class ToggleAction extends BaseAction {
     'show' => 'toggle-off',
   );
   public $title = array(
-    'hide' => 'fields.sortable.hide',
-    'show' => 'fields.sortable.show',
+    'hide' => 'field.sortable.hide',
+    'show' => 'field.sortable.show',
   );
-
-  public function status() {
-    if($this->status) return $this->status;
-    return $this->status = $this->page()->isVisible() ? 'hide' : 'show';
-  }
-
-  public function params() {
-
-    $params = array(
-      $this->status(),
-      $this->page()->uid(),
-    );
-
-    if($this->status() == 'show') {
-      return a::merge($params, ['to' => $this->layout()->numVisible() + 1]);
-    }
-
-    return $params;
-
-  }
-
-  public function title() {
-    $title = a::get($this->title, $this->status());
-    return $this->i18n($title);
-  }
-
-  public function icon($position = null) {
-    if(empty($this->icon)) return null;
-    $icon  = a::get($this->icon, $this->status());
-    return icon($icon, $position);
-  }
 
   public function routes() {
     return array(
@@ -60,8 +29,35 @@ class ToggleAction extends BaseAction {
     );
   }
 
+  public function status() {
+    if($this->status) return $this->status;
+    return $this->status = $this->page()->isVisible() ? 'hide' : 'show';
+  }
+
+  public function title() {
+    $title = a::get($this->title, $this->status());
+    return $this->i18n($title);
+  }
+
+  public function icon($position = null) {
+    if(empty($this->icon)) return null;
+    $icon  = a::get($this->icon, $this->status());
+    return icon($icon, $position);
+  }
+
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
+
+    $content = parent::content();
+    $content->addClass('element__action');
+    $content->data('action', true);
+    $content->attr('href', $this->url() . '/' . $this->status() . '/' . $this->page()->uid());
+
+    if($this->status() == 'show') {
+      $content->attr('href', $content->attr('href') . '/' . ($this->layout()->numVisible() + 1));
+    }
+
+    return $content;
+
   }
 
   public function disabled() {

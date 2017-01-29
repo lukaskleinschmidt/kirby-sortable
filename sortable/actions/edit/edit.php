@@ -3,10 +3,16 @@
 class EditAction extends BaseAction {
 
   public $icon = 'pencil';
-  public $title = 'fields.sortable.hide';
+  public $title = 'field.sortable.edit';
 
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
+
+    $content = parent::content();
+    $content->addClass('element__action');
+    $content->attr('href', $this->page()->url('edit'));
+
+    return $content;
+
   }
 
   public function disabled() {

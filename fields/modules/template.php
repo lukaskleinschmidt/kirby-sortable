@@ -9,12 +9,25 @@
 <?php else: ?>
   <div class="elements__empty">
     <?php
-      echo $field->l('fields.sortable.empty');
+      echo $field->l('field.sortable.empty');
       if($field->add()) {
-        echo $field->action('add', ['label' => $field->l('fields.sortable.add.first', 'modules'), 'icon' => '', 'class' => '']);
+
+        // TEMP: should be a one liner when https://github.com/getkirby/toolkit/pull/217 gets merged
+        // echo $field->action('add', ['label' => $field->l('field.sortable.add.first'), 'icon' => ''])->content()->removeAttr('class');
+        $add = $field->action('add', ['label' => $field->l('field.sortable.add.first'), 'icon' => ''])->content();
+        $add->removeAttr('class');
+
+        echo $add;
+
         if($field->paste()) {
-          echo $field->l('fields.sortable.or');
-          echo $field->action('paste', ['label' => $field->l('fields.sortable.paste.first'), 'icon' => '', 'class' => '']);
+          echo $field->l('field.sortable.or');
+
+          // TEMP: should be a one liner when https://github.com/getkirby/toolkit/pull/217 gets merged
+          // echo $field->action('paste', ['label' => $field->l('field.sortable.paste.first'), 'icon' => ''])->content()->removeAttr('class');
+          $paste = $field->action('paste', ['label' => $field->l('field.sortable.paste.first'), 'icon' => ''])->content();
+          $paste->removeAttr('class');
+
+          echo $paste;
         }
       }
     ?>

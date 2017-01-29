@@ -3,8 +3,7 @@
 class PasteAction extends BaseAction {
 
   public $icon  = 'paste';
-  public $class = 'elements__action elements__action--paste';
-  public $label = 'fields.sortable.paste';
+  public $label = 'field.sortable.paste';
 
   public function routes() {
     return array(
@@ -18,7 +17,13 @@ class PasteAction extends BaseAction {
   }
 
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
+
+    $content = parent::content();
+    $content->addClass('elements__action elements__action--paste');
+    $content->data('modal', true);
+
+    return $content;
+
   }
 
   public function disabled() {

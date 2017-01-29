@@ -3,7 +3,7 @@
 class DeleteAction extends BaseAction {
 
   public $icon = 'trash-o';
-  public $title = 'fields.sortable.delete';
+  public $title = 'field.sortable.delete';
 
   public function routes() {
     return array(
@@ -17,7 +17,14 @@ class DeleteAction extends BaseAction {
   }
 
   public function content() {
-    return tpl::load($this->root() . DS . 'template.php', ['action' => $this], true);
+
+    $content = parent::content();
+    $content->addClass('element__action');
+    $content->attr('href', $this->url() . '/' . $this->page()->uid());
+    $content->data('modal', true);
+
+    return $content;
+
   }
 
   public function disabled() {

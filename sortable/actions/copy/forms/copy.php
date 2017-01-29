@@ -16,7 +16,7 @@ return function($page, $entries, $model, $field) {
 
     $form = new Kirby\Panel\Form(array(
       'uri' => array(
-        'label'    => $field->l('fields.sortable.copy.uri.label'),
+        'label'    => $field->l('field.sortable.copy.uri.label'),
         'type'     => 'options',
         'columns'  => 1,
         'required' => true,
@@ -28,16 +28,16 @@ return function($page, $entries, $model, $field) {
 
     $form = new Kirby\Panel\Form(array(
       'info' => array(
-        'label' =>  $field->l('fields.sortable.copy.info.label'),
+        'label' =>  $field->l('field.sortable.copy.info.label'),
         'type'  => 'info',
-        'text'  => $field->l('fields.sortable.copy.info.text')
+        'text'  => $field->l('field.sortable.copy.info.text')
       )
     ));
 
   }
 
   $form->cancel($model);
-  $form->buttons->submit->val($field->l('fields.sortable.copy'));
+  $form->buttons->submit->val($field->l('field.sortable.copy'));
 
   if(!$entries->count()) {
     $form->buttons->submit = $form->buttons->cancel;

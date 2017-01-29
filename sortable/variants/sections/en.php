@@ -1,17 +1,17 @@
 <?php
 
 return array(
-  'fields.sortable.empty' => 'No sections yet.',
-  'fields.sortable.add.first' => 'Add the first section',
+  'field.sortable.empty' => 'No sections yet.',
+  'field.sortable.add.first' => 'Add the first section',
 
-  'fields.sortable.add.template.label' => 'Add a new section',
+  'field.sortable.add.template.label' => 'Add a new section',
 
-  'fields.sortable.copy.info.label' => 'No sections yet',
-  'fields.sortable.copy.info.text' => 'There are no sections you can store in the clipboard yet.',
-  'fields.sortable.copy.error.uri' => 'Select at least one section',
+  'field.sortable.copy.info.label' => 'No sections yet',
+  'field.sortable.copy.info.text' => 'There are no sections you can store in the clipboard yet.',
+  'field.sortable.copy.error.uri' => 'Select at least one section',
 
-  'fields.sortable.delete.page.label' => 'Do you really want to delete this section?',
+  'field.sortable.delete.page.label' => 'Do you really want to delete this section?',
 
-  'fields.sortable.paste.info.text' => 'There are no sections stored in the clipboard at the moment.',
-  'fields.sortable.paste.error.uri' => 'Select at least one section',
+  'field.sortable.paste.info.text' => 'There are no sections stored in the clipboard at the moment.',
+  'field.sortable.paste.error.uri' => 'Select at least one section',
 );
