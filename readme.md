@@ -167,7 +167,7 @@ myvariant/
     ...
 ```
 
-### translation
+#### translation
 ```php
 // The translation file must exist at the given location
 $kirby->set('translation', 'mytranslation', __DIR__ . DS . 'mytranslation.php');
