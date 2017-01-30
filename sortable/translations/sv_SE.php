@@ -7,7 +7,7 @@ return array(
   'field.sortable.paste.first' => 'lägg till från urklipp',
 
   'field.sortable.limit' => 'Gräns nådd',
-  'field.sortable.limit.template' => 'Limit reached for this template', // TODO: translation
+  'field.sortable.limit.template' => 'Gräns nådd för den här mallen', // Done
 
   'field.sortable.add' => 'Lägg till',
   'field.sortable.add.template.label' => 'Lägg till nytt inlägg',
@@ -27,7 +27,7 @@ return array(
 
   'field.sortable.paste' => 'Klistra in',
   'field.sortable.paste.uri.label' => 'Klistra in från urklipp',
-  'field.sortable.paste.uri.help' => 'One or more templates are not available', // TODO: translation
+  'field.sortable.paste.uri.help' => 'En eller fler mallar är inte tillgängliga', // Done
   'field.sortable.paste.info.label' => 'Urklipp är tomt',
   'field.sortable.paste.info.text' => 'Det finns inga inlägg sparade i urklipp.',
   'field.sortable.paste.error.uri' => 'Välj minst ett inlägg',
@@ -36,7 +36,7 @@ return array(
   'field.sortable.show' => 'Visa',
 
   // These are not overwritable by a variant
-  'field.sortable.error.missing.controller' => 'The action controller file is missing', // TODO: translation
-  'field.sortable.error.missing.class' => 'The action controller class is missing', // TODO: translation
-  'field.sortable.error.route.invalid' => 'Invalid action route', // TODO: translation
+  'field.sortable.error.missing.controller' => 'Action-filen för controller saknas', // Done
+  'field.sortable.error.missing.class' => 'Action i controller-klassen saknas', // Done
+  'field.sortable.error.route.invalid' => 'Ogiltig action-route', // Done
 );
