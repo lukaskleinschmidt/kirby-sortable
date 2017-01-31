@@ -1,54 +1,32 @@
-<div id="<?php echo $field->id(); ?>" class="modules"
-  data-field="modules"
-  data-api="<?php echo purl($field->model(), implode('/', array('field', $field->name(), 'modules'))); ?>"
-  data-copy="<?php echo $field->copy() ? 'true' : 'false'; ?>"
-  data-paste="<?php echo $field->paste() && $field->origin()->ui()->create() ? 'true' : 'false'; ?>">
+<label class="label">
+  <?= $field->label(); ?>
+  <?= $field->counter(); ?>
+  <?php if($field->add()) echo $field->action('add'); ?>
+</label>
 
-  <?php if($field->modules()->count()): ?>
-    <div class="modules__container">
-      <?php $i = 0; $n = 0; foreach($field->modules() as $module): $i++; if($module->isVisible()) $n++; $options = $field->options($module); ?>
-      <div class="module"
-        data-visible="<?php echo $module->isVisible() ? 'true' : 'false'; ?>"
-        data-uid="<?php echo $module->uid(); ?>">
+<?php if($field->entries()->count()): ?>
+  <?= $field->layouts(); ?>
+<?php else: ?>
+  <div class="sortable__empty">
+    <?php
+      echo $field->l('field.sortable.empty');
+      if($field->add()) {
+        echo $field->action('add', ['label' => $field->l('field.sortable.add.first'), 'icon' => '', 'class' => '']);
+        if($field->paste()) {
+          echo $field->l('field.sortable.or');
+          echo $field->action('paste', ['label' => $field->l('field.sortable.paste.first'), 'icon' => '', 'class' => '']);
+        }
+      }
+    ?>
+  </div>
+<?php endif; ?>
 
-        <?php if($options->preview() === true || $options->preview() === 'top') echo $field->preview($module); ?>
-
-        <nav class="module__navigation">
-          <div class="module__title">
-            <div class="module__icon">
-              <?php echo $module->icon('left'); ?>
-            </div>
-            <?php echo $module->title(); ?>
-            <?php echo $field->counter($module); ?>
-          </div>
-          <?php foreach($field->actions() as $action) { tpl::load(__DIR__ . DS . 'actions' . DS . $action . '.php', compact('field', 'module', 'options', 'i', 'n'), false); }; ?>
-        </nav>
-
-        <?php if($options->preview() === 'bottom') echo $field->preview($module); ?>
-        <?php echo $field->input($module->uid()); ?>
-
-      </div>
-      <?php endforeach; ?>
-    </div>
-  <?php else: ?>
-    <div class="modules__empty">
-      <?php echo l('fields.modules.empty'); ?>
-      <?php if($field->add()): ?>
-        <a href="<?php echo $field->url('add'); ?>" data-modal><?php echo l('fields.modules.empty.add'); ?></a>
-      <?php endif; ?>
-      <?php if($field->add() && $field->paste()): ?>
-        <?php echo l('fields.modules.empty.or'); ?>
-        <a href="<?php echo $field->url('paste'); ?>" data-modal data-shortcut="meta+v"><?php echo l('fields.modules.empty.paste'); ?></a>
-      <?php endif; ?>
-    </div>
-  <?php endif; ?>
-
-  <nav class="modules__navigation">
-    <?php $disabled = $field->copy() === false; ?>
-    <a class="modules__action modules__action--copy<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('copy'); ?>" data-modal><?php i('copy', 'left'); ?><?php echo l('fields.modules.copy'); ?></a>
-    <?php $disabled = $field->add() === false || $field->paste() === false || $field->origin()->ui()->create() === false; ?>
-    <a class="modules__action modules__action--paste<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('paste'); ?>" data-modal><?php i('paste', 'left'); ?><?php echo l('fields.modules.paste'); ?></a>
-    <?php $disabled = $field->add() === false || $field->origin()->ui()->create() === false; ?>
-    <a class="modules__action modules__action--add<?php if($disabled) echo ' is-disabled'; ?>" href="<?php echo $field->url('add'); ?>" data-modal><?php i('plus-circle', 'left'); ?><?php echo l('fields.modules.add'); ?></a>
-  </nav>
+<div class="sortable__navigation">
+  <?php
+    if($field->copy()) echo $field->action('copy');
+    if($field->add()) {
+      if($field->paste()) echo $field->action('paste');
+      echo $field->action('add');
+    }
+  ?>
 </div>

@@ -1,0 +1,160 @@
+/* TEMP: until https://github.com/getkirby/panel/pull/986 is resolved */
+.form-blueprint-home > fieldset {
+  min-width: 0;
+}
+
+@-moz-document url-prefix() {
+  .form-blueprint-home > fieldset {
+   display: table-cell;
+  }
+}
+
+.sortable__counter {
+  padding-left: 0.25em;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #bbb;
+  line-height: 1;
+}
+
+.sortable__empty {
+  background: #ddd;
+  padding: 1.5em;
+}
+
+.sortable__empty a {
+  border-bottom: 2px solid #bbb;
+  margin: 0 0.25em;
+}
+
+.sortable__empty a:hover {
+  border-color: #000;
+}
+
+.sortable__empty a:first-child {
+  margin-left: 0.5em;
+}
+
+.sortable__navigation {
+  padding-top: 0.5em;
+  position: relative;
+}
+
+.sortable__action {
+  color: #777;
+  font-weight: 400;
+  line-height: 1.5em;
+}
+
+.sortable__action .icon,
+.sortable__action:hover {
+  color: #000;
+}
+
+.sortable__action--add {
+  position: absolute;
+  right: 0;
+}
+
+.sortable__action:nth-child(n+2) {
+  margin-left: 1em;
+}
+
+.sortable__action.is-disabled {
+  pointer-events: none;
+  color: #c9c9c9;
+}
+
+.sortable__layout {
+  margin-bottom: 0.25em;
+}
+
+.sortable-layout a,
+.sortable-layout button,
+.sortable__action.is-disabled .icon {
+  color: inherit;
+}
+
+.sortable-layout {
+  background: #fff;
+  border: 2px solid #ddd;
+  position: relative;
+}
+
+.sortable-layout .icon {
+  vertical-align: -5%;
+}
+
+.sortable-layout .icon:not(.icon-left) {
+  width: 1.28571em;
+}
+
+.sortable-layout__icon {
+  display: inline;
+}
+
+.sortable-layout__counter {
+  padding-left: 0.25em;
+  font-size: 0.8em;
+  color: #bbb;
+  line-height: 1;
+}
+
+.sortable-layout [data-handle] {
+  cursor: move;
+}
+
+.sortable-layout__navigation {
+  min-height: 44px;
+
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+}
+
+.sortable-layout__icon,
+.sortable-layout__action,
+.sortable-layout__title {
+  padding: 0.65em 0.9em 0.55em;
+  white-space: nowrap;
+  line-height: 1.5em;
+  font-size: 1em;
+}
+
+.sortable-layout__icon {
+  padding-right: 0.35em;
+}
+
+.sortable-layout__title {
+  -webkit-flex: 1 0 0%;
+  -ms-flex: 1 0 0%;
+  flex: 1 0 0%;
+  cursor: move;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 0.35em;
+}
+
+.sortable-layout[data-visible=false] .sortable-layout__icon,
+.sortable-layout[data-visible=false] .sortable-layout__title {
+  color: #c9c9c9;
+}
+
+.sortable-layout__action {
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  border: none;
+  border-left: 1px solid #efefef;
+  background: 0 0;
+  cursor: pointer;
+  outline: 0;
+}
+
+.sortable-layout__action.is-disabled {
+  pointer-events: none;
+  color: #c9c9c9;
+}

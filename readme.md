@@ -1,47 +1,59 @@
 ---
 
-### Update from v1 to v2
-
-With v2 this field is now a plugin and must be installed accordingly.  
+### Update from v2.1 to v2.2
+You have to change the name of the plugin folder form `modules-field` to `sortable`.  
+The plugin still includes the `modules` field. Only the name of the plugin changed.  
 [See the installation instructions below](#installation).
 
 ---
 
-# Kirby Modules Field
+# Kirby Sortable Field
+Manage subpages in the content area.  
+This plugin includes the [`sortable`](#sortable), [`modules`](#modules) and [`redirect`](#redirect) field.
+The following animation shows the [`modules`](#modules) field in combination with the [modules-plugin](https://github.com/getkirby-plugins/modules-plugin).
 
-This field was built to extend the [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) by providing a more user friendly interface to the plugin.  
-In version 2 it is now possible to duplicate modules and copy them across pages.
+![Preview](http://github.kleinschmidt.at/kirby-sortable/modules/preview.gif)
 
-![Preview](preview.gif)
+## Scope of the plugin
+In addition to the three fields the plugin has its own [registry](#registry).
+A short overview of the fields.
+
+### `sortable`
+The core field. It is the base for the `modules` field.  
+Change appereance in the [blueprint](#blueprint) or [build your own field](#extend-the-sortable-field) based on this one.
+
+### `modules`
+The `modules` field is an extended `sortable` field. Bundled with the [modules-plugin](https://github.com/getkirby-plugins/modules-plugin) it is a very powerful tool. You can find further informations [here](fields/modules/readme.md).
+
+To disable the field add `c::get('sortable.field.modules', false);` to your `config.php`.
+
+### `redirect`
+Redirect a user to the parent of the currently visited panel page. Useful for pages that act as a container. You can find further informations [here](fields/redirect/readme.md).
+
+To disable the field add `c::get('sortable.field.redirect', false);` to your `config.php`.
 
 ## Installation
-
 To install the plugin, please put it in the `site/plugins` directory.  
-The plugin folder must be named `modules-field`.
+The plugin folder must be named `sortable`.
 
 ```
 site/plugins/
-    modules-field/
-        modules-field.php
+    sortable/
+        sortable.php
         ...
 ```
 
 ### Download
-
-You can download the latest version of the plugin from https://github.com/lukaskleinschmidt/kirby-field-modules/releases/latest
+You can download the latest version of the plugin from https://github.com/lukaskleinschmidt/kirby-sortable/releases/latest
 
 ### With Git
-
 If you are familiar with Git, you can clone this repository from Github into your plugins folder.
 
-```git clone https://github.com/lukaskleinschmidt/kirby-field-modules.git modules-field```
+```git clone https://github.com/lukaskleinschmidt/kirby-sortable.git sortable```
 
 ## Blueprint
-
-After installing the plugin, you can use the new field type `modules`.  
-This blueprint shows all available options and their defaults.
-
-Bare in mind that you should not use `modules` for the field key. This might be tempting, given the purpose, but will produce an error in the panel. Use something like `modules_field` or any other key you feel comfortable with.
+After installing the plugin you can use the new field types.
+This blueprint shows all available options of the `sortable` field.
 
 ```yml
 fields:
@@ -49,146 +61,120 @@ fields:
     label: Title
     type: text
 
-  modules_field:
-    label: Modules
-    type: modules
+  sortable:
+    label: Sortable
+    type:  sortable
 
-    add: true
-    copy: true
-    paste: true
+    layout:  base
+    variant: null
+
     limit: false
-    variant: modules
 
-    actions:
-      - edit
-      - duplicate
-      - delete
-      - toggle
+    parent: null
+    prefix: null
 
     options:
-      preview: true
       limit: false
-      edit: true
-      duplicate: true
-      delete: true
-      toggle: true
   ...
 ```
 
-## Examples
+#### `layout`
+Load a registerd layout. The layout defines how a entry is rendered. Learn how to [register your own layout](#layout-1).
 
-The following examples show and explain some of the possible settings.
+#### `variant`
+Load a registerd variant. A variant is used to change the naming of the field from page to modules for example. Learn how to [register your own variant](#variant-1).
 
-### Preview
-
-A preview is a normal PHP file with the HTML and PHP code that defines your preview. The preview has access to the following variables:
-
-- `$page`  is the page on which the module appears
-- `$module` is the module subpage, which you can use to access the fields from your module blueprint as well as module files
-- `$moduleName` is the name of the module such as text or gallery
-
-The preview file must be in the same folder as the module itself.
-The module directory looks something like this:
-
-```
-site/modules/
-    gallery/
-        gallery.html.php
-        gallery.yml
-
-        # The preview file
-        gallery.preview.php
-        ...
-```
-
-### Preview options
-
-Previews are enabled by default. Set `preview` to `false` to disable the preview.
-It is also possible to change the position in the module.
-
+#### `limit`
+Limit he number of visible pages. Example blueprint from the `modules` field.
 ```yml
-    options:
-      # Render the preview at the bottom
-      preview: bottom
-
-      # Or at the top
-      preview: top
-      preview: true
-```
-
-
-### Limit the number of visible modules
-
-```yml
-  modules_field:
+  modules:
     label: Modules
     type: modules
 
-    # Allow 3 visible modules overall
-    limit: 3
+    # Allow 5 visible modules overall
+    limit: 5
 
     # Template specific option
     options:
+
+      # Allow only 3 modules per template (applies to all templates)
+      limit: 3
       module.gallery:
-        # Allow only 1 visible gallery module
+
+        # Allow only 1 visible gallery module (overwrites the current limit of 3)
         limit: 1
 ```
 
-![Limit](limit.png)
+#### `parent`
+Uid to use when looking for the container page. If left empty the field will look for subpages in the current page.
 
-### Is it a module or a section?
+#### `prefix`
+Template prefix to filter available subpages.
 
-Change the naming.
+## Registry
+With the new registry you are now able to customize the visual appearance and modify or add custom functionality.
+The registry makes it possible to register layouts, actions, variants and translations.
 
-```yml
-    # Modules is fine
-    variant: modules
+```php
+// site/plugins/product-variants/product-variants.php
 
-    # Nah sections it is
-    variant: sections
+// Make sure that the sortable plugin is loaded
+$kirby->plugin('sortable');
+
+if(!function_exists('sortable')) return;
+
+$kirby->set('field', 'variants', __DIR__ . DS . 'fields' . DS . 'variants');
+
+$sortable = sortable();
+$sortable->set('action', 'stock', __DIR__ . DS . 'actions' . DS . 'stock');
+$sortable->set('layout', 'variant', __DIR__ . DS . 'layouts' . DS . 'variant');
+$sortable->set('variant', 'variants', __DIR__ . DS . 'variants' . DS . 'variants');
 ```
 
-### Changing actions
+As you can see in this example of a product variant field, the plugin can take care of registering all kinds of extensions, which will then be available in the `sortable` field or any field based on that.
 
-To change the actions or remove an action completely from the modules, you must specify the `actions` array in the blueprint.
+### List of registry extensions
+These are all possible registry extensions you can register this way:
 
-```yml
-    # Default
-    actions:
-      - edit
-      - duplicate
-      - delete
-      - toggle
+#### `layout`
+```php
+// The layout directory must exist and it must have a PHP file with the same name in it
+sortable()->set('layout', 'mylayout', __DIR__ . DS . 'mylayout');
 ```
+Have a look at the [base layout](sortable/layouts/base) or the [module layout](sortable/layouts/module).
 
-![Default actions](actions.png)
-
-```yml
-    actions:
-      - edit
-      - toggle
+#### `action`
+```php
+// The action directory must exist and it must have a PHP file with the same name in it
+sortable()->set('action', 'myaction', __DIR__ . DS . 'myaction');
 ```
+Have a look at the available [actions](sortable/actions).
 
-![Custom actions](actions-custom.png)
-
-### Disabling an action
-
-```yml
-    options:
-      edit: false
-      duplicate: false
-      delete: true
-      toggle: true
-
-      # Template specific options
-      module.gallery:
-        edit: true
-        duplicate: true
+#### `variant`
+```php
+// The variant directory must exist and can have multiple tranlation files
+sortable()->set('variant', 'myvariant', __DIR__ . DS . 'myvariant');
 ```
+Have a look at the [modules variant](sortable/variants/modules) or the [sections variant](sortable/variants/sections).
 
-![Disabled actions](actions-disabled.png)
+#### `translation`
+```php
+// The translation file must exist at the given location
+sortable()->set('translation', 'en', __DIR__ . DS . 'en.php');
+sortable()->set('translation', 'sv_SE', __DIR__ . DS . 'sv_SE.php');
+```
+Have a look at the available [translations](sortable/translations).
+
+## Extend the sortable field
+Currently you can have a look at the `modules` field within this plugin. Since the field is included in the plugin all parts are registered within the plugin.
+
+- [fields/modules](fields/modules)
+- [layouts/module](sortable/layouts/module)
+- [variants/module](sortable/variants/modules)
+
+Also check out the [demo](https://github.com/lukaskleinschmidt/kirby-modules-field/tree/demo) branch. I will try to update the demo with a more meaningful example soon.
 
 ## Requirements
-
 - [Kirby](https://getkirby.com/) 2.3+
-- [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.3+
+- [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.3+  
+when you want to use the `modules` field
