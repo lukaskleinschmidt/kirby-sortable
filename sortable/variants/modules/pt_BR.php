@@ -1,12 +1,12 @@
 <?php
 
 return array(
-  'field.sortable.empty' => 'Nenhum módulo ainda.',
+  'field.sortable.empty' => 'Nenhum módulo até o momento.',
   'field.sortable.add.first' => 'Adicione o primeiro módulo',
 
   'field.sortable.add.template.label' => 'Adicionar um novo módulo',
 
-  'field.sortable.copy.info.label' => 'Nenhum módulo ainda',
+  'field.sortable.copy.info.label' => 'Nenhum módulo até o momento',
   'field.sortable.copy.info.text' => 'Ainda não há nenhum módulo para você copiar.',
   'field.sortable.copy.error.uri' => 'Selecione pelo menos um módulo',
 
