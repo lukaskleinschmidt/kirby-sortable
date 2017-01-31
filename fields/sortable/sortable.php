@@ -204,6 +204,10 @@ class SortableField extends InputField {
       $origin = $origin->find($this->parent());
     }
 
+    if(!is_a($origin, 'Page')) {
+      throw new Exception('The parent page could not be found');
+    }
+
     return $this->origin = $origin;
 
   }
