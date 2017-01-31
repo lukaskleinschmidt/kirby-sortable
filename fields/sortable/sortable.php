@@ -215,10 +215,14 @@ class SortableField extends InputField {
       return $this->entries;
     }
 
-    // Filter the entries by valid entry
-    $entries = $this->origin()->children()->filter(function($page) {
-      return str::startsWith($page->intendedTemplate(), $this->prefix());
-    });
+    $entries = $this->origin()->children();
+
+    // Filter the entries
+    if($entries->count() && $this->prefix()) {
+      $entries = $entries->filter(function($page) {
+        return str::startsWith($page->intendedTemplate(), $this->prefix());
+      });
+    }
 
     // Sort entries
     if($entries->count() && $this->value()) {
@@ -234,7 +238,7 @@ class SortableField extends InputField {
 
     // Always return a collection
     if(is_a($entries, 'Page')) {
-      $page     = $entries;
+      $page = $entries;
       $entries = new Children($this->origin());
 
       $entries->data[$page->id()] = $page;
