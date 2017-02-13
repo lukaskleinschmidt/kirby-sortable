@@ -176,7 +176,7 @@ Also check out the [demo](https://github.com/lukaskleinschmidt/kirby-modules-fie
 
 
 ## Requirements
-- PHP 5.6
+- PHP 5.6+
 - [Kirby](https://getkirby.com/) 2.3+
 - [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.3+  
 when you want to use the `modules` field
