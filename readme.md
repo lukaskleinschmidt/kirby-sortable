@@ -174,7 +174,9 @@ Currently you can have a look at the `modules` field within this plugin. Since t
 
 Also check out the [demo](https://github.com/lukaskleinschmidt/kirby-modules-field/tree/demo) branch. I will try to update the demo with a more meaningful example soon.
 
+
 ## Requirements
+- PHP 5.6
 - [Kirby](https://getkirby.com/) 2.3+
 - [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.3+  
 when you want to use the `modules` field
