@@ -34,9 +34,9 @@
       return false;
     });
 
-    // setup custom field script
-    var key = this.element.data('custom-field');
-    if(this.element[key]) this.element[key]();
+    // setup extended field script
+    var key = this.element.data('field-extended');
+    if(key != 'sortable' && this.element[key]) this.element[key]();
   };
 
   Sort.prototype.blur = function() {

@@ -182,7 +182,7 @@ class SortableField extends InputField {
     // Sort namespace is used because otherwise there
     // would be a collision with the jquery sortable plugin
     $content->attr('data-field', 'sort');
-    $content->attr('data-custom-field', $this->type());
+    $content->attr('data-field-extended', $this->type());
     $content->attr('data-api', $this->url());
     $content->addClass('sortable');
     $content->append(tpl::load($template, array('field' => $this)));
