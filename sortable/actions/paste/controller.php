@@ -1,5 +1,7 @@
 <?php
 
+use Kirby\Panel\Models\Page\Blueprint;
+
 class PasteActionController extends Kirby\Sortable\Controllers\Action {
 
   /**
@@ -8,7 +10,7 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
   public function paste() {
 
     $self    = $this;
-    $page    = $this->field()->origin();
+    $parent  = $this->field()->origin();
     $entries = site()->user()->clipboard();
 
     if(empty($entries)) {
@@ -17,11 +19,11 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
 
     $entries = pages($entries);
 
-    if($page->ui()->create() === false) {
+    if($parent->ui()->create() === false) {
       throw new PermissionsException();
     }
 
-    $form = $this->form('paste', array($page, $entries, $this->model(), $this->field()), function($form) use($page, $self) {
+    $form = $this->form('paste', array($parent, $entries, $this->model(), $this->field()), function($form) use($parent, $self) {
 
       try {
 
@@ -33,19 +35,49 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
 
         $data = $form->serialize();
 
-        $templates = $page->blueprint()->pages()->template()->pluck('name');
+        $templates = $parent->blueprint()->pages()->template()->pluck('name');
         $entries   = $self->field()->entries();
         $to        = $entries->count();
 
         foreach(pages(str::split($data['uri'], ',')) as $entry) {
 
-          $uid = $self->uid($entry);
+          if(!v::in($entry->intendedTemplate(), $templates)) continue;
 
-          if(v::in($entry->intendedTemplate(), $templates)) {
-            dir::copy($entry->root(), $page->root() . DS . $uid);
-            $entries->add($uid);
-            $self->sort($uid, ++$to);
+          $template  = $entry->intendedTempalte();
+          $blueprint = new Blueprint($template);
+          $data      = array();
+          $uid       = $self->uid($entry);
+
+          foreach($blueprint->fields(null) as $key => $field) {
+            $data[$key] = $field->default();
           }
+
+          $data  = array_merge($data, $entry->content()->toArray());
+          $event = $parent->event('create:action', [
+            'parent'    => $parent,
+            'template'  => $template,
+            'blueprint' => $blueprint,
+            'uid'       => $uid,
+            'data'      => $data
+          ]);
+
+          $event->check();
+
+          dir::copy($entry->root(), $parent->root() . DS . $uid);
+
+          $page = $parent->children()->find($uid);
+
+          if(!$page) {
+            throw new Exception(l('pages.add.error.create'));
+          }
+
+          kirby()::$triggered = array();
+
+          kirby()->trigger($event, $page);
+
+          $entries->add($uid);
+          $self->sort($uid, ++$to);
+
         }
 
         $self->notify(':)');
