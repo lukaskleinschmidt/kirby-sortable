@@ -3,9 +3,9 @@
 class CopyActionController extends Kirby\Sortable\Controllers\Action {
 
   /**
-   * Copy to clipboard
+   * Save to clipboard
    */
-  public function copy() {
+  public function save() {
 
     $self    = $this;
     $page    = $this->field()->origin();

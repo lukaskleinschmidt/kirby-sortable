@@ -1,7 +1,5 @@
 <?php
 
-use Kirby\Panel\Models\Page\Blueprint;
-
 class PasteActionController extends Kirby\Sortable\Controllers\Action {
 
   /**
@@ -39,44 +37,17 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
         $entries   = $self->field()->entries();
         $to        = $entries->count();
 
-        foreach(pages(str::split($data['uri'], ',')) as $entry) {
+        foreach(pages(str::split($data['uri'], ',')) as $page) {
 
-          if(!v::in($entry->intendedTemplate(), $templates)) continue;
+          if(!in_array($page->intendedTemplate(), $templates)) continue;
 
-          $template  = $entry->intendedTempalte();
-          $blueprint = new Blueprint($template);
-          $data      = array();
-          $uid       = $self->uid($entry);
-
-          foreach($blueprint->fields(null) as $key => $field) {
-            $data[$key] = $field->default();
-          }
-
-          $data  = array_merge($data, $entry->content()->toArray());
-          $event = $parent->event('create:action', [
-            'parent'    => $parent,
-            'template'  => $template,
-            'blueprint' => $blueprint,
-            'uid'       => $uid,
-            'data'      => $data
-          ]);
-
-          $event->check();
-
-          dir::copy($entry->root(), $parent->root() . DS . $uid);
-
-          $page = $parent->children()->find($uid);
-
-          if(!$page) {
-            throw new Exception(l('pages.add.error.create'));
-          }
-
+          // Reset previously triggered hooks
           kirby()::$triggered = array();
 
-          kirby()->trigger($event, $page);
+          $page = $self->copy($page, $parent);
 
-          $entries->add($uid);
-          $self->sort($uid, ++$to);
+          $entries->add($page->uid());
+          $self->sort($page->uid(), ++$to);
 
         }
 

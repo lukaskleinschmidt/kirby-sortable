@@ -3,9 +3,11 @@
 namespace Kirby\Sortable\Controllers;
 
 use Str;
+use Dir;
 use Router;
 use Children;
 use Kirby\Panel\Event;
+use Kirby\Panel\Models\Page\Blueprint;
 use Kirby\Panel\Exceptions\PermissionsException;
 use Kirby\Sortable\Sortable;
 
@@ -102,6 +104,51 @@ class Field extends \Kirby\Panel\Controllers\Field {
         $this->alert($e->getMessage());
       }
     }
+
+  }
+
+  /**
+   * Copy a page to a new location
+   *
+   * @param object $page
+   * @param object $to
+   * @return object
+   */
+  public function copy($page, $to) {
+
+    $template  = $page->intendedTempalte();
+    $blueprint = new Blueprint($template);
+    $parent    = $to;
+    $data      = array();
+    $uid       = $this->uid($page);
+
+    foreach($blueprint->fields(null) as $key => $field) {
+      $data[$key] = $field->default();
+    }
+
+    $data  = array_merge($data, $page->content()->toArray());
+    $event = $parent->event('create:action', [
+      'parent'    => $parent,
+      'template'  => $template,
+      'blueprint' => $blueprint,
+      'uid'       => $uid,
+      'data'      => $data
+    ]);
+
+    $event->check();
+
+    // Actually copy the page
+    dir::copy($page->root(), $parent->root() . DS . $uid);
+
+    $page = $parent->children()->find($uid);
+
+    if(!$page) {
+      throw new Exception(l('pages.add.error.create'));
+    }
+
+    kirby()->trigger($event, $page);
+
+    return $page;
 
   }
 

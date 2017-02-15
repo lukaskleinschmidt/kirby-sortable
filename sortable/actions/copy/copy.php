@@ -11,7 +11,7 @@ class CopyAction extends BaseAction {
       array(
         'pattern' => '/',
         'method'  => 'POST|GET',
-        'action'  => 'copy',
+        'action'  => 'save',
         'filter'  => 'auth',
       ),
     );
