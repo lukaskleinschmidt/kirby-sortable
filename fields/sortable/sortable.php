@@ -148,9 +148,12 @@ class SortableField extends InputField {
     $templates = $this->origin()->blueprint()->pages()->template()->pluck('name');
 
     // Remove template specific options from the defaults
-    $defaults = array_filter($this->options, function($key) use($templates) {
-      return !in_array($key, $templates);
-    }, ARRAY_FILTER_USE_KEY);
+    $defaults = array();
+
+    foreach($this->options as $key => $value) {
+      if(in_array($key, $templates)) continue;
+      $defaults[$key] = $value;
+    }
 
     return $this->defaults = $defaults;
 
