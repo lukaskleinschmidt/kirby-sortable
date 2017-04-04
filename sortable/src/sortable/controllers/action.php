@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Sortable\Controllers;
+namespace LukasKleinschmidt\Sortable\Controllers;
 
 use Kirby\Panel\View;
 use Kirby\Panel\Snippet;

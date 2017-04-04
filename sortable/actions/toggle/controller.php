@@ -1,6 +1,8 @@
 <?php
 
-class ToggleActionController extends Kirby\Sortable\Controllers\Action {
+use Kirby\Panel\Exceptions\PermissionsException;
+
+class ToggleActionController extends LukasKleinschmidt\Sortable\Controllers\Action {
 
   /**
    * Show page

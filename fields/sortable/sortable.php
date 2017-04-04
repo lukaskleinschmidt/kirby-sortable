@@ -1,6 +1,6 @@
 <?php
 
-use Kirby\Sortable\Sortable;
+use LukasKleinschmidt\Sortable;
 
 // Load all registerd classes
 sortable()->load();

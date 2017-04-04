@@ -1,6 +1,6 @@
 <?php
 
-class CopyActionController extends Kirby\Sortable\Controllers\Action {
+class CopyActionController extends LukasKleinschmidt\Sortable\Controllers\Action {
 
   /**
    * Save to clipboard

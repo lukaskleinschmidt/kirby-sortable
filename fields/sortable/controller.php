@@ -1,3 +1,3 @@
 <?php
 
-class SortableFieldController extends Kirby\Sortable\Controllers\Field {}
+class SortableFieldController extends LukasKleinschmidt\Sortable\Controllers\Field {}

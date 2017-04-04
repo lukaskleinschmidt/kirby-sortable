@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Sortable;
+namespace LukasKleinschmidt\Sortable;
 
 use A;
 use F;

@@ -1,6 +1,6 @@
 <?php
 
-class DeleteActionController extends Kirby\Sortable\Controllers\Action {
+class DeleteActionController extends LukasKleinschmidt\Sortable\Controllers\Action {
 
   /**
    * Delete a entry
@@ -13,7 +13,7 @@ class DeleteActionController extends Kirby\Sortable\Controllers\Action {
     $page = $this->field()->entries()->find($uid);
 
     if($page->ui()->delete() === false) {
-      throw new PermissionsException();
+      throw new Kirby\Panel\Exceptions\PermissionsException();
     }
 
     $form = $this->form('delete', array($page, $this->model(), $this->field()), function($form) use($page, $self) {

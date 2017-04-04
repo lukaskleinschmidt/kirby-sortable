@@ -1,6 +1,6 @@
 <?php
 
-class PasteActionController extends Kirby\Sortable\Controllers\Action {
+class PasteActionController extends LukasKleinschmidt\Sortable\Controllers\Action {
 
   /**
    * Add from clipboard
@@ -18,7 +18,7 @@ class PasteActionController extends Kirby\Sortable\Controllers\Action {
     $entries = pages($entries);
 
     if($parent->ui()->create() === false) {
-      throw new PermissionsException();
+      throw new Kirby\Panel\Exceptions\PermissionsException();
     }
 
     $form = $this->form('paste', array($parent, $entries, $this->model(), $this->field()), function($form) use($parent, $self) {

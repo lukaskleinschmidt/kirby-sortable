@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Sortable\Registry;
+namespace LukasKleinschmidt\Sortable\Registry;
 
 use Exception;
 use Kirby;

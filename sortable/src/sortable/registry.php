@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Sortable;
+namespace LukasKleinschmidt\Sortable;
 
 // Kirby dependencies
 use Exception;
@@ -17,10 +17,10 @@ class Registry extends Kirby\Registry {
 
     // start the registry entry autoloader
     load([
-      'kirby\\sortable\\registry\\translation' => __DIR__ . DS . 'registry' . DS . 'translation.php',
-      'kirby\\sortable\\registry\\variant'     => __DIR__ . DS . 'registry' . DS . 'variant.php',
-      'kirby\\sortable\\registry\\layout'      => __DIR__ . DS . 'registry' . DS . 'layout.php',
-      'kirby\\sortable\\registry\\action'      => __DIR__ . DS . 'registry' . DS . 'action.php',
+      'lukaskleinschmidt\\sortable\\registry\\translation' => __DIR__ . DS . 'registry' . DS . 'translation.php',
+      'lukaskleinschmidt\\sortable\\registry\\variant'     => __DIR__ . DS . 'registry' . DS . 'variant.php',
+      'lukaskleinschmidt\\sortable\\registry\\layout'      => __DIR__ . DS . 'registry' . DS . 'layout.php',
+      'lukaskleinschmidt\\sortable\\registry\\action'      => __DIR__ . DS . 'registry' . DS . 'action.php',
     ]);
 
   }
@@ -34,9 +34,9 @@ class Registry extends Kirby\Registry {
    */
   public function entry($type, $subtype = null) {
 
-    $class = 'kirby\\sortable\\registry\\' . $type;
+    $class = 'lukaskleinschmidt\\sortable\\registry\\' . $type;
 
-    if(!class_exists('kirby\\sortable\\registry\\' . $type)) {
+    if(!class_exists('lukaskleinschmidt\\sortable\\registry\\' . $type)) {
       throw new Exception('Unsupported registry entry type: ' . $type);
     }
 

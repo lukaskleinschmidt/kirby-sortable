@@ -1,5 +1,5 @@
 <?php
 
 function sortable() {
-  return Kirby\Sortable\Sortable::instance();
+  return LukasKleinschmidt\Sortable::instance();
 }

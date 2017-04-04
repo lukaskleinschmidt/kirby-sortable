@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Sortable\Registry;
+namespace LukasKleinschmidt\Sortable\Registry;
 
 use Exception;
 use Kirby;
@@ -21,7 +21,7 @@ class Variant extends Kirby\Registry\Entry {
 	 * @param string $root
 	 */
 	public function set($name, $root = null) {
-    // 
+    //
     // $name  = strtolower($name);
     // $files = array();
 

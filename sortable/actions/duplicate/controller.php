@@ -1,6 +1,6 @@
 <?php
 
-class DuplicateActionController extends Kirby\Sortable\Controllers\Action {
+class DuplicateActionController extends LukasKleinschmidt\Sortable\Controllers\Action {
 
   /**
    * Duplicate a entry
@@ -15,7 +15,7 @@ class DuplicateActionController extends Kirby\Sortable\Controllers\Action {
     $page    = $entries->find($uid);
 
     if($parent->ui()->create() === false) {
-      throw new PermissionsException();
+      throw new Kirby\Panel\Exceptions\PermissionsException();
     }
 
     $page = $this->copy($page, $parent);

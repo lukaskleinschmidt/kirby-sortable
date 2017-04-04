@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Sortable\Controllers;
+namespace LukasKleinschmidt\Sortable\Controllers;
 
 use Str;
 use Dir;
@@ -9,7 +9,7 @@ use Children;
 use Kirby\Panel\Event;
 use Kirby\Panel\Models\Page\Blueprint;
 use Kirby\Panel\Exceptions\PermissionsException;
-use Kirby\Sortable\Sortable;
+use LukasKleinschmidt\Sortable;
 
 class Field extends \Kirby\Panel\Controllers\Field {
 

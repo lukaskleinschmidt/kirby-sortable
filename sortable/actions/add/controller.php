@@ -1,6 +1,6 @@
 <?php
 
-class AddActionController extends Kirby\Sortable\Controllers\Action {
+class AddActionController extends LukasKleinschmidt\Sortable\Controllers\Action {
 
   /**
    * Add a entry
@@ -11,7 +11,7 @@ class AddActionController extends Kirby\Sortable\Controllers\Action {
     $parent = $this->field()->origin();
 
     if($parent->ui()->create() === false) {
-      throw new PermissionsException();
+      throw new Kirby\Panel\Exceptions\PermissionsException();
     }
 
     $form = $this->form('add', array($parent, $this->model(), $this->field()), function($form) use($parent, $self) {
