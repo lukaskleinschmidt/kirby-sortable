@@ -1,12 +1,5 @@
 ---
 
-### Update from v2.1 to v2.2
-You have to change the name of the plugin folder form `modules-field` to `sortable`.  
-The plugin still includes the `modules` field. Only the name of the plugin changed.  
-[See the installation instructions below](#installation).
-
----
-
 ### Help keeping me motivated :)
 If you enjoy this plugin and want to support me you can buy me a beer.
 
