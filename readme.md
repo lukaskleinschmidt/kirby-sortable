@@ -7,6 +7,13 @@ The plugin still includes the `modules` field. Only the name of the plugin chang
 
 ---
 
+### Help keeping me motivated :)
+If you enjoy this plugin and want to support me you can buy me a beer.
+
+[![Buy me a beer](http://github.kleinschmidt.at/kirby-sortable/buy-me-a-beer-v1.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=F6SAVYV7PKTHA)
+
+---
+
 # Kirby Sortable Field
 Manage subpages in the content area.  
 This plugin includes the [`sortable`](#sortable), [`modules`](#modules) and [`redirect`](#redirect) field.
