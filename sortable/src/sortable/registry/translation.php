@@ -4,7 +4,6 @@ namespace LukasKleinschmidt\Sortable\Registry;
 
 use Exception;
 use Kirby;
-use Dir;
 use Obj;
 use A;
 
