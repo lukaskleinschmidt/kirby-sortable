@@ -1,38 +1,63 @@
----
-
-### Help keeping me motivated :)
-If you enjoy this plugin and want to support me you can buy me a beer.
-
-[![Buy me a beer](http://github.kleinschmidt.at/kirby-sortable/buy-me-a-beer-v1.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=F6SAVYV7PKTHA)
-
----
-
-# Kirby Sortable Field
-Manage subpages in the content area.  
-This plugin includes the [`sortable`](#sortable), [`modules`](#modules) and [`redirect`](#redirect) field.
-The following animation shows the [`modules`](#modules) field in combination with the [modules-plugin](https://github.com/getkirby-plugins/modules-plugin).
+# Kirby Sortable
+A toolkit for managing subpages in the content area.
 
 ![Preview](http://github.kleinschmidt.at/kirby-sortable/modules/preview.gif)
 
-## Scope of the plugin
-In addition to the three fields the plugin has its own [registry](#registry).
-A short overview of the fields.
 
-### `sortable`
+## Table of contents
+1. [Features](#1-features)
+3. [Installation](#2-installation)
+4. [Blueprint](#3-blueprint)
+5. [Customize](#4-customize)
+6. [Donate](#5-donate)
+
+
+## 1 Features
+This project started as a simple field and has grown into a reliable and extendable plugin.
+It includes the [`sortable`](#sortable), [`modules`](#modules), [`redirect`](#redirect) and [`options`](#options) field.
+In addition to the four fields the plugin has its own [registry](#registry).
+
+### Fields
+#### `sortable`
 The core field. It is the base for the `modules` field.  
-Change appereance in the [blueprint](#blueprint) or [build your own field](#extend-the-sortable-field) based on this one.
+Change appereance in the [blueprint](#3-blueprint) or [build your own field](#4-customize) based on this one.
 
-### `modules`
-The `modules` field is an extended `sortable` field. Bundled with the [modules-plugin](https://github.com/getkirby-plugins/modules-plugin) it is a very powerful tool. You can find further informations [here](fields/modules/readme.md).
-
+#### `modules`
+The `modules` field is an extended `sortable` field. Bundled with the [modules-plugin](https://github.com/getkirby-plugins/modules-plugin) it is a very powerful tool. You can find further informations [here](fields/modules).  
 To disable the field add `c::get('sortable.field.modules', false);` to your `config.php`.
 
-### `redirect`
-Redirect a user to the parent of the currently visited panel page. Useful for pages that act as a container. You can find further informations [here](fields/redirect/readme.md).
-
+#### `redirect`
+Redirect a user to the parent of the currently visited panel page. Useful for pages that act as a container. You can find further informations [here](fields/redirect).  
 To disable the field add `c::get('sortable.field.redirect', false);` to your `config.php`.
 
-## Installation
+#### `options`
+This field is used internally by the `sortable` field for the copy and paste functionality.
+
+### Registry
+With the registry you are able to customize the visual appearance and modify or add custom functionality.
+The registry makes it possible to register [layouts](#layout-1), [actions](#action), [variants](#variant-1) and [translations](#translation). Learn more about how to register components in the [customize](#4-customize) section.
+
+
+## 2 Installation
+There are several ways to install the plugin.  
+Please make sure you meet the minimum requirements.
+
+### Requirements
+- PHP 5.4+
+- [Kirby](https://getkirby.com/) 2.3+
+- [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.3+  
+when you want to use the `modules` field
+
+### Git
+To clone or add the plugin as a submodule you need to cd to the root directory of your Kirby installation and run one of the corresponding command:  
+`$ git clone https://github.com/lukaskleinschmidt/kirby-sortable.git site/plugins/sortable`  
+`$ git submodule add https://github.com/lukaskleinschmidt/kirby-sortable.git site/plugins/sortable`  
+
+### Kirby CLI
+If you're using the Kirby CLI, you need to cd to the root directory of your Kirby installation and run the following command: `kirby plugin:install lukaskleinschmidt/kirby-sortable`
+
+### Download
+You can download the latest version of the plugin [here](https://github.com/lukaskleinschmidt/kirby-sortable/releases/latest).  
 To install the plugin, please put it in the `site/plugins` directory.  
 The plugin folder must be named `sortable`.
 
@@ -43,15 +68,8 @@ site/plugins/
         ...
 ```
 
-### Download
-You can download the latest version of the plugin from https://github.com/lukaskleinschmidt/kirby-sortable/releases/latest
 
-### With Git
-If you are familiar with Git, you can clone this repository from Github into your plugins folder.
-
-```git clone https://github.com/lukaskleinschmidt/kirby-sortable.git sortable```
-
-## Blueprint
+## 3 Blueprint
 After installing the plugin you can use the new field types.
 This blueprint shows all available options of the `sortable` field.
 
@@ -59,7 +77,7 @@ This blueprint shows all available options of the `sortable` field.
 fields:
   title:
     label: Title
-    type: text
+    type:  text
 
   sortable:
     label: Sortable
@@ -75,8 +93,9 @@ fields:
 
     options:
       limit: false
-  ...
 ```
+
+### Options
 
 #### `layout`
 Load a registerd layout. The layout defines how a entry is rendered. Learn how to [register your own layout](#layout-1).
@@ -87,9 +106,10 @@ Load a registerd variant. A variant is used to change the naming of the field fr
 #### `limit`
 Limit he number of visible pages. Example blueprint from the `modules` field.
 ```yml
+fields:
   modules:
     label: Modules
-    type: modules
+    type:  modules
 
     # Allow 5 visible modules overall
     limit: 5
@@ -107,76 +127,115 @@ Limit he number of visible pages. Example blueprint from the `modules` field.
 
 #### `parent`
 Uid to use when looking for the container page. If left empty the field will look for subpages in the current page.
+```yml
+# home.yml
+
+fields:
+  events:
+    label: Events
+    type:  sortable
+
+    parent: events
+```
+```
+site/content/
+    home/
+        home.txt
+        events/
+            event-1/
+                event.txt
+            event-2/
+                event.txt
+        ...
+```
 
 #### `prefix`
 Template prefix to filter available subpages.
+```yml
+# home.yml
 
-## Registry
+fields:
+  events:
+    label: Events
+    type:  sortable
+
+    prefix: event.
+```
+```
+site/content/
+    home/
+        home.txt
+        event-1/
+            event.default.txt
+        event-2/
+            event.default.txt
+        subpage/
+            default.txt
+        ...
+```
+
+
+## 4 Customize
 With the new registry you are now able to customize the visual appearance and modify or add custom functionality.
 The registry makes it possible to register layouts, actions, variants and translations.
 
 ```php
-// site/plugins/product-variants/product-variants.php
+// site/plugins/sortable-variants/sortable-variants.php
 
 // Make sure that the sortable plugin is loaded
 $kirby->plugin('sortable');
 
 if(!function_exists('sortable')) return;
 
-$kirby->set('field', 'variants', __DIR__ . DS . 'fields' . DS . 'variants');
+$kirby->set('field', 'variants', __DIR__ . DS . 'field');
 
 $sortable = sortable();
-$sortable->set('action', 'stock', __DIR__ . DS . 'actions' . DS . 'stock');
-$sortable->set('layout', 'variant', __DIR__ . DS . 'layouts' . DS . 'variant');
-$sortable->set('variant', 'variants', __DIR__ . DS . 'variants' . DS . 'variants');
+$sortable->set('layout',  'variant', __DIR__ . DS . 'layout');
+$sortable->set('variant', 'variants', __DIR__ . DS . 'variant');
+$sortable->set('action',  '_add', __DIR__ . DS . 'actions' . DS . '_add');
+$sortable->set('action',  '_paste', __DIR__ . DS . 'actions' . DS . '_paste');
+$sortable->set('action',  '_duplicate', __DIR__ . DS . 'actions' . DS . '_duplicate');
 ```
 
-As you can see in this example of a product variant field, the plugin can take care of registering all kinds of extensions, which will then be available in the `sortable` field or any field based on that.
+A plugin can take care of registering all kinds of extensions, which will then be available in the `sortable` field or any field based on that.
 
 ### List of registry extensions
 These are all possible registry extensions you can register this way:
 
-#### `layout`
+#### layout
 ```php
 // The layout directory must exist and it must have a PHP file with the same name in it
 sortable()->set('layout', 'mylayout', __DIR__ . DS . 'mylayout');
 ```
 Have a look at the [base layout](sortable/layouts/base) or the [module layout](sortable/layouts/module).
 
-#### `action`
+#### action
 ```php
 // The action directory must exist and it must have a PHP file with the same name in it
 sortable()->set('action', 'myaction', __DIR__ . DS . 'myaction');
 ```
-Have a look at the available [actions](sortable/actions).
+Have a look at the [actions](sortable/actions).
 
-#### `variant`
+#### variant
 ```php
 // The variant directory must exist and can have multiple tranlation files
 sortable()->set('variant', 'myvariant', __DIR__ . DS . 'myvariant');
 ```
 Have a look at the [modules variant](sortable/variants/modules) or the [sections variant](sortable/variants/sections).
 
-#### `translation`
+#### translation
 ```php
 // The translation file must exist at the given location
 sortable()->set('translation', 'en', __DIR__ . DS . 'en.php');
 sortable()->set('translation', 'sv_SE', __DIR__ . DS . 'sv_SE.php');
 ```
-Have a look at the available [translations](sortable/translations).
+Have a look at the [translations](sortable/translations).
 
-## Extend the sortable field
-Currently you can have a look at the `modules` field within this plugin. Since the field is included in the plugin all parts are registered within the plugin.
-
-- [fields/modules](fields/modules)
-- [layouts/module](sortable/layouts/module)
-- [variants/module](sortable/variants/modules)
-
-Also check out the [demo](https://github.com/lukaskleinschmidt/kirby-modules-field/tree/demo) branch. I will try to update the demo with a more meaningful example soon.
+### Examples
+- [kirby-sortable-variants](https://github.com/lukaskleinschmidt/kirby-sortable-variants)
+- [kirby-sortable-events](https://github.com/lukaskleinschmidt/kirby-sortable-events)
 
 
-## Requirements
-- PHP 5.4+
-- [Kirby](https://getkirby.com/) 2.3+
-- [Kirby Modules Plugin](https://github.com/getkirby-plugins/modules-plugin) 1.3+  
-when you want to use the `modules` field
+## 5 Donate
+
+If you enjoy this plugin and want to support me you can [buy me a beer](https://www.paypal.me/lukaskleinschmidt/5eur) :)
