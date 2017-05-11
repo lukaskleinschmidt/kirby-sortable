@@ -176,7 +176,7 @@ site/content/
 
 
 ## 4 Customize
-With the registry you are able to customize the visual appearance and modify or add custom functionality.
+With the registry you are able to customize the visual appearance and modify or add functionality.
 The registry makes it possible to register layouts, actions, variants and translations.
 
 ```php
