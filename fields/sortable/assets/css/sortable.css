@@ -132,7 +132,6 @@
   -webkit-flex: 1 0 0%;
   -ms-flex: 1 0 0%;
   flex: 1 0 0%;
-  cursor: move;
   overflow: hidden;
   text-overflow: ellipsis;
   padding-left: 0.35em;
