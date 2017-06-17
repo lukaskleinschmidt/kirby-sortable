@@ -3,5 +3,5 @@
   "version": "2.3.2",
   "description": "Kirby Sortable",
   "license": "MIT",
-  "type": "kirby-plugin",
+  "type": "kirby-plugin"
 }
