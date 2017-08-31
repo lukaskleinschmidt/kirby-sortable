@@ -246,7 +246,7 @@ Long title can cause the entries to overflow the content area.
 
 Put the following code in your custom [panel css](https://getkirby.com/docs/developer-guide/panel/css).
 
-```scss
+```css
 .form-blueprint-checklist > fieldset {
   min-width: 0;
 }
@@ -266,28 +266,30 @@ Readonly has no effect.
 
 One simple and fast way is to disable functionality with some custom [panel css](https://getkirby.com/docs/developer-guide/panel/css).
 
-```scss
-// disable global actions
+```css
+/* disable global actions */
 .field-is-readonly .sortable__action,
 .field-is-readonly .sortable__action .icon {
   pointer-events: none;
   color: #c9c9c9;
 }
 
-// disable sorting
+/* disable sorting */
 .field-is-readonly .sortable [data-handle] {
   pointer-events: none;
   color: #c9c9c9;
 }
 
-// enable entry actions
-// only necessary when you want to disable
-// sorting but still want the actions to work
+/*
+ * enable entry actions
+ * only necessary when you want to disable
+ * sorting but still want the actions to work
+ */
 .field-is-readonly .sortable-layout__action {
   pointer-events: auto;
 }
 
-// disable entry actions
+/* disable entry actions */
 .field-is-readonly .sortable-layout__action {
   pointer-events: none;
   color: #c9c9c9;
