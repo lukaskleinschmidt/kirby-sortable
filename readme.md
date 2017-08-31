@@ -101,7 +101,7 @@ fields:
 ### Options
 
 #### `sortable`
-Disable sorting if necessray.
+Disable sorting when necessary.
 
 #### `layout`
 Load a registerd layout. The layout defines how a entry is rendered. Learn how to [register your own layout](#layout-1).
