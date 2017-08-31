@@ -6,10 +6,11 @@ A toolkit for managing subpages in the content area.
 
 ## Table of contents
 1. [Features](#1-features)
-3. [Installation](#2-installation)
-4. [Blueprint](#3-blueprint)
-5. [Customize](#4-customize)
-6. [Donate](#5-donate)
+2. [Installation](#2-installation)
+3. [Blueprint](#3-blueprint)
+4. [Customize](#4-customize)
+5. [Known Bugs](#5-known-bugs)
+6. [Donate](#6-donate)
 
 
 ## 1 Features
@@ -236,6 +237,27 @@ Have a look at the [translations](sortable/translations).
 - [kirby-sortable-events](https://github.com/lukaskleinschmidt/kirby-sortable-events)
 
 
-## 5 Donate
+## 5 Known Bugs
+
+Long title can cause the entries to overflow the content area.
+
+- https://github.com/lukaskleinschmidt/kirby-sortable/issues/37
+- https://github.com/getkirby/panel/pull/986
+
+Put the following code in your [panel css](https://getkirby.com/docs/developer-guide/panel/css).
+
+```css
+.form-blueprint-checklist > fieldset {
+  min-width: 0;
+}
+
+@-moz-document url-prefix() {
+  .form-blueprint-checklist > fieldset {
+    display: table-cell;
+  }
+}
+```
+
+## 6 Donate
 
 If you enjoy this plugin and want to support me you can [buy me a beer](https://www.paypal.me/lukaskleinschmidt/5eur) :)
