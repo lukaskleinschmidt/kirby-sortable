@@ -7,12 +7,13 @@ sortable()->load();
 
 class SortableField extends InputField {
 
-  public $limit   = false;
-  public $parent  = null;
-  public $prefix  = null;
-  public $layout  = 'base';
-  public $variant = null;
-  public $options = array();
+  public $limit    = false;
+  public $parent   = null;
+  public $prefix   = null;
+  public $layout   = 'base';
+  public $variant  = null;
+  public $options  = array();
+  public $sortable = true;
 
   // Caches
   protected $entries;
@@ -75,6 +76,7 @@ class SortableField extends InputField {
 
     $layouts = new Brick('div');
     $layouts->addClass('sortable__container');
+    $layouts->attr('data-sortable', $this->sortable() ? 'true' : 'false');
 
     $numVisible = 0;
     $num = 0;

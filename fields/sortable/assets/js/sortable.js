@@ -4,7 +4,7 @@
     var self = this;
 
     this.element = $(element);
-    this.container = $('.sortable__container', element);
+    this.container = $('.sortable__container[data-sortable="true"]', element);
     this.api = this.element.data('api');
 
     this.container._sortable({

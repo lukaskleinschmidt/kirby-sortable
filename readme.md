@@ -84,6 +84,8 @@ fields:
     label: Sortable
     type:  sortable
 
+    sortable: true
+
     layout:  base
     variant: null
 
@@ -97,6 +99,9 @@ fields:
 ```
 
 ### Options
+
+#### `sortable`
+Disable sorting if necessray.
 
 #### `layout`
 Load a registerd layout. The layout defines how a entry is rendered. Learn how to [register your own layout](#layout-1).

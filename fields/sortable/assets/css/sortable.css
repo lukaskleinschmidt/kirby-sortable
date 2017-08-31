@@ -100,7 +100,7 @@
   line-height: 1;
 }
 
-.sortable-layout [data-handle] {
+.sortable__container[data-sortable="true"] .sortable-layout [data-handle] {
   cursor: move;
 }
 
