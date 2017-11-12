@@ -4,5 +4,9 @@
   "description": "Kirby Sortable",
   "license": "MIT",
   "author": "Lukas Kleinschmidt (https://github.com/lukaskleinschmidt)",
-  "type": "kirby-plugin"
+  "type": "kirby-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukaskleinschmidt/kirby-sortable"
+  }
 }
