@@ -42,16 +42,16 @@
   Sort.prototype.blur = function() {
     $('.form input:focus, .form select:focus, .form textarea:focus').blur();
     app.content.focus.forget();
-  }
+  };
 
   Sort.prototype.disable = function() {
     this.container._sortable('disable');
-  }
+  };
 
   Sort.prototype.reload = function() {
     this.disable();
     app.content.reload();
-  }
+  };
 
 
   // Fixing scrollbar jumping issue
