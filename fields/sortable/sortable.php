@@ -76,7 +76,12 @@ class SortableField extends InputField {
 
     $layouts = new Brick('div');
     $layouts->addClass('sortable__container');
-    $layouts->attr('data-sortable', $this->sortable() ? 'true' : 'false');
+    
+    if (c::get('sortable.field.sortByPermission')) {
+      $layouts->attr('data-sortable', site()->user()->can('sortable.sortable') ? 'true' : 'false');
+    } else {
+      $layouts->attr('data-sortable', $this->sortable() ? 'true' : 'false');
+    }
 
     $numVisible = 0;
     $num = 0;
