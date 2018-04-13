@@ -72,16 +72,22 @@ class SortableField extends InputField {
 
   }
 
+  public function sortable() {
+
+    if ($this->sortable === false) return false;
+
+    foreach($this->entries() as $page) {
+      if ($page->event('sort')->isDenied() || $page->event('visibility')->isDenied()) return false;
+    }
+
+    return true;
+  }
+
   public function layouts() {
 
     $layouts = new Brick('div');
     $layouts->addClass('sortable__container');
-    
-    if (c::get('sortable.field.sortByPermission')) {
-      $layouts->attr('data-sortable', site()->user()->can('panel.page.sort') ? 'true' : 'false');
-    } else {
-      $layouts->attr('data-sortable', $this->sortable() ? 'true' : 'false');
-    }
+    $layouts->attr('data-sortable', $this->sortable() ? 'true' : 'false');
 
     $numVisible = 0;
     $num = 0;

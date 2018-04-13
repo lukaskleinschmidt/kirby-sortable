@@ -8,9 +8,10 @@ A toolkit for managing subpages in the content area.
 1. [Features](#1-features)
 2. [Installation](#2-installation)
 3. [Blueprint](#3-blueprint)
-4. [Customize](#4-customize)
-5. [Known Bugs](#5-known-bugs)
-6. [Donate](#6-donate)
+4. [Permissions](#4-permissions)
+5. [Customize](#4-customize)
+6. [Known Bugs](#5-known-bugs)
+7. [Donate](#6-donate)
 
 
 ## 1 Features
@@ -180,8 +181,12 @@ site/content/
         ...
 ```
 
+## 4 Permissions
+Since `v2.4.0` you can now disable sorting independently from the `panel.page.visibility` permission. The new `panel.page.sort` permission will disable sorting as soon as one module denies sorting.
 
-## 4 Customize
+Keep in mind that the `panel.page.visibility` permission will additionally to disabeling the visibility toggle still disable sorting also.
+
+## 5 Customize
 With the registry you are able to customize the visual appearance and modify or add functionality.
 The registry makes it possible to register layouts, actions, variants and translations.
 
@@ -242,7 +247,7 @@ Have a look at the [translations](sortable/translations).
 - [kirby-sortable-events](https://github.com/lukaskleinschmidt/kirby-sortable-events)
 
 
-## 5 Known Bugs
+## 6 Known Bugs
 
 Long title can cause the entries to overflow the content area.
 
@@ -301,6 +306,6 @@ One simple and fast way is to disable functionality with some custom [panel css]
 }
 ```
 
-## 6 Donate
+## 7 Donate
 
 If you enjoy this plugin and want to support me you can [buy me a beer](https://www.paypal.me/lukaskleinschmidt/5eur) :)
