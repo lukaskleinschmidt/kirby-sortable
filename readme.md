@@ -184,7 +184,7 @@ site/content/
 ## 4 Permissions
 Since `v2.4.0` you can now disable sorting independently from the `panel.page.visibility` permission. The new `panel.page.sort` permission will disable sorting as soon as one module denies sorting.
 
-Keep in mind that the `panel.page.visibility` permission will additionally to disabeling the visibility toggle still disable sorting also.
+Keep in mind that the `panel.page.visibility` permission will additionally to disabling the visibility toggle still disable sorting also.
 
 ## 5 Customize
 With the registry you are able to customize the visual appearance and modify or add functionality.
