@@ -248,7 +248,7 @@ class SortableField extends InputField {
     if($entries->count() && $this->value()) {
       $i = 0;
 
-      $order = a::merge(array_flip($this->value()), array_flip($entries->pluck('uid')));
+      $order = array_flip($this->value()) + array_flip($entries->pluck('uid'));
       $order = array_map(function($value) use(&$i) {
         return $i++;
       }, $order);
