@@ -3,8 +3,15 @@
 return function($page, $model, $field) {
 
   $options = [];
+  $templates = $page->blueprint()->pages()->template();
 
-  foreach($page->blueprint()->pages()->template() as $template) {
+  if($prefix = $field->prefix()) {
+    $templates = $templates->filter(function($template) use($prefix) {
+      return str::startsWith($template, $prefix);
+    });
+  }
+
+  foreach($templates as $template) {
     $options[$template->name()] = $template->title();
   }
 
