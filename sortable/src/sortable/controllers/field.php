@@ -183,7 +183,7 @@ class Field extends \Kirby\Panel\Controllers\Field {
 
     $prefix = $this->field()->prefix();
 
-    if(strpos($template, $prefix) !== false) {
+    if($prefix && strpos($template, $prefix) !== false) {
       $length = str::length($prefix);
       $template = str::substr($template, $length);
     }
